@@ -1,0 +1,6 @@
+.image_vol{
+    width: 350px;
+    height: 500px;
+    object-fit: cover;
+    border-radius: 10px;
+}
