@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class RegisterMail extends Notification
+class RegisterMail extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -33,7 +33,7 @@ class RegisterMail extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->greeting('Hollo')
+                    ->greeting('Welcome to Momen App')
                     ->line('hello '.$notifiable->name)
                     ->line('Thank you for using our application!');
     }

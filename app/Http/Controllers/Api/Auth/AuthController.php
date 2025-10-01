@@ -6,10 +6,12 @@ use App\Http\Controllers\Api\MainController;
 use App\Http\Requests\Api\CheckRegisterRequest;
 use App\Http\Requests\Api\LoginRequest;
 use App\Http\Requests\Api\RegisterRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\Api\UserResource;
 use App\Models\User;
+use App\Notifications\RegisterMail;
 use App\Notifications\SendOtpMail;
 use App\Services\UserCodeService;
+use App\TypeUserCodeEnum;
 use Ichtrojan\Otp\Otp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +33,7 @@ class AuthController extends MainController
 
     public function check_register(CheckRegisterRequest $request)
     {
-        $otp = $this->userCodeService->generate($request->email, 4, 10);
+        $otp = $this->userCodeService->generate($request->email,TypeUserCodeEnum::VerfiyEmail, 4, 10);
         Notification::route('mail', $request->email)
         ->notify((new SendOtpMail($otp))->delay(now()->addMinutes(1)));
         return $this->messageSuccess(__('auth.send_code_successfully'));
@@ -39,11 +41,9 @@ class AuthController extends MainController
 
 
 
-    public function register(RegisterRequest $request){
-
-
-        $otp=(new Otp)->validate($request->email, $request->code);
-
+    public function register(RegisterRequest $request)
+    {
+        $otp = $this->userCodeService->validate($request->email, $request->code);
         if($otp->status==true){
             $user = User::create($request->all());
             $user->devices()->create($request->all());
@@ -51,6 +51,7 @@ class AuthController extends MainController
         }else{
             return $this->messageError($otp->message,400);
         }
+        $user->notify(new RegisterMail());
 
         return $this->sendData([
             'user' => new UserResource($user),

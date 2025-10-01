@@ -18,8 +18,8 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
+            'name_first' => 'required|string',
+            'name_last' => 'required|string',
             'email' => 'required|email|unique:users|string',
             'phone' => 'required|string|unique:users,phone',
             'password' => 'required|confirmed|min:8|string',
@@ -34,8 +34,8 @@ class RegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'first_name.required' => __('validation.required', ['attribute' => __('auth.first_name')]),
-            'last_name.required' => __('validation.required', ['attribute' => __('auth.last_name')]),
+            'name_first.required' => __('validation.required', ['attribute' => __('auth.first_name')]),
+            'name_last.required' => __('validation.required', ['attribute' => __('auth.last_name')]),
             'email.required' => __('validation.required', ['attribute' => __('auth.email')]),
             'email.unique' => __('validation.unique', ['attribute' => __('auth.email')]),
             'phone.required' => __('validation.required', ['attribute' => __('auth.phone')]),

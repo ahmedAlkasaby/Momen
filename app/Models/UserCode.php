@@ -2,12 +2,18 @@
 
 namespace App\Models;
 
+use App\TypeUserCodeEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class UserCode extends Model
 {
     protected $table = 'user_codes';
-    protected $fillable = ['user_id', 'email','code', 'code_expire'];
+    protected $fillable = ['user_id', 'email','code','type', 'code_expire'];
+
+    protected $casts = [
+        'code_expire' => 'datetime',
+        'type'=>TypeUserCodeEnum::class,
+    ];
 
     public function user()
     {

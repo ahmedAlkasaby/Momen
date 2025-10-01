@@ -36,4 +36,11 @@ return [
     'account_not_active' => 'Account Not Active',
     'token' => 'Token',
     'email_exists_go_to_login'=>'Email exists, go to login',
+    'verify_email'=>'Verify Email',
+    'reset_password'=>'Reset Password',
+    'invalid_otp'=>'Invalid OTP',
+    'valid_otp'=>'Valid OTP',
+    'expired_otp'=>'Expired OTP',
+
+
 ];

@@ -4,16 +4,17 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
-use Tymon\JWTAuth\Contracts\JWTSubject;
 use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject,LaratrustUser
 {
-    use  HasFactory, Notifiable , HasRolesAndPermissions;
+    use  HasFactory, Notifiable ,SoftDeletes, HasRolesAndPermissions;
 
 
     public function setPasswordAttribute($value)
@@ -54,6 +55,11 @@ class User extends Authenticatable implements JWTSubject,LaratrustUser
         'email',
         'phone',
     ];
+
+    public function devices()
+    {
+        return $this->hasMany(Device::class);
+    }
 
 
     public function getJWTIdentifier()
