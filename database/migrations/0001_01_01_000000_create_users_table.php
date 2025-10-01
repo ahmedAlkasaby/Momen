@@ -63,10 +63,6 @@ return new class extends Migration
             $table->double('point')->default(0);
             $table->timestamps();
             $table->softDeletes();
-            $table->index(['name', 'username', 'email', 'phone', 'type', 'active', 'vip', 'is_client', 'is_admin', 'is_store', 'is_delivery']);
-            $table->index(['country_id', 'city_id', 'branch_id', 'group_id']);
-            $table->index(['latitude', 'longitude']);
-            $table->index(['last_active']);
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
