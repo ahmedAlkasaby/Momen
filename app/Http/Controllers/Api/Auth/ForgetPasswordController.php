@@ -3,33 +3,30 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Api\MainController;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\ForgetPasswordRequest;
 use App\Models\User;
+use App\Notifications\ForgetPasswordNotification;
+use App\Services\UserCodeService;
+use App\TypeUserCodeEnum;
 use Ichtrojan\Otp\Otp;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
-use App\Notifications\ForgetPasswordNotification;
 
 
 class ForgetPasswordController extends MainController
 {
-    private $otp;
-    public function __construct() {
-        $this->otp=new Otp;
+    public function __construct(UserCodeService $userCodeService)
+    {
+        $this->userCodeService = $userCodeService;
     }
 
-    public function ForgetPassword(Request $request){
-        $validator=Validator::make($request->all(),[
-            'email'=>'required|email|exists:users,email',
-        ]);
-
-        if($validator->fails()){
-            return $this->sendError('error',$validator->errors(),403);
-        }
-
+    public function ForgetPassword(ForgetPasswordRequest $request){
+       
         $user=User::where('email',$request->email)->first();
+        $otp = $this->userCodeService->generate($request->email,TypeUserCodeEnum::ResetPassword, 4, 10);
 
-        $user->notify(new ForgetPasswordNotification());
+        $user->notify(new ForgetPasswordNotification($otp));
 
         return $this->messageSuccess( __('auth.send_code_successfully'));
     }

@@ -41,6 +41,7 @@ return [
     'invalid_otp'=>'Invalid OTP',
     'valid_otp'=>'Valid OTP',
     'expired_otp'=>'Expired OTP',
+    'this_email_not_found_go_to_register'=>'This email not found, go to register'
 
 
 ];

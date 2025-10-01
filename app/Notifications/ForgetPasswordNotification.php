@@ -15,9 +15,9 @@ class ForgetPasswordNotification extends Notification
 
     private $otp;
 
-    public function __construct()
+    public function __construct($code)
     {
-        $this->otp=new Otp;
+        $this->otp=$code;
     }
 
     /**
@@ -35,11 +35,10 @@ class ForgetPasswordNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $code=$this->otp->generate($notifiable->email,'numeric',4,10);
         return (new MailMessage)
         ->greeting('Hollo '.$notifiable->name)
         ->line('Rest Password ')
-        ->line('the Code : '. $code->token)
+        ->line('the Code : '. $this->otp)
         // ->action('RestPassword','/')
         ->line('thanks');
 
