@@ -66,9 +66,6 @@ class AuthController extends MainController
 
 
     public function login(LoginRequest $request){
-
-
-
         $credentials = $request->only('email', 'password');
         $token=Auth::guard('api')->attempt($credentials);
         if (!$token) {
