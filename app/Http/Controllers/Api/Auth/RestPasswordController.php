@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\RestPasswordRequest;
 use App\Models\User;
 use App\Services\UserCodeService;
-use App\TypeUserCodeEnum;
+use App\Enums\TypeUserCodeEnum;
 use Ichtrojan\Otp\Otp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;

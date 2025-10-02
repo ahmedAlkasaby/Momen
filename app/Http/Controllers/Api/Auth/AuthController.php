@@ -11,7 +11,7 @@ use App\Models\User;
 use App\Notifications\RegisterMail;
 use App\Notifications\SendOtpMail;
 use App\Services\UserCodeService;
-use App\TypeUserCodeEnum;
+use App\Enums\TypeUserCodeEnum;
 use Ichtrojan\Otp\Otp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

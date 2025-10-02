@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\UserCode;
-use App\TypeUserCodeEnum;
+use App\Enums\TypeUserCodeEnum;
 use Carbon\Carbon;
 
 

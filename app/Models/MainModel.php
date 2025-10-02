@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class MainModel extends Model
 {
@@ -15,7 +17,8 @@ class MainModel extends Model
 
     protected $casts = [
         'name' => \App\Casts\UnescapedJson::class,
-        'description' => \App\Casts\UnescapedJson::class,
+        'title' => \App\Casts\UnescapedJson::class,
+        'content' => \App\Casts\UnescapedJson::class,
     ];
 
 
@@ -23,24 +26,51 @@ class MainModel extends Model
     {
         $data = $this->name;
         if ($lang === null) {
-            $user = Auth::guard('api')->user();
-            $langUser = $user ? $user->lang : app()->getLocale();
+
             $defaultLang = app()->getLocale();
-            return $data[$langUser] ?? $data[$defaultLang] ?? null;
+            return $data[$defaultLang] ?? null;
         }
         return $data[$lang] ?? null;
     }
 
-    public function descriptionLang($lang = null)
+    public function contentLang($lang = null)
     {
-        $data = $this->description;
+        $data = $this->content;
         if ($lang === null) {
-            $user = Auth::guard('api')->user();
-            $langUser = $user ? $user->lang : app()->getLocale();
+
             $defaultLang = app()->getLocale();
-            return $data[$langUser] ?? $data[$defaultLang] ?? null;
+            return  $data[$defaultLang] ?? null;
         }
         return $data[$lang] ?? null;
+    }
+
+     public function titleLang($lang = null)
+    {
+        $data = $this->title;
+        if ($lang === null) {
+
+            $defaultLang = app()->getLocale();
+            return  $data[$defaultLang] ?? null;
+        }
+        return $data[$lang] ?? null;
+    }
+
+    protected function setLinkAttribute($value)
+    {
+        $name = $this->name['en'] ?? null;
+    
+        $slug = $value
+            ? Str::slug($value)
+            : ($name ? Str::slug($name) : Str::slug(Str::random(8)));
+    
+        $original = $slug;
+        $count = 1;
+    
+        while (DB::table($this->getTable())->where('link', $slug)->exists()) {
+            $slug = $original . '-' . $count++;
+        }
+    
+        $this->attributes['link'] = $slug;
     }
 
     public function scopeMainSearch($query, $search)
@@ -48,7 +78,7 @@ class MainModel extends Model
         if (!$search) {
             return $query;
         }
-        $searchable = property_exists($this, 'searchable') ? $this->searchable : ['name', 'description'];
+        $searchable = property_exists($this, 'searchable') ? $this->searchable : ['name', 'content'];
 
         $query->where(function ($q) use ($search, $searchable) {
             foreach ($searchable as $column) {
@@ -76,6 +106,28 @@ class MainModel extends Model
     
         return $query;
     }
+
+     public function scopeNewest($query)
+    {
+        return $query->orderByDesc('id');
+    }
+
+    public function scopeOldest($query)
+    {
+        return $query->orderBy('id');
+    }
+
+    public function scopeOrderNo($query)
+    {
+        return $query->orderByRaw('order_id IS NULL') 
+                     ->orderBy('order_id', 'asc');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('active', true)->orderNo();
+    }
+
 
 
    

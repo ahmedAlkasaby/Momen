@@ -8,7 +8,7 @@ use App\Http\Requests\Api\ForgetPasswordRequest;
 use App\Models\User;
 use App\Notifications\ForgetPasswordNotification;
 use App\Services\UserCodeService;
-use App\TypeUserCodeEnum;
+use App\Enums\TypeUserCodeEnum;
 use Ichtrojan\Otp\Otp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;

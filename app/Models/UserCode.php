@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\TypeUserCodeEnum;
+use App\Enums\TypeUserCodeEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class UserCode extends Model
