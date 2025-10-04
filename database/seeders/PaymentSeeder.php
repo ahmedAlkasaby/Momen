@@ -19,8 +19,8 @@ class PaymentSeeder extends Seeder
                 ],
                
                 'image'=>'payments\Paymentcash.jpg',
-                'active'=>rand(0,1),
-                'order_id'=>rand(1,10),
+                'active'=>1,
+                'order_id'=>1,
         ]);
     }
 }

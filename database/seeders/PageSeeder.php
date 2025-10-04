@@ -16,6 +16,8 @@ class PageSeeder extends Seeder
     public function run(): void
     {
         for ($i = 0; $i < 10; $i++) {
+            $types = PageHelper::getPagesTypes();
+
             Page::create([
                 'name' => [
                     'en' => fake()->word(),
@@ -31,8 +33,8 @@ class PageSeeder extends Seeder
                 ],
                 'active' => rand(0, 1),
                 'feature' => rand(0, 1),
-                'type' =>'page',
-                'page_type'=>array_rand(PageHelper::getPagesTypes()),
+                'type' => 'page',
+                'page_type' => $types[array_rand($types)], 
                 'order_id' => rand(1, 10),
             ]);
         }
@@ -42,7 +44,7 @@ class PageSeeder extends Seeder
                     'en' => fake()->word(),
                     'ar' => fake()->word(),
                 ],
-              
+
                 'content' => [
                     'en' => fake()->text(),
                     'ar' => fake()->text(),
@@ -50,8 +52,8 @@ class PageSeeder extends Seeder
                 'image' => 'sliders\sliderDefoult.png',
                 'active' => rand(0, 1),
                 'feature' => rand(0, 1),
-                'type' =>'slider',
-                'product_id'=>rand(0,1) == 1 ? null : Product::where('active',1)->inRandomOrder()->first()->id,
+                'type' => 'slider',
+                'product_id' => rand(0, 1) == 1 ? null : Product::where('active', 1)->inRandomOrder()->first()->id,
                 'order_id' => rand(1, 10),
             ]);
         }

@@ -49,6 +49,15 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['middleware'=>['userLangApi']],function(){
+
+    Route::get('home',[HomeController::class,'index']);
+    Route::apiResource('categories',CategoryController::class)->only(['index','show']);
+    Route::apiResource('products',ProductController::class)->only(['index','show']);
+    Route::apiResource('cities',CityController::class)->only(['index','show']);
+    Route::apiResource('regions',RegionController::class)->only(['index','show']);
+    Route::apiResource('payments',PaymentController::class)->only(['index','show']);
+    Route::apiResource('delivery_times',DeliveryTimeController::class)->only(['index','show']);
+    Route::apiResource('pages',PageController::class)->only(['index','show']);
    
     Route::group(['prefix'=>'auth'],function(){
         Route::group(['prefix'=>'register'],function(){

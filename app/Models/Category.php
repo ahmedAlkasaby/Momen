@@ -24,6 +24,10 @@ class Category extends MainModel
     {
         return $this->hasMany(Category::class, 'parent_id', 'id');
     }
+    public function activeChildren()
+    {
+        return $this->hasMany(Category::class, 'parent_id', 'id')->where('active', 1)->orderNo();
+    }
    
     public function products()
     {
@@ -51,9 +55,9 @@ class Category extends MainModel
     {
 
         $request = $request ?? request();
-        $filters = $request->only(['active', 'parent_id']);
-        
-        $query->orderBy('order_id','asc');
+        $filters = $request->only(['parent_id']);
+        $type_app == 'app' ?  $query->where('active',1) :  $query->where('active',$request->input('active'));
+        $query->orderNo();
         
         $query->mainSearch($request->input('search'));
 

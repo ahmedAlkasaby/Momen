@@ -13,7 +13,7 @@ enum TypeUserCodeEnum : string
             self::VerfiyEmail->value,
             self::ResetPassword->value,
         ];
-    }
+    } 
 
       public function label(): string
     {

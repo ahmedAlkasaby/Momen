@@ -17,12 +17,8 @@ class City extends MainModel
     {
 
         $request=$request??request();
-        $filters = $request->only(['active']);
-
-        $query->orderBy('order_id','asc');
-
-        $query->mainApplyDynamicFilters($filters);
-
+        $query->orderNo();
+        $type_app == 'app' ?  $query->where('active',1) :  $query->where('active',$request->input('active'));
         $query->mainSearch($request->input('search'));
 
        return $query;

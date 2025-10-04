@@ -26,9 +26,10 @@ return new class extends Migration
             $table->tinyInteger('active')->default(1);
             $table->tinyInteger('feature')->default(1);
 
-            $table->timestamps();
             $table->index('type');
             $table->index('page_type');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -4,7 +4,7 @@ namespace App\Helpers;
 
 class PageHelper
 {
-    public static function getPagesTypes()
+    public static function getPagesTypes() 
     {
         return [
             "home",

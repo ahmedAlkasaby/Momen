@@ -158,23 +158,15 @@ class Product extends MainModel
 
     public function scopeApplyBasicFilters($query, $request, $type_app)
     {
-        if($type_app=='app'){
-          $query->activeProducts();
-        }
-
         $query->orderNo();
         $query->whereNull('parent_id');
-        if ($request->filled('active') && $request->active != 'all') {
-            $query->where('active', $request->active);
+        if($type_app=='app'){
+          $query->activeProducts();
+        }else{
+            if ($request->filled('active') && $request->active != 'all') {
+                $query->where('active', $request->active);
+            }
         }
-        if ($request->filled('date_start')) {
-            $query->whereDate('date_start', '<=', $request->date_start);
-        }
-        if ($request->filled('date_end')) {
-            $query->whereDate('date_end', '>=', $request->date_end);
-        }
-
-
         return $query;
     }
 

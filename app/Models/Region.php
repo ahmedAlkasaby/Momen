@@ -26,7 +26,9 @@ class Region extends MainModel
 
         $request=$request??request();
 
-        $query->orderBy('order_id','asc');
+        $query->orderNo();
+        $type_app == 'app' ?  $query->where('active',1) :  $query->where('active',$request->input('active'));
+
 
         $filters = $request->only(['active','city_id']);
 
