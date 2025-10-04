@@ -16,7 +16,6 @@ class Product extends MainModel
         'image',
         'video',
         'background',
-        'color',
 
         //offer
         'offer_type',
@@ -80,14 +79,7 @@ class Product extends MainModel
     ];
 
 
-    public function setPriceIsSizeAttribute($value)
-    {
-        $this->attributes['is_size'] = $this->children->where('size_id','!=',null)->count() > 0 ? 1 : 0;
-    }
-    public function setPriceIsColorAttribute($value)
-    {
-        $this->attributes['is_color'] = $this->children->where('color_id','!=',null)->count() > 0 ? 1 : 0;
-    }
+   
    
     public function setDateStartAttribute($value)
     {
@@ -118,7 +110,8 @@ class Product extends MainModel
         return $this->belongsTo(Size::class);
     }
 
-    public function color(){
+    public function color()
+    {
         return $this->belongsTo(Color::class);
     }
     public function brand()
@@ -149,7 +142,7 @@ class Product extends MainModel
     {
         return $query
             ->where('active', 1)
-            ->where('stock',1)
+            ->where('is_stock',1)
             ->orderNo();
     }
 
@@ -165,6 +158,9 @@ class Product extends MainModel
         }else{
             if ($request->filled('active') && $request->active != 'all') {
                 $query->where('active', $request->active);
+            }
+            if ($request->filled('is_stock') && $request->is_stock != 'all') {
+                $query->where('is_stock', $request->is_stock);
             }
         }
         return $query;

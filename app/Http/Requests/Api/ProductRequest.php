@@ -28,14 +28,12 @@ class ProductRequest extends FormRequest
             'sort_by' => 'nullable|in:latest,oldest,highest_price,lowest_price',
             'min_price' => 'nullable|numeric|min:0',
             'max_price' => 'nullable|numeric|min:0',
-            'feature'=>'nullable|in:0,1',
-            'new'=>'nullable|in:0,1',
-            'special'=>'nullable|in:0,1',
-            'filter'=>'nullable|in:0,1',
-            'sale'=>'nullable|in:0,1',
-            'late'=>'nullable|in:0,1',
-            'free_shipping'=>'nullable|in:0,1',
-            'returned'=>'nullable|in:0,1',
+            'is_feature'=>'nullable|in:0,1',
+            'is_new'=>'nullable|in:0,1',
+            'is_special'=>'nullable|in:0,1',
+            'is_filter'=>'nullable|in:0,1',
+            'is_free_shipping'=>'nullable|in:0,1',
+            'is_returned'=>'nullable|in:0,1',
         ];
     }
     public function messages(): array

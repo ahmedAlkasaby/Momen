@@ -17,9 +17,9 @@ class UnitResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->nameLang(),
-            'description' => $this->descriptionLang(),
+            'content' => $this->contentLang(),
             'active' => $this->active,
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
+            'order_id'=>$this->order_id
         ];
     }
 }

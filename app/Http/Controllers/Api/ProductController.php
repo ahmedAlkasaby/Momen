@@ -14,13 +14,8 @@ class ProductController extends MainController
 
     public function index(ProductRequest $request)
     {
-        $data = ['categories', 'service', 'unit', 'size', 'brand', 'wishlists', 'cartItems'];
+        $data = ['categories','unit','color','size', 'brand','parent'];
         $products = Product::with($data)
-            ->withMin('children', 'price')
-            ->withMax('children', 'price')
-            ->withCount('activeReviews')
-            ->withAvg('activeReviews', 'rating')
-            ->withSum('cartItems as amount_in_all_carts', 'amount')
             ->filter($request)->paginate($this->perPage);
 
         return $this->sendData(new ProductCollection($products));
@@ -30,15 +25,9 @@ class ProductController extends MainController
 
     public function show(string $id)
     {
-        $data = ['categories', 'service', 'unit', 'size', 'brand', 'wishlists', 'cartItems', 'children.size', 'parent'];
+        $data = ['categories','unit', 'color','size', 'brand','children.size','children.color', 'parent'];
 
-        $product = Product::with($data)
-            ->withMin('children', 'price')
-            ->withMax('children', 'price')
-            ->withCount('activeReviews')
-            ->withAvg('activeReviews', 'rating')
-            ->withSum('cartItems as amount_in_all_carts', 'amount')
-            ->active()
+        $product = Product::with($data)->activeProducts()
             ->where('id', $id)
             ->first();
         if (!$product) {
