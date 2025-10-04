@@ -49,7 +49,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::group(['middleware'=>['userLangApi']],function(){
-
     Route::get('home',[HomeController::class,'index']);
     Route::apiResource('categories',CategoryController::class)->only(['index','show']);
     Route::apiResource('products',ProductController::class)->only(['index','show']);
