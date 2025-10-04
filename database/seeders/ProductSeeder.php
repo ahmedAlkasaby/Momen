@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
 use App\Models\Service;
 use App\Models\Size;
@@ -21,28 +22,28 @@ class ProductSeeder extends Seeder
         for ($i = 0; $i < 50; $i++) {
 
             $dataProduct=$this->getDataProduct();
-            $dataOffer=$this->getOfferData($dataProduct['offer'],$dataProduct['price']);
-            $dataShipping=$this->getShippingData($dataProduct['free_shipping']);
+            $dataOffer=$this->getOfferData($dataProduct['is_offer'],$dataProduct['price']);
+            $dataShipping=$this->getShippingData($dataProduct['is_shipping_free']);
             $data = array_merge($dataProduct, $dataOffer, $dataShipping);
-            $categoryIds = $this->getCategoryData(3,$dataProduct['service_id']);
+            $categoryIds = $this->getCategoryData(3);
 
             $product=Product::create($data);
             $product->categories()->sync($categoryIds);
 
             $dataProductParent=Arr::except($data,[
-                'amount',
                 'price',
                 'offer_price',
-                'offer_percent',
-                'offer_amount',
-                'offer',
+                'is_offer',
                 'size_id',
+                'color_id',
                 'parent_id',
             ]);
 
             if (rand(0,1)==1){
 
-                foreach ($this->getChlidrenData($dataProduct['price'],$dataProduct['offer'],$product->id,Size::inRandomOrder()->first()->id,rand(3,5)) as $childData) {
+                foreach ($this->getChlidrenData($dataProduct['is_offer'],$product->id,
+                    Size::inRandomOrder()->first()->id,
+                    Color::inRandomOrder()->first()->id,rand(3,5)) as $childData) {
                     $clidermProduct=Product::create(array_merge($dataProductParent,$childData));
                 }
             }
@@ -60,29 +61,26 @@ class ProductSeeder extends Seeder
                 'en'=>fake()->word(),
                 'ar'=>fake()->word(),
             ],
-            'description'=>[
+            'content'=>[
                 'en'=>fake()->text(),
                 'ar'=>fake()->text(),
             ],
             'code' => fake()->unique()->bothify('PROD-####'),
-            'image'=>'uploads\categories\685ee90b4219a.png',
+            'image'=>'products\productDefoult.png',
             'price'=>rand(100,1000),
-            'amount'=>rand(50,100),
+
+            'order_limit'=>rand(1,10),
             'max_order'=>rand(1,10),
+
             'active'=>rand(0,1),
-            'offer'=>rand(0,1),
-            'free_shipping'=>rand(0,1),
-            'feature'=>rand(0,1),
-            'new'=>rand(0,1),
-            'special'=>rand(0,1),
-            'filter'=>rand(0,1),
-            'sale'=>rand(0,1),
-            'late'=>rand(0,1),
-            'stock'=>rand(0,1),
-            'returned'=>rand(0,1),
-            'date_start' => now(),
-            'date_end' => now()->addMonth(),
-            'service_id' => Service::where('active',1)->inRandomOrder()->first()->id,
+            'is_stock'=>rand(0,1),
+            'is_filter'=>rand(0,1),
+            'is_offer'=>rand(0,1),
+            'is_new'=>rand(0,1),
+            'is_special'=>rand(0,1),
+            'is_returned'=>rand(0,1),
+            'is_shipping_free'=>rand(0,1),
+          
             'unit_id'=> Unit::where('active',1)->inRandomOrder()->first()->id,
         ];
     }
@@ -93,14 +91,10 @@ class ProductSeeder extends Seeder
         if($isOffer==1){
             return [
                 'offer_price'=>$price + rand(1,100),
-                'offer_amount'=>null,
-                'offer_percent'=>null,
             ];
         }else{
             return [
                 'offer_price'=>null,
-                'offer_amount'=>null,
-                'offer_percent'=>null,
             ];
         }
     }
@@ -109,24 +103,26 @@ class ProductSeeder extends Seeder
     {
         if($isShipping==1){
             return [
-                'shipping_cost'=>rand(1,100),
+                'shipping'=>rand(1,100),
             ];
         }else{
             return [
-                'shipping_cost'=>0,
+                'shipping'=>0,
             ];
         }
     }
 
-    public function getChlidrenData($price,$offer,$parentId,$sizeId,$count){
+    public function getChlidrenData($offer,$parentId,$sizeId,$colorId,$count){
         $data=[];
+
         for ($i=0; $i < $count; $i++) {
+            $price=rand(100,1000);
             $data[]=array_merge($this->getOfferData($offer,$price),[
             'price'=>$price,
-            'amount'=>rand(50,100),
-            'offer'=>$offer,
+            'is_offer'=>$offer,
             'parent_id'=>$parentId,
-            'size_id'=>$sizeId
+            'size_id'=>$sizeId,
+            'color_id'=>$colorId
             ]);
 
         }
@@ -134,9 +130,9 @@ class ProductSeeder extends Seeder
         return $data;
     }
 
-    public function getCategoryData($count,$service_id): array
+    public function getCategoryData($count): array
     {
-        return Category::where('service_id',$service_id)->active()
+        return Category::activeCategories()
                        ->inRandomOrder()
                        ->limit($count)
                        ->pluck('id')

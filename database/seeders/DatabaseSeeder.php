@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             RegionSeeder::class,
             StoreSeeder::class,
             ColorSeeder::class,
-            // ProductSeeder::class,
+            ProductSeeder::class,
             // SliderSeeder::class,
             // UserSeeder::class,
             // AddressSeeder::class,
