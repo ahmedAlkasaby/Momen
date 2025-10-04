@@ -24,15 +24,14 @@ class DatabaseSeeder extends Seeder
 
         
         $this->call([
-            // PageSeeder::class,
-            // PaymentSeeder::class,
+            PaymentSeeder::class,
             DeliveryTimeSeeder::class,
             CitySeeder::class,
             RegionSeeder::class,
             StoreSeeder::class,
             ColorSeeder::class,
             ProductSeeder::class,
-            // SliderSeeder::class,
+            PageSeeder::class,
             // UserSeeder::class,
             // AddressSeeder::class,
             // NotificationSeeder::class,

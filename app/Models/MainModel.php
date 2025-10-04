@@ -21,6 +21,30 @@ class MainModel extends Model
         'content' => \App\Casts\UnescapedJson::class,
     ];
 
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            if (array_key_exists('link', $model->getAttributes()) || in_array('link', $model->getFillable())) {
+
+                if (empty($model->link)) {
+
+                    $name = $model->nameLang('en');
+                   
+
+                    $slug = $name ? Str::slug($name) : Str::slug(Str::random(8));
+                    $original = $slug;
+                    $count = 1;
+
+                    while (DB::table($model->getTable())->where('link', $slug)->exists()) {
+                        $slug = $original . '-' . $count++;
+                    }
+
+                    $model->link = $slug;
+                }
+            }
+        });
+    }
+
 
     public function nameLang($lang = null)
     {
@@ -55,23 +79,7 @@ class MainModel extends Model
         return $data[$lang] ?? null;
     }
 
-    protected function setLinkAttribute($value)
-    {
-        $name = $this->name['en'] ?? null;
-    
-        $slug = $value
-            ? Str::slug($value)
-            : ($name ? Str::slug($name) : Str::slug(Str::random(8)));
-    
-        $original = $slug;
-        $count = 1;
-    
-        while (DB::table($this->getTable())->where('link', $slug)->exists()) {
-            $slug = $original . '-' . $count++;
-        }
-    
-        $this->attributes['link'] = $slug;
-    }
+   
 
     public function scopeMainSearch($query, $search)
     {

@@ -11,26 +11,17 @@ class PaymentSeeder extends Seeder
     
     public function run(): void
     {
-        for ($i=0; $i < 5; $i++) {
-
-            Payment::create([
-                   'name'=>[
-                        'en'=>fake()->word(),
-                        'ar'=>fake()->word(),
-                    ],
-                    'description'=>[
-                        'en'=>fake()->text(),
-                        'ar'=>fake()->text(),
-                    ],
-                    'image'=>'uploads\payments\download.jpeg',
-                    'active'=>rand(0,1),
-                    'order_id'=>rand(1,10),
-            ]);
-        }
-
-
-
-
+        
+        Payment::create([
+               'name'=>[
+                    'en'=>'Cash',
+                    'ar'=>'كاش',
+                ],
+               
+                'image'=>'payments\Paymentcash.jpg',
+                'active'=>rand(0,1),
+                'order_id'=>rand(1,10),
+        ]);
     }
 }
 
