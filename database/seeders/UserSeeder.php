@@ -13,14 +13,30 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
+        $user = User::create([
+            'name_first'=>'ahmed',
+            'name_last'=>'alkasaby',
+            'email'=> 'ahmedalkasaby21@gmail.com',
+            'phone'=> '01016192605',
+            'password'=> 'ahmed145',
+            'locale'=>'en',
+            'theme'=>'light',
+            'type'=>'admin',
+        ]);
+        $user->devices()->create([
+            'token'=>fake()->uuid(),
+            'device_type'=>'android',
+            'imei'=>fake()->uuid(),
+
+        ]);
           for ($i = 0; $i < 10; $i++) {
             $user = User::create([
-              'first_name'=>fake()->firstName(),
-              'last_name'=>fake()->lastName(),
+              'name_first'=>fake()->firstName(),
+              'name_last'=>fake()->lastName(),
               'email'=> fake()->unique()->safeEmail(),
               'phone'=> fake()->phoneNumber(),
               'password'=> fake()->password(),
-              'lang'=>'en',
+              'locale'=>'en',
               'theme'=>'light',
               'type'=>fake()->randomElement(['admin', 'client','delivery']),
            ]);

@@ -54,6 +54,7 @@ return [
     'payment_initiated'=>'تم بدء عملية الدفع',
     'payment_success'=>'تم الدفع بنجاح',
     'payment_failed'=>'فشلت عملية الدفع',
+    'order_limit'=>'الحد الأدنى المسموح للطلب من هذا المنتج هو :order_limit وحدة.',
  
     
 

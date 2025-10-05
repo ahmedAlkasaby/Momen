@@ -69,7 +69,7 @@ class ProductSeeder extends Seeder
             'image'=>'products\productDefoult.png',
             'price'=>rand(100,1000),
 
-            'order_limit'=>rand(1,10),
+            'order_limit'=>rand(1,2),
             'max_order'=>rand(1,10),
 
             'active'=>rand(0,1),

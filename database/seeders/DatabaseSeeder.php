@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
 
         
         $this->call([
+            UserSeeder::class,
             SettingSeeder::class,
             PaymentSeeder::class,
             DeliveryTimeSeeder::class,
@@ -33,7 +34,7 @@ class DatabaseSeeder extends Seeder
             ColorSeeder::class,
             ProductSeeder::class,
             PageSeeder::class,
-            // UserSeeder::class,
+
             // AddressSeeder::class,
             // NotificationSeeder::class,
             // ContactSeeder::class,

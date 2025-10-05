@@ -17,7 +17,8 @@ class CheckSettingOpenMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! AppSettings::get('site_open')) {
+        
+        if (AppSettings::get('site_open') !== 'yes') {
             return response()->json([
                 'status'=>false,
                 'message'=>__('api.setting_close'),

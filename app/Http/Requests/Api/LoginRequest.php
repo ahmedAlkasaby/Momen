@@ -22,7 +22,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:users,email',
+            'email' => 'required|email',
             'password' => 'required|string|min:6',
             'token' => 'required|string',
             'device_type' => 'required|string|in:android,huawei,apple',
@@ -35,7 +35,6 @@ class LoginRequest extends FormRequest
     {
         return [
             'email.required' => __('validation.required', ['attribute' => __('auth.email')]),
-            'email.exists' => __('validation.exists', ['attribute' => __('auth.email')]),
             'password.required' => __('validation.required', ['attribute' => __('auth.password')]),
             'token.required' => __('validation.required', ['attribute' => __('auth.token')]),
             'device_type.required' => __('validation.required', ['attribute' => __('auth.device_type')]),

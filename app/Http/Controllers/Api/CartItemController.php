@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\Api\StoreCartItemsRequest;
 use App\Http\Resources\Api\CartItemCollection;
 use App\Http\Resources\Api\CartItemResource;
+use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\User;
 use App\Services\CartItemsService;
@@ -30,10 +31,12 @@ class CartItemController extends MainController
     public function store(StoreCartItemsRequest $request)
     {
         $auth=Auth()->guard('api')->user();
-        $user=User::find($auth->id);
 
         if($this->cartItemsService->checkProductInCart($request->product_id,$auth->id)){
-            CartItem::where('product_id', $request->product_id)->where('user_id', $auth->id)->delete();
+            $cart=Cart::where('user_id',$auth->id)->first();
+            CartItem::where('product_id', $request->product_id)
+            ->orWhere('product_child_id', $request->product_id)
+            ->where('cart_id', $cart->id)->delete();
         }
 
         $result=$this->cartItemsService->canPlaceProductInCart($request->product_id,$request->amount,$auth->id);
@@ -41,8 +44,12 @@ class CartItemController extends MainController
         if($result !== true){
             return $this->messageError($result);
         }
-
-        $user->cartItems()->create($request->validated());
+        $cart=Cart::firstOrCreate(
+            ['user_id'=>$auth->id],
+            ['type'=>'cart']
+        );
+      
+        $cart->cartItems()->create($this->cartItemsService->getDataCartItem($request->product_id,$request->amount));
 
         return $this->messageSuccess(__('site.cart_item_added'));
 

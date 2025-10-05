@@ -48,7 +48,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::group(['middleware'=>['userLangApi']],function(){
+Route::group(['middleware'=>['userLangApi','checkSettingOpen']],function(){
     Route::get('home',[HomeController::class,'index']);
     Route::apiResource('categories',CategoryController::class)->only(['index','show']);
     Route::apiResource('products',ProductController::class)->only(['index','show']);
@@ -68,6 +68,11 @@ Route::group(['middleware'=>['userLangApi']],function(){
         Route::post('forget/password',[ForgetPasswordController::class,'ForgetPassword']);
         Route::post('rest/password',[RestPasswordController::class,'RestPassword']);
     });
+      Route::group(['middleware'=>['auth-api']],function(){
+        Route::apiResource('cart_items',CartItemController::class)->except(('update'));
+      });
+      
+    
   
 
 });
