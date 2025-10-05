@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
 
         
         $this->call([
+            SettingSeeder::class,
             PaymentSeeder::class,
             DeliveryTimeSeeder::class,
             CitySeeder::class,

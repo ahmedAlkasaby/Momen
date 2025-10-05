@@ -2,8 +2,10 @@
 
 namespace App\Http\Resources\Api;
 
-use App\Http\Resources\UserResource;
+use App\Facades\SettingFacade as AppSettings;
+use App\Http\Resources\Api\UserResource;
 use App\Models\Category;
+use App\Models\Page;
 use App\Models\Product;
 use App\Models\Service;
 use App\Models\Setting;
@@ -12,7 +14,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Auth;
-use App\Facades\SettingFacade as AppSettings;
 
 
 class HomeCollection extends ResourceCollection
@@ -22,57 +23,25 @@ class HomeCollection extends ResourceCollection
 
     public function toArray(Request $request): array
     {
+        $settings= AppSettings::all();
         $auth = Auth::guard('api')->user();
         $user =$auth ? User::find($auth->id) : null;
-        $setting= AppSettings::all();
-        $sliders=Slider::filter()->paginate(10);
-        $sliderFeature=Slider::where('feature',1)->filter()->paginate(10);
+        $sliders=Page::where('type','slider')->active()->paginate(10);
+        $sliderFeature=Page::where('type','slider')->where('feature',1)->active()->paginate(10);
         $categories=Category::with('children')->filter()->paginate(10);
-        $services=Service::filter()->paginate(10);
-        $data=['categories','service','unit','size','brand','wishlists','cartItems'];
 
+        $data = ['categories','unit', 'size', 'brand'];
+        
+        $newProducts = Product::with($data)->where('is_new',1)
+            ->filter()->paginate(10);
+        $specialProducts = Product::with($data)->where('is_special',1)
+            ->filter()->paginate(10);
+        $filterProducts = Product::with($data)->where('is_filter',1)
+            ->filter()->paginate(10);
+        $offerProducts = Product::with($data)->where('is_offer',1)
+            ->filter()->paginate(10);
 
-        $featureProducts=Product::with($data)
-         ->withMin('children','price')
-        ->withMax('children','price')
-        ->withCount('activeReviews')
-        ->withAvg('activeReviews','rating')
-        ->withSum('cartItems as amount_in_all_carts', 'amount')->where('feature',1)->active()->paginate(10);
-        $newProducts=Product::with($data)
-         ->withMin('children','price')
-        ->withMax('children','price')
-        ->withCount('activeReviews')
-        ->withAvg('activeReviews','rating')
-        ->withSum('cartItems as amount_in_all_carts', 'amount')->where('new',1)->active()->paginate(10);
-        $specialProducts=Product::with($data)
-         ->withMin('children','price')
-        ->withMax('children','price')
-        ->withCount('activeReviews')
-        ->withAvg('activeReviews','rating')
-        ->withSum('cartItems as amount_in_all_carts', 'amount')->where('special',1)->active()->paginate(10);
-        $saleProducts=Product::with($data)
-         ->withMin('children','price')
-        ->withMax('children','price')
-        ->withCount('activeReviews')
-        ->withAvg('activeReviews','rating')
-        ->withSum('cartItems as amount_in_all_carts', 'amount')->where('sale',1)->active()->paginate(10);
-        $filterProducts=Product::with($data)
-         ->withMin('children','price')
-        ->withMax('children','price')
-        ->withCount('activeReviews')
-        ->withAvg('activeReviews','rating')
-        ->withSum('cartItems as amount_in_all_carts', 'amount')->where('filter',1)->active()->paginate(10);
-        $offerProducts=Product::with($data)
-         ->withMin('children','price')
-        ->withMax('children','price')
-        ->withCount('activeReviews')
-        ->withAvg('activeReviews','rating')
-        ->withSum('cartItems as amount_in_all_carts', 'amount')->where('offer',1)->active()->paginate(10);
-
-
-
-
-
+      
 
         return [
             'products'=>ProductResource::collection($this->collection),
@@ -89,34 +58,35 @@ class HomeCollection extends ResourceCollection
                 'next' => $this->nextPageUrl(),
             ],
             'user'=>$user ? new UserResource($user) : null,
-            'notification_count'=>$user? $user->notificationsUnread()->count() : 0,
-            'min_order'=> $setting->min_order,
-            'max_order'=> $setting->max_order,
-            'delivery_cost'=> $setting->delivery_cost,
-            'min_order_for_shipping_free'=> $setting->min_order_for_shipping_free,
-            'cart_total'=>$user ? $user->totalPriceInCart() : 0,
+            // 'notification_count'=>$user? $user->notificationsUnread()->count() : 0,
+            'min_order'                    => $settings['min_order'] ?? 0,
+            'max_order'                    => $settings['max_order'] ?? 0,
+            'delivery_cost'                => $settings['delivery_cost'] ?? 0,
+            'min_order_for_shipping_free'  => $settings['min_order_for_shipping_free'] ?? 0,
+
+            // 'cart_total'=>$user ? $user->totalPriceInCart() : 0,
             'product_min'=>Product::filter()->min('price'),
             'product_max'=> Product::filter()->max('price'),
-            'site_title'=> $setting->site_title,
-            'site_phone'=> $setting->site_phone,
-            'site_email'=> $setting->site_email,
-            'logo'=> $setting->logo,
-            'facebook'=> $setting->facebook,
-            'youtube'=> $setting->youtube,
-            'whatsapp'=> $setting->whatsapp,
-            'snapchat'=> $setting->snapchat,
-            'instagram'=> $setting->instagram,
-            'twitter'=> $setting->twitter,
-            'tiktok'=> $setting->tiktok,
-            'telegram'=> $setting->telegram,
-            'services'=>ServiceResource::collection($services),
-            'sliders'=>SliderResource::collection($sliders),
-            'sliderFeature'=>SliderResource::collection($sliderFeature),
+           
+            'site_title'  => $settings['site_title'] ,
+            'site_phone'  => $settings['site_phone'] ,
+            'site_email'  => $settings['site_email'] ,
+            'logo'        => $settings['logo'] ,
+            'facebook'    => $settings['facebook'],
+            'youtube'     => $settings['youtube'],
+            'whatsapp'    => $settings['whatsapp'] ,
+            'snapchat'    => $settings['snapchat'] ,
+            'instagram'   => $settings['instagram'] ,
+            'twitter'     => $settings['twitter'] ,
+            'tiktok'      => $settings['tiktok'] ,
+            'telegram'    => $settings['telegram'] ,
+            // 'services'=>ServiceResource::collection($services),
+            'sliders'=>PageResource::collection($sliders),
+            'sliderFeature'=>PageResource::collection($sliderFeature),
             'categories'=>CategoryResource::collection($categories),
-            'featureProducts'=>ProductResource::collection($featureProducts),
             'newProducts'=>ProductResource::collection($newProducts),
             'specialProducts'=>ProductResource::collection($specialProducts),
-            'saleProducts'=>ProductResource::collection($saleProducts),
+            // 'saleProducts'=>ProductResource::collection($saleProducts),
             'filterProducts'=>ProductResource::collection($filterProducts),
             'offerProducts'=>ProductResource::collection($offerProducts),
         ];
