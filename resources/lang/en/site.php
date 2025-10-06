@@ -628,5 +628,6 @@ return [
     'desktop' => 'Desktop',
     'mobile' => 'Mobile',
     'trash_buckets' => 'Trash Buckets',
+    'cart_is_empty' => 'Cart is empty',
 
 ];

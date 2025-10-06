@@ -23,14 +23,14 @@ class Product extends MainModel
         'offer_amount',
         'offer_amount_add',
         'offer_percent',
-        
+
 
         // price
         'price',
         'price_start',
         'price_end',
         'shipping',
-      
+
 
         // order limits
         'start',
@@ -79,8 +79,8 @@ class Product extends MainModel
     ];
 
 
-   
-   
+
+
     public function setDateStartAttribute($value)
     {
         $this->attributes['date_start'] = date('Y-m-d H:i:00', strtotime($value));
@@ -98,7 +98,7 @@ class Product extends MainModel
     }
 
 
-   
+
 
 
     public function unit()
@@ -121,7 +121,7 @@ class Product extends MainModel
 
     public function parent()
     {
-        return $this->belongsTo(Product::class,'parent_id', 'id');
+        return $this->belongsTo(Product::class, 'parent_id', 'id');
     }
     public function children()
     {
@@ -133,16 +133,28 @@ class Product extends MainModel
     //     return $this->belongsToMany(User::class, 'wishlists', 'product_id', 'user_id')->withTimestamps();
     // }
 
-    // public function cartItems()
-    // {
-    //     return $this->hasMany(CartItem::class, 'product_id', 'id');
-    // }
+    public function parentCartItems()
+    {
+        return $this->hasMany(CartItem::class, 'product_id');
+    }
+
+    public function childCartItems()
+    {
+        return $this->hasMany(CartItem::class, 'product_child_id');
+    }
+
+    public function getAllCartItemsAttribute()
+    {
+        return $this->parentCartItems->merge($this->childCartItems);
+    }
+
+
 
     public function scopeActiveProducts($query)
     {
         return $query
             ->where('active', 1)
-            ->where('is_stock',1)
+            ->where('is_stock', 1)
             ->orderNo();
     }
 
@@ -153,9 +165,9 @@ class Product extends MainModel
     {
         $query->orderNo();
         $query->whereNull('parent_id');
-        if($type_app=='app'){
-          $query->activeProducts();
-        }else{
+        if ($type_app == 'app') {
+            $query->activeProducts();
+        } else {
             if ($request->filled('active') && $request->active != 'all') {
                 $query->where('active', $request->active);
             }
@@ -167,9 +179,9 @@ class Product extends MainModel
     }
 
 
-   
 
-   
+
+
     public function scopeApplyCategoryFilter($query, $request)
     {
         if ($request->filled('category_id') && $request->category_id != 'all') {
@@ -194,14 +206,14 @@ class Product extends MainModel
         return $query;
     }
 
-    
-  
- 
-   
-   
-   
 
-   
+
+
+
+
+
+
+
 
     public function scopeApplyDateFilters($query, $request)
     {
@@ -216,9 +228,9 @@ class Product extends MainModel
         return $query;
     }
 
-   
 
-   
+
+
 
     public function scopeApplySorting($query, $request)
     {
@@ -249,17 +261,28 @@ class Product extends MainModel
     public function scopeFilter($query, $request = null, $type_app = 'app')
     {
         $request = $request ?? request();
-       
-      
 
-        $filters = $request->only([ 
+
+
+        $filters = $request->only([
             // relations
-            'brand_id', 'unit_id','color_id'
+            'brand_id',
+            'unit_id',
+            'color_id'
             // status flags
-             ,'active', 'is_stock', 'is_filter', 'is_offer', 'is_new', 'is_special',
-             
-              'is_size', 'is_color', 'is_shipping_free','is_returned'
-            ]);
+            ,
+            'active',
+            'is_stock',
+            'is_filter',
+            'is_offer',
+            'is_new',
+            'is_special',
+
+            'is_size',
+            'is_color',
+            'is_shipping_free',
+            'is_returned'
+        ]);
 
 
         return $query
@@ -280,8 +303,11 @@ class Product extends MainModel
     {
         $userId = Auth::guard('api')->id();
         if ($userId) {
-            return $this->cartItems->where('user_id', $userId)
-                ->sum('amount');
+            $cart = Cart::where('user_id', $userId)->first();
+            if ($cart) {
+                return $this->all_cart_items->where('cart_id', $cart->id)
+                    ->sum('amount');
+            }
         }
         return 0;
     }
@@ -290,7 +316,9 @@ class Product extends MainModel
     {
         $userId = Auth::guard('api')->id();
         if (!$userId) return false;
-        return $this->cartItems->where('user_id', $userId)->isNotEmpty();
+        $cart = Cart::where('user_id', $userId)->first();
+        if (!$cart) return false;
+        return $this->all_cart_items->where('cart_id', $cart->id)->isNotEmpty();
     }
 
     public function checkProductInWishlists(): bool
@@ -305,7 +333,9 @@ class Product extends MainModel
     {
         $userId = Auth::guard('api')->id();
         if ($userId) {
-            $cartItem = $this->cartItems->where('user_id', $userId)->first();
+            $cart = Cart::where('user_id', $userId)->first();
+            if (!$cart) return 0;
+            $cartItem = $this->all_cart_items->where('cart_id', $cart->id)->first();
             return $cartItem ? $cartItem->id : 0;
         }
         return 0;

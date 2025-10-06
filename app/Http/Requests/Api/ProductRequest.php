@@ -28,7 +28,6 @@ class ProductRequest extends FormRequest
             'sort_by' => 'nullable|in:latest,oldest,highest_price,lowest_price',
             'min_price' => 'nullable|numeric|min:0',
             'max_price' => 'nullable|numeric|min:0',
-            'is_feature'=>'nullable|in:0,1',
             'is_new'=>'nullable|in:0,1',
             'is_special'=>'nullable|in:0,1',
             'is_filter'=>'nullable|in:0,1',

@@ -648,5 +648,6 @@ return [
     'desktop' => 'سطح المكتب',
     'mobile' => 'جوال',
     'trash_buckets' => 'سلة المهملات',
+    'cart_is_empty' => 'السلة فارغة',
 ];
 

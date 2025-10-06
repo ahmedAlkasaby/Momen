@@ -26,36 +26,36 @@ class ProductResource extends JsonResource
             'image' => url($this->image),
 
 
-            'offer_type'=>$this->offer_type,
-            'offer_price'=>$this->offer_price,
-            'offer_amount'=>$this->offer_amount,
-            'offer_amount_add'=>$this->offer_amount_add,
-            'offer_percent'=>$this->offer_percent,
+            'offer_type' => $this->offer_type,
+            'offer_price' => $this->offer_price,
+            'offer_amount' => $this->offer_amount,
+            'offer_amount_add' => $this->offer_amount_add,
+            'offer_percent' => $this->offer_percent,
 
 
             'price_start' => $this->price_start,
             'price_end'   => $this->price_end,
             'price' => $this->price,
-            'shipping'=>$this->shipping,
-          
+            'shipping' => $this->shipping,
+
 
             'start' => $this->start,
             'skip' => $this->skip,
-            'order_limit'=>$this->order_limit,
+            'order_limit' => $this->order_limit,
             'max_order' => $this->max_order,
 
 
             'active' => $this->active,
             'is_filter' => $this->is_filter,
-            'is_offer'=>$this->is_offer,
+            'is_offer' => $this->is_offer,
             'is_new' => $this->is_new,
             'is_special' => $this->is_special,
             'is_stock' => $this->is_stock,
             'is_shipping_free' => $this->is_shipping_free,
             'is_returned' => $this->is_returned,
 
-            'is_size'=>$this->is_size,
-            'is_color'=>$this->is_color,
+            'is_size' => $this->is_size,
+            'is_color' => $this->is_color,
 
 
             // 'reviews_count'  => $this->reviews_count ?? 0,
@@ -70,18 +70,13 @@ class ProductResource extends JsonResource
             // 'in_wishlists' =>$this->whenLoaded('wishlists', function (){
             //     return $this->checkProductInWishlists();
             // }),
-            // 'in_cart' => $this->whenLoaded('cartItems', function () {
-            //     return $this->checkProductInCart();
-            // }),
-            // 'id_in_cart' => $this->whenLoaded('cartItems', function () {
-            //     return $this->productIdInCart();
-            // }),
-            // 'count_in_cart' => $this->whenLoaded('cartItems', function () {
-            //     return $this->countInCart();
-            // }),
+            'in_cart' => $this->checkProductInCart(),
+            'id_in_cart' => $this->productIdInCart(),
+            'count_in_cart' => $this->countInCart(),
+
             'categories' => CategoryResource::collection($this->whenLoaded('categories')),
             'unit' => new UnitResource($this->whenLoaded('unit')),
-            'brand' =>new BrandResource($this->whenLoaded('brand')),
+            'brand' => new BrandResource($this->whenLoaded('brand')),
             'size' => new SizeResource($this->whenLoaded('size')),
             'color' => new ColorResource($this->whenLoaded('color')),
             'parent' => new ProductResource($this->whenLoaded('parent')),

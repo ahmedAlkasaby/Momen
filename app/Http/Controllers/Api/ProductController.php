@@ -14,7 +14,14 @@ class ProductController extends MainController
 
     public function index(ProductRequest $request)
     {
-        $data = ['categories','unit','color','size', 'brand','parent'];
+        $data = [
+            'categories',
+            'unit',
+            'color',
+            'size',
+            'brand',
+            'parent',
+        ];
         $products = Product::with($data)
             ->filter($request)->paginate($this->perPage);
 
@@ -25,9 +32,18 @@ class ProductController extends MainController
 
     public function show(string $id)
     {
-        $data = ['categories','unit', 'color','size', 'brand','children.size','children.color', 'parent'];
 
-        $product = Product::with($data)->activeProducts()
+        $data = [
+            'categories',
+            'unit',
+            'color',
+            'size',
+            'brand',
+            'children',
+            'parent',
+        ];
+
+        $product = Product::with($data)->filter()
             ->where('id', $id)
             ->first();
         if (!$product) {

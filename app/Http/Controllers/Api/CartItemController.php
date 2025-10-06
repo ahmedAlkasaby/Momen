@@ -23,7 +23,11 @@ class CartItemController extends MainController
     public function index()
     {
         $auth=Auth()->guard('api')->user();
-        $cartItems = CartItem::with('product')->where('user_id', $auth->id)->paginate($this->perPage);
+        $cart=Cart::where('user_id',$auth->id)->first();
+        if (!$cart) {
+            return $this->messageError(__('site.cart_is_empty'), 404);
+        }
+        $cartItems = CartItem::with('product','productChild')->where('cart_id', $cart->id)->paginate($this->perPage);
         return $this->sendData(new CartItemCollection($cartItems), __('site.cart_items'));
     }
 
@@ -59,10 +63,12 @@ class CartItemController extends MainController
     public function show(string $id)
     {
         $auth=Auth()->guard('api')->user();
-        $user=User::find($auth->id);
-        $cartItem=$user->cartItems()->with('product')->where('id',$id)->first();
+        $cart=Cart::where('user_id',$auth->id)->first();
+        $cartItem=CartItem::with('product','productChild')
+        ->where('cart_id', $cart->id)
+        ->where('id',$id)->first();
         if (!$cartItem) {
-            return $this->messageError(__('site.cart_item_not_found'));
+            return $this->messageError(__('site.cart_item_not_found'), 404);
         }
         return $this->sendData(new CartItemResource($cartItem), __('site.cart_item'));
     }
@@ -72,13 +78,16 @@ class CartItemController extends MainController
     public function destroy(string $id)
     {
         $auth=Auth()->guard('api')->user();
-        $user=User::find($auth->id);
-        $cartItem=$user->cartItems()->where('id',$id)->first();
+        $cart=Cart::where('user_id',$auth->id)->first();
+        $cartItem=CartItem::where('cart_id', $cart->id)->where('id',$id)->first();
 
         if (!$cartItem) {
             return $this->messageError(__('site.cart_item_not_found'));
         }
         $cartItem->delete();
+        if($cart->cartItems->count() == 0){
+            $cart->delete();
+        }
         return $this->messageSuccess(__('site.cart_item_deleted'));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api;
 
+use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class CartItemCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         $auth=Auth()->guard('api')->user();
-        $user=User::find($auth->id);
+        $cart=Cart::where('user_id',$auth->id)->first();
         return [
             'cart_items' => $this->collection,
             'meta' => [
@@ -28,8 +29,10 @@ class CartItemCollection extends ResourceCollection
                 'prev' => $this->previousPageUrl(),
                 'next' => $this->nextPageUrl(),
             ],
-
-            'total_price'=>$user->totalPriceInCart(),
+            'total'=>$cart->cartItems->sum('total'),
+            'total_price'=>$cart->cartItems->sum('total_price'),
+            'total_items'=>$cart->cartItems->count(),
+            
         ];
     }
 }
