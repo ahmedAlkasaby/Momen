@@ -48,31 +48,44 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::group(['middleware'=>['userLangApi','checkSettingOpen']],function(){
-    Route::get('home',[HomeController::class,'index']);
-    Route::apiResource('categories',CategoryController::class)->only(['index','show']);
-    Route::apiResource('products',ProductController::class)->only(['index','show']);
-    Route::apiResource('cities',CityController::class)->only(['index','show']);
-    Route::apiResource('regions',RegionController::class)->only(['index','show']);
-    Route::apiResource('payments',PaymentController::class)->only(['index','show']);
-    Route::apiResource('delivery_times',DeliveryTimeController::class)->only(['index','show']);
-    Route::apiResource('pages',PageController::class)->only(['index','show']);
-   
-    Route::group(['prefix'=>'auth'],function(){
-        Route::group(['prefix'=>'register'],function(){
-            Route::post('check',[AuthController::class, 'check_register']);
-            Route::post('/',[AuthController::class,'register']);
-        });
-        Route::post('login',[AuthController::class,'login']);
-        Route::post('logout',[AuthController::class,'logout'])->middleware('auth-api');
-        Route::post('forget/password',[ForgetPasswordController::class,'ForgetPassword']);
-        Route::post('rest/password',[RestPasswordController::class,'RestPassword']);
-    });
-      Route::group(['middleware'=>['auth-api']],function(){
-        Route::apiResource('cart_items',CartItemController::class)->except(('update'));
-      });
-      
-    
-  
+Route::group(['middleware' => ['userLangApi', 'checkSettingOpen']], function () {
+  Route::get('home', [HomeController::class, 'index']);
+  Route::apiResource('categories', CategoryController::class)->only(['index', 'show']);
+  Route::apiResource('products', ProductController::class)->only(['index', 'show']);
+  Route::apiResource('cities', CityController::class)->only(['index', 'show']);
+  Route::apiResource('regions', RegionController::class)->only(['index', 'show']);
+  Route::apiResource('payments', PaymentController::class)->only(['index', 'show']);
+  Route::apiResource('delivery_times', DeliveryTimeController::class)->only(['index', 'show']);
+  Route::apiResource('pages', PageController::class)->only(['index', 'show']);
 
+  Route::group(['prefix' => 'auth'], function () {
+    Route::group(['prefix' => 'register'], function () {
+      Route::post('check', [AuthController::class, 'check_register']);
+      Route::post('/', [AuthController::class, 'register']);
+    });
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout'])->middleware('auth-api');
+    Route::post('forget/password', [ForgetPasswordController::class, 'ForgetPassword']);
+    Route::post('rest/password', [RestPasswordController::class, 'RestPassword']);
+  });
+  Route::group(['middleware' => ['auth-api']], function () {
+    Route::apiResource('cart_items', CartItemController::class)->except(('update'));
+    Route::resource('notifications', NotificationController::class)->only(['index', 'destroy']);
+    Route::put('notifications/read-all', [NotificationController::class, 'readAll']);
+    Route::put('notifications/read/{id}', [NotificationController::class, 'read']);
+
+
+    // Route::group(['prefix' => 'profile'], function () {
+    //   Route::get('/', [ProfileController::class, 'index']);
+    //   Route::put('/', [ProfileController::class, 'update']);
+    //   Route::group(['prefix' => 'change'], function () {
+    //     Route::post('address', [ProfileController::class, 'changeAddress']);
+    //     Route::post('password', [ProfileController::class, 'changePassword']);
+    //     Route::post('image', [ProfileController::class, 'changeImage']);
+    //     Route::post('available', [ProfileController::class, 'changeAvailable']);
+    //     Route::post('theme', [ProfileController::class, 'changeTheme']);
+    //     Route::post('lang', [ProfileController::class, 'changeLang']);
+    //   });
+    // });
+  });
 });

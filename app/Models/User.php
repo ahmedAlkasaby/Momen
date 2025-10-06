@@ -12,9 +12,9 @@ use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject,LaratrustUser
+class User extends Authenticatable implements JWTSubject, LaratrustUser
 {
-    use  HasFactory, Notifiable ,SoftDeletes, HasRolesAndPermissions;
+    use  HasFactory, Notifiable, SoftDeletes, HasRolesAndPermissions;
 
 
     public function setPasswordAttribute($value)
@@ -64,15 +64,15 @@ class User extends Authenticatable implements JWTSubject,LaratrustUser
 
     public function getJWTIdentifier()
     {
-      return $this->getKey();
+        return $this->getKey();
     }
 
     public function getJWTCustomClaims()
     {
-      return [
-        'email'=>$this->email,
-        'name'=>$this->name
-      ];
+        return [
+            'email' => $this->email,
+            'name' => $this->name
+        ];
     }
 
     public function getNameAttribute()
@@ -80,9 +80,25 @@ class User extends Authenticatable implements JWTSubject,LaratrustUser
         return $this->name_first . ' ' . $this->name_last;
     }
 
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class, 'user_id', 'id');
+    }
 
-   
+    public function notificationsUnread()
+    {
+        return $this->hasMany(Notification::class, 'user_id', 'id')->whereNull('read_at');
+    }
+    public function notificationsRead()
+    {
+        return $this->hasMany(Notification::class, 'user_id', 'id')->whereNotNull('read_at');
+    }
 
 
-
+    public function markNotificationAsRead($notifications)
+    {
+        foreach ($notifications as $notification) {
+            $notification->update(['read_at' => now()]);
+        }
+    }
 }

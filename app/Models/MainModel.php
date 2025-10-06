@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 class MainModel extends Model
 {
-    use HasFactory, SoftDeletes, ActivityLogTrait,HasTrash;
+    use HasFactory, SoftDeletes, ActivityLogTrait;
 
     protected $casts = [
         'name' => \App\Casts\UnescapedJson::class,

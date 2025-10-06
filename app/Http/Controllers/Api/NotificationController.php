@@ -51,6 +51,8 @@ class NotificationController extends MainController
         return $this->messageSuccess(__('site.notification_deleted_successfully'));
     }
 
+    
+
 
 
 

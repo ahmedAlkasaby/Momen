@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
             PageSeeder::class,
 
             // AddressSeeder::class,
-            // NotificationSeeder::class,
+            NotificationSeeder::class,
             // ContactSeeder::class,
             // PaymentSeeder::class,
             // AddressSeeder::class,

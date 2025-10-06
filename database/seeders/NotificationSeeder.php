@@ -20,7 +20,7 @@ class NotificationSeeder extends Seeder
                     'en'=>fake()->word(),
                     'ar'=>fake()->word(),
                 ],
-                'description'=>[
+                'content'=>[
                     'en'=>fake()->text(),
                     'ar'=>fake()->text(),
                 ],
