@@ -23,7 +23,7 @@ class AddressSeeder extends Seeder
                 'longitude' => fake()->longitude(),
                 'address' => fake()->address(),
                 'phone' => fake()->phoneNumber(),
-                'active'=>1
+                'is_main'=>1
             ]);
         }
     }

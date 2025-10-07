@@ -56,6 +56,8 @@ return [
     'payment_success'=>'Payment Success',
     'payment_failed'=>'Payment Failed',
     'order_limit'=>'The minimum quantity allowed for this product is :order_limit units.',
+    'name'=>'Name', 
+    'is_main'=>'Is Main',
 
 
 ];

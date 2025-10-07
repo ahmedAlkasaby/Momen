@@ -73,19 +73,21 @@ Route::group(['middleware' => ['userLangApi', 'checkSettingOpen']], function () 
     Route::resource('notifications', NotificationController::class)->only(['index', 'destroy']);
     Route::put('notifications/read-all', [NotificationController::class, 'readAll']);
     Route::put('notifications/read/{id}', [NotificationController::class, 'read']);
+    Route::apiResource('addresses',AddressController::class);
 
 
-    // Route::group(['prefix' => 'profile'], function () {
-    //   Route::get('/', [ProfileController::class, 'index']);
-    //   Route::put('/', [ProfileController::class, 'update']);
-    //   Route::group(['prefix' => 'change'], function () {
-    //     Route::post('address', [ProfileController::class, 'changeAddress']);
-    //     Route::post('password', [ProfileController::class, 'changePassword']);
-    //     Route::post('image', [ProfileController::class, 'changeImage']);
-    //     Route::post('available', [ProfileController::class, 'changeAvailable']);
-    //     Route::post('theme', [ProfileController::class, 'changeTheme']);
-    //     Route::post('lang', [ProfileController::class, 'changeLang']);
-    //   });
-    // });
+
+    Route::group(['prefix' => 'profile'], function () {
+      Route::get('/', [ProfileController::class, 'index']);
+      Route::put('/', [ProfileController::class, 'update']);
+      Route::group(['prefix' => 'change'], function () {
+        Route::post('address', [ProfileController::class, 'changeAddress']);
+        Route::post('password', [ProfileController::class, 'changePassword']);
+        Route::post('image', [ProfileController::class, 'changeImage']);
+        Route::post('available', [ProfileController::class, 'changeAvailable']);
+        Route::post('theme', [ProfileController::class, 'changeTheme']);
+        Route::post('lang', [ProfileController::class, 'changeLang']);
+      });
+    });
   });
 });

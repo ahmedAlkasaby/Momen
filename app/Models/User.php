@@ -80,6 +80,11 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
         return $this->name_first . ' ' . $this->name_last;
     }
 
+     public function addresses()
+    {
+        return $this->hasMany(Address::class, 'user_id', 'id');
+    }
+
     public function notifications()
     {
         return $this->hasMany(Notification::class, 'user_id', 'id');

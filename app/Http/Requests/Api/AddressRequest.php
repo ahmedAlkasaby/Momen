@@ -25,6 +25,8 @@ class AddressRequest extends FormRequest
     {
         return [
             'type'    => ['required', new Enum(TypeAddressEnum::class)],
+            'name'=>'nullable|string',
+            'is_main'=>'nullable|in:0,1',
             'city_id'=>'required|exists:cities,id',
             'region_id'=>'nullable|exists:regions,id',
             'address'=>'required|string',
@@ -43,6 +45,8 @@ class AddressRequest extends FormRequest
         return [
             'type.required' => __('validation.required',['attribute'=>__('api.type')]),
             'type.enum' => __('validation.enum',['attribute'=>__('api.type')]),
+            'name.string' => __('validation.string',['attribute'=>__('api.name')]),
+            'is_main.in' => __('validation.in',['attribute'=>__('api.is_main')]),
             'city_id.required' => __('validation.required',['attribute'=>__('api.city_id')]),
             'city_id.exists' => __('validation.exists',['attribute'=>__('api.city_id')]),
             'region_id.exists' => __('validation.exists',['attribute'=>__('api.region_id')]),

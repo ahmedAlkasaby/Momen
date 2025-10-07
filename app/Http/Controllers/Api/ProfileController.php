@@ -8,7 +8,7 @@ use App\Http\Requests\Api\ChangeLangRequest;
 use App\Http\Requests\Api\ChangePasswordRequest;
 use App\Http\Requests\Api\ChangeThemeRequest;
 use App\Http\Requests\Api\UpdateProfileRequest;
-use App\Http\Resources\UserResource;
+use App\Http\Resources\Api\UserResource;
 use App\Models\User;
 use App\Services\ImageHandlerService;
 use Illuminate\Support\Facades\Hash;
