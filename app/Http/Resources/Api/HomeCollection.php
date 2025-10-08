@@ -58,13 +58,13 @@ class HomeCollection extends ResourceCollection
                 'next' => $this->nextPageUrl(),
             ],
             'user'=>$user ? new UserResource($user) : null,
-            // 'notification_count'=>$user? $user->notificationsUnread()->count() : 0,
+            'notification_count'=>$user? $user->notificationsUnread()->count() : 0,
             'min_order'                    => $settings['min_order'] ?? 0,
             'max_order'                    => $settings['max_order'] ?? 0,
             'delivery_cost'                => $settings['delivery_cost'] ?? 0,
             'min_order_for_shipping_free'  => $settings['min_order_for_shipping_free'] ?? 0,
 
-            // 'cart_total'=>$user ? $user->totalPriceInCart() : 0,
+            'cart_total'=>$user ? $user->totalPriceInCart() : 0,
             'product_min'=>Product::filter()->min('price'),
             'product_max'=> Product::filter()->max('price'),
            

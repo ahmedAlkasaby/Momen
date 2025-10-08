@@ -106,4 +106,13 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
             $notification->update(['read_at' => now()]);
         }
     }
+
+    public function cart()
+    {
+        return $this->hasOne(Cart::class, 'user_id', 'id');
+    }
+    public function totalPriceInCart()
+    {
+        return $this->cart->cartItems->sum('total_price');
+    }
 }
