@@ -55,6 +55,7 @@ return [
     'payment_success'=>'تم الدفع بنجاح',
     'payment_failed'=>'فشلت عملية الدفع',
     'order_limit'=>'الحد الأدنى المسموح للطلب من هذا المنتج هو :order_limit وحدة.',
+    'theme_updated'=>'تم تحديث الثيم بنجاح',    
  
     'name'=>'الاسم',
     'is_main'=>'العنوان الرئيسي',

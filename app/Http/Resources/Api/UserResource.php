@@ -21,7 +21,7 @@ class UserResource extends JsonResource
             'active' => $this->active,
             'email' => $this->email,
             'phone' => $this->phone,
-            'image' => $this->image,
+            'image' => $this->image ? asset($this->image) : null,
             'vip' => $this->vip,
             'locale' => $this->locale,
             'theme' => $this->theme,

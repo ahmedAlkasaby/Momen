@@ -23,8 +23,8 @@ class SetUserApiLangMiddleware
         }
 
         $auth=Auth::guard('api')->user();
-        if($auth && $auth->lang != $lang){
-            $lang=$auth->lang;
+        if($auth && $auth->locale != $lang){
+            $lang=$auth->locale;
         }
 
         app()->setLocale($lang);

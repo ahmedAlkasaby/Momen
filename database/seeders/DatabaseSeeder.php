@@ -34,11 +34,9 @@ class DatabaseSeeder extends Seeder
             ColorSeeder::class,
             ProductSeeder::class,
             PageSeeder::class,
-
             AddressSeeder::class,
             NotificationSeeder::class,
             // ContactSeeder::class,
-            // PaymentSeeder::class,
             // AddressSeeder::class,
             // OrderSeeder::class
         ]);

@@ -38,9 +38,9 @@ class ProfileController extends MainController
         if (!$address) {
             return $this->messageError(__('api.address_not_found'));
         }
-        $auth->addresses()->where('active',1)->update(['active'=>0]);
+        $auth->addresses()->where('is_main',1)->update(['is_main'=>0]);
         $address->update([
-            'active'=>1,
+            'is_main'=>1,
         ]);
 
         return $this->messageSuccess(__('api.address_changed'));
@@ -70,7 +70,7 @@ class ProfileController extends MainController
     public function changeImage(ChangeImageRequest $request){
         $auth=auth()->guard('api')->user();
         $user=User::find($auth->id);
-        $imageUrl = $this->imageHandlerService->editImage($request, $user, 'users');
+        $imageUrl = $this->imageHandlerService->editImage($user->image,$request->image,'users');
         $user->update([
             'image' => $imageUrl,
         ]);
@@ -80,7 +80,7 @@ class ProfileController extends MainController
     public function changeAvailable(){
         $auth=auth()->guard('api')->user();
         $auth->update([
-            'notify'=>!$auth->notify,
+            'is_notify'=>!$auth->is_notify,
         ]);
         return $this->messageSuccess(__('api.notify_updated'));
     }
@@ -95,7 +95,7 @@ class ProfileController extends MainController
     public function changeLang(ChangeLangRequest $request){
         $auth=auth()->guard('api')->user();
         $auth->update([
-            'lang'=>$request->lang,
+            'locale'=>$request->lang,
         ]);
         return $this->messageSuccess(__('api.lang_updated'));
     }

@@ -2,53 +2,53 @@
 
 namespace App\Services;
 
-use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 
 class ImageHandlerService
 {
-   
-    public function uploadImage( $folder = 'images', $request,$width = 800, $height = 600)
+
+    public function uploadImage($imageFile, $folder = 'images', $width = 800, $height = 600)
     {
+        if (!$imageFile || !$imageFile->isValid()) {
+            return null;
+        }
+
         $manager = new ImageManager(new Driver());
-
-        $imageFile = $request->file('image');
-
-        $realPath = $imageFile->getRealPath();
-        $image = $manager->read($realPath);
+        $image = $manager->read($imageFile->getRealPath());
 
         $image->resize($width, $height, function ($constraint) {
             $constraint->aspectRatio();
             $constraint->upsize();
         });
+        $imageName = time() . '_' . uniqid() . '.webp';
+        $pathInStorage = "$folder/$imageName";
 
-        $imageName = time() . '.webp';
-        $imagePath = 'uploads/' . $folder . '/' . $imageName;
+        $encoded = $image->toWebp(quality: 60);
+        Storage::disk('public')->put($pathInStorage, (string) $encoded);
 
-        $image->toWebp(quality: 60)
-              ->save(public_path($imagePath));
-
-        return $imagePath;
+        return ;
     }
 
 
 
 
 
-    public function deleteImage($path): void
+    public function deleteImage(?string $path): void
     {
         if (!$path) return;
-        if(!file_exists(public_path($path))) return;
-        unlink(public_path($path));
+    
+        $relativePath = str_replace('/storage/', '', $path);
+    
+        if (Storage::disk('public')->exists($relativePath)) {
+            Storage::disk('public')->delete($relativePath);
+        }
     }
 
-    public function editImage($request, $obj, $folder)
+    public function editImage($oldPath ,$imageFile, $folder)
     {
-        $imgUrl = $obj->image ?? "";
-        if ($request->hasFile('image') && $request->image!= $obj->image) {
-            $this->deleteImage($obj->image);
-            $imgUrl = $this->uploadImage($folder, $request);
-        }
-        return $imgUrl;
+        $this->deleteImage($oldPath);
+        return $this->uploadImage($imageFile, $folder); 
     }
 }
