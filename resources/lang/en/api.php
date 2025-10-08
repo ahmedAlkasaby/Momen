@@ -58,6 +58,7 @@ return [
     'order_limit'=>'The minimum quantity allowed for this product is :order_limit units.',
     'name'=>'Name', 
     'is_main'=>'Is Main',
+    'coupon_not_found'=>'Coupon not found',
 
 
 ];

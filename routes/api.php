@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Auth\RestPasswordController;
 use App\Http\Controllers\Api\CartItemController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CityController;
+use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\DeliveryTimeController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\NotificationController;
@@ -23,6 +24,7 @@ use App\Http\Controllers\Api\StoreTypeController;
 use App\Http\Controllers\Api\WishListController;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -57,6 +59,7 @@ Route::group(['middleware' => ['userLangApi', 'checkSettingOpen']], function () 
   Route::apiResource('payments', PaymentController::class)->only(['index', 'show']);
   Route::apiResource('delivery_times', DeliveryTimeController::class)->only(['index', 'show']);
   Route::apiResource('pages', PageController::class)->only(['index', 'show']);
+  Route::apiResource('coupons', CouponController::class)->only(['index', 'show']);
 
   Route::group(['prefix' => 'auth'], function () {
     Route::group(['prefix' => 'register'], function () {
@@ -74,8 +77,7 @@ Route::group(['middleware' => ['userLangApi', 'checkSettingOpen']], function () 
     Route::put('notifications/read-all', [NotificationController::class, 'readAll']);
     Route::put('notifications/read/{id}', [NotificationController::class, 'read']);
     Route::apiResource('addresses',AddressController::class);
-
-
+    Route::apiResource('orders',OrderController::class)->except('destroy');
 
     Route::group(['prefix' => 'profile'], function () {
       Route::get('/', [ProfileController::class, 'index']);
