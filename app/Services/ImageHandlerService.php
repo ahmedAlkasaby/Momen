@@ -28,7 +28,7 @@ class ImageHandlerService
         $encoded = $image->toWebp(quality: 60);
         Storage::disk('public')->put($pathInStorage, (string) $encoded);
 
-        return ;
+        return '/storage/' . $pathInStorage;
     }
 
 
