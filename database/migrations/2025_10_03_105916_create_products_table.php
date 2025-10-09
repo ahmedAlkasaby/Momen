@@ -65,7 +65,7 @@ return new class extends Migration
             $table->tinyInteger('is_size')->default(0);
             $table->tinyInteger('is_color')->default(0);
             $table->tinyInteger('is_max')->default(0);
-            $table->tinyInteger('is_shipping_free')->default(0);
+            $table->tinyInteger('is_shipping_free')->default(1);
             $table->tinyInteger('is_returned')->default(0);
 
 

@@ -25,6 +25,7 @@ class SettingSeeder extends Seeder
             'site_open' => 'yes',
             'result' => 100,
             'logo' => 'Settings/logo.png',
+            'return_period_days' => 14,
         ];
 
         foreach ($generalSettings as $key => $value) {
