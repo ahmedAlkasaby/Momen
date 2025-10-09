@@ -59,6 +59,9 @@ return [
     'name'=>'Name', 
     'is_main'=>'Is Main',
     'coupon_not_found'=>'Coupon not found',
+    'coupon'=>'Coupon', 
+    'coupon_user_limit'=>'You can not use this coupon more than :user_limit time',
+    'coupon_min_order'=>'The order value must be at least :min_order to use this coupon',
 
 
 ];

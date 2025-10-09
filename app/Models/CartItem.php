@@ -21,6 +21,9 @@ class CartItem extends Model
         'total_amount',
         'total',
         'total_price',
+        'shipping',
+        'is_return',
+        'return_at'
     ];
 
     public function product()

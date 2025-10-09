@@ -7,11 +7,65 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends MainModel
 {
     protected $fillable = [
-        'user_id', 'delivery_id', 'cancel_by', 'cancel_date', 'address_id', 'coupon_id', 'payment_id',
-        'region_id', 'city_id', 'branch_id', 'country_id', 'coupon_type', 'coupon_discount',
-        'tax', 'fees', 'total_products', 'total', 'is_paid', 'rate', 'rate_comment',
-        'status', 'parent_id', 'delivery_time_id'
+        'user_id',
+        'delivery_id',
+        'cancel_by',
+        'cancel_date',
+        'address_id',
+        'payment_id',
+        'region_id',
+        'city_id',
+
+        'coupon_id',
+        'coupon_type',
+        'coupon_discount',
+
+        'tax',
+        'fees',
+        'price',
+        'shipping',
+        'discount',
+        'total',
+
+        'paid',
+        'wallet',
+        'total_paid',
+        'remaining',
+        'is_paid',
+
+
+        'status',
+
+        'delivery_time_id',
+
+
+        'note',
+        'delivery_note',
+        'admin_note',
+        'reject_note',
+
+        'is_read',
     ];
+
+    public function setCityIdAttribute($value)
+    {
+        if ($this->address_id) {
+            $address = Address::find($this->address_id);
+            $this->attributes['city_id'] = $address?->city_id ?? $value;
+        } else {
+            $this->attributes['city_id'] = $value;
+        }
+    }
+
+    public function setRegionIdAttribute($value)
+    {
+        if ($this->address_id) {
+            $address = Address::find($this->address_id);
+            $this->attributes['region_id'] = $address?->region_id ?? $value;
+        } else {
+            $this->attributes['region_id'] = $value;
+        }
+    }
 
     public function user()
     {
@@ -53,12 +107,10 @@ class Order extends MainModel
         return $this->belongsTo(City::class);
     }
 
-    
+
 
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
     }
-
-
 }

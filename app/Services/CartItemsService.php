@@ -106,8 +106,14 @@ class CartItemsService
         $data['offer_amount_add']=$product->offer_amount_add;
         $data['free_amount']=$this->calculateFreeAmount($productId,$amount);
         $data['total_amount']=$data['amount'] + $data['free_amount'];
-        $data['total']=$data['offer_price']>0 ?$data['offer_price'] * $data['total_amount'] :  $data['price'] * $data['total_amount'];
+        $data['total']=$data['offer_price'] > 0  ? ($data['offer_price'] * $data['total_amount'] ): ( $data['price'] * $data['total_amount']);
         $data['total_price']=$product->price * $amount;
+        $data['shipping']=$product->shipping;
+        $data['is_return']=$product->is_returned;
+        $returnPeriodDays = (int) AppSettings::get('return_period_days',14);    
+        $data['return_at']=$data['is_return']==1 && isset($returnPeriodDays) ?
+        now()->addDays((int) $returnPeriodDays)
+       : null;
         return $data;
 
     }

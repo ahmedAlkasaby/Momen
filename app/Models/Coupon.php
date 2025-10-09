@@ -15,7 +15,11 @@ class Coupon extends MainModel
 
    public function scopeActiveCoupons($query)
    {
-       return $query->where('active', 1)->where('finish', 0)->where(function($q) {
+       return $query->where('active', 1)->where('finish', 0)
+       ->where(function($q) {
+           $q->whereColumn('use_count', '<', 'use_limit');
+       })
+       ->where(function($q) {
            $q->whereNull('date_start')->orWhere('date_start', '<=', now());
        })->where(function($q) {
            $q->whereNull('date_expire')->orWhere('date_expire', '>=', now());
@@ -24,7 +28,12 @@ class Coupon extends MainModel
        })->where(function($q) {
            $q->whereNull('day_expire')->orWhere('day_expire', '>=', now()->toDateString());
        });
-   }  
+   }
+   
+   public function orders()
+   {
+       return $this->hasMany(Order::class);
+   }
 
 
 }

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Facades\SettingFacade as AppSettings;
 
 
 class OrderItem extends MainModel
@@ -28,21 +27,27 @@ class OrderItem extends MainModel
         'return_at'
     ];
 
-    public function setIsReturnAttribute($value)
-    {
-        $product = Product::find($this->product_id);
+    // public function setShippingAttribute($value)
+    // {
+    //     $product = Product::find($this->product_id);
+    //     $this->attributes['shipping'] = $product?->shipping ?? 0;
+    // }
 
-        $this->attributes['is_return'] = $product?->is_returned ?? 0;
-    }
 
-    public function setReturnAtAttribute($value)
-    {
-        $product = Product::find($this->product_id);
-        $returnPeriodDays = (int) AppSettings::get('return_period_days',14);
-        $this->attributes['return_at'] = ($product?->is_returned==1) && isset($returnPeriodDays)
-            ? now()->addDays((int) AppSettings::get('return_period_days'))
-            : null;
-    }
+    // public function setIsReturnAttribute($value)
+    // {
+    //     $product = Product::find($this->product_id);
+    //     $this->attributes['is_return'] = $product?->is_returned ?? 0;
+    // }
+
+    // public function setReturnAtAttribute($value)
+    // {
+    //     $product = Product::find($this->product_id);
+    //     $returnPeriodDays = (int) AppSettings::get('return_period_days',14);
+    //     $this->attributes['return_at'] = ($product?->is_returned==1) && isset($returnPeriodDays)
+    //         ? now()->addDays((int) AppSettings::get('return_period_days'))
+    //         : null;
+    // }
 
 
     public function order()

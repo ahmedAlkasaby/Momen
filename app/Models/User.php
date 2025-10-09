@@ -111,8 +111,18 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
     {
         return $this->hasOne(Cart::class, 'user_id', 'id');
     }
-    public function totalPriceInCart()
+    public function totalPriceInCart() // after discount without Shipping and coupon
     {
         return $this->cart->cartItems->sum('total_price');
     }
+
+    public function totalPriceInCartBeforeDiscount(){
+        return $this->cart->cartItems->sum('total');   
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id', 'id');
+    }
+
+   
 }

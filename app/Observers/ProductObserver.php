@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Facades\SettingFacade as AppSettings;
+
 
 class ProductObserver
 {
@@ -22,24 +24,51 @@ class ProductObserver
 
     public function updated(Product $product): void
     {
-        if ($product->wasChanged(['price', 'offer_price', 'offer_amount', 'offer_amount_add'])) {
+        if ($product->wasChanged([
+            'price',
+            'offer_price',
+            'offer_amount',
+            'offer_amount_add',
+            'shipping',
+            'is_returned'
+        ])) {
 
             $newPrice = $product->price;
             $newOfferPrice = $product->offer_price;
             $offerAmount = $product->offer_amount ?? 0;
             $offerAmountAdd = $product->offer_amount_add ?? 0;
+            $shipping = $product->shipping ?? 0;
+            $isReturned = $product->is_returned ?? 0;
 
-            $this->updateCartItems($product->id, 'product_id', $newPrice, $newOfferPrice, $offerAmount, $offerAmountAdd);
+            $this->updateCartItems(
+                $product->id,
+                'product_id',
+                $newPrice,
+                $newOfferPrice,
+                $offerAmount,
+                $offerAmountAdd,
+                $shipping,
+                $isReturned
+            );
 
-            $this->updateCartItems($product->id, 'product_child_id', $newPrice, $newOfferPrice, $offerAmount, $offerAmountAdd);
+            $this->updateCartItems(
+                $product->id,
+                'product_child_id',
+                $newPrice,
+                $newOfferPrice,
+                $offerAmount,
+                $offerAmountAdd,
+                $shipping,
+                $isReturned
+            );
         }
     }
 
-   
-    protected function updateCartItems($productId, $column, $price, $offerPrice, $offerAmount, $offerAmountAdd)
+
+    protected function updateCartItems($productId, $column, $price, $offerPrice, $offerAmount, $offerAmountAdd, $shipping, $isReturned)
     {
         CartItem::where($column, $productId)
-            ->chunkById(100, function ($items) use ($price, $offerPrice, $offerAmount, $offerAmountAdd) {
+            ->chunkById(100, function ($items) use ($price, $offerPrice, $offerAmount, $offerAmountAdd, $shipping, $isReturned) {
 
                 foreach ($items as $item) {
 
@@ -51,8 +80,13 @@ class ProductObserver
                     $totalAmount = $item->amount + $freeAmount;
 
 
-                    $total = $offerPrice>0 ? $offerPrice:$price * $totalAmount;
+                    $total = $offerPrice > 0 ? $offerPrice : $price * $totalAmount;
                     $totalPrice = $price * $item->amount;
+                    $returnPeriodDays = (int) AppSettings::get('return_period_days', 14);
+
+                    $returnAt = $isReturned && isset($returnPeriodDays) ?
+                    now()->addDays((int) AppSettings::get('return_period_days'))
+                   : null;
 
                     $item->update([
                         'price' => $price,
@@ -63,6 +97,9 @@ class ProductObserver
                         'total_amount' => $totalAmount,
                         'total' => $total,
                         'total_price' => $totalPrice,
+                        'shipping' => $shipping,
+                        'is_return' => $isReturned,
+                        'return_at' => $returnAt
                     ]);
                 }
             });

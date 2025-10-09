@@ -16,17 +16,23 @@ return new class extends Migration
             $table->foreignId('cart_id')->constrained('carts')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->foreignId('product_child_id')->constrained('products')->onDelete('cascade');
-            $table->double('offer_price')->nullable(); 
+            $table->double('offer_price')->nullable();
             $table->double('price');
             $table->integer('amount');
-            $table->integer('price_addition')->nullable();
-            $table->integer('amount_addition')->nullable();
-            $table->integer('offer_amount')->nullable();
-            $table->integer('offer_amount_add')->nullable();
-            $table->integer('free_amount')->nullable();
+            $table->double('price_addition')->nullable()->default(0);
+            $table->integer('amount_addition')->nullable()->default(0);
+            $table->integer('offer_amount')->nullable()->default(0);
+            $table->integer('offer_amount_add')->nullable()->default(0);
+            $table->integer('free_amount')->nullable()->default(0);
+
             $table->integer('total_amount');
             $table->double('total');
             $table->double('total_price');
+
+            $table->double('shipping')->default(0);
+            $table->tinyInteger('is_return')->default(0);
+            $table->dateTime('return_at')->nullable();
+
             $table->timestamps();
         });
     }
