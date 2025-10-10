@@ -2,15 +2,16 @@
 
 namespace App\Services;
 
-use App\Facades\SettingFacade as AppSettings;
-use App\Helpers\OrderNotificationData;
+use App\Models\User;
 use App\Models\Coupon;
-use App\Models\Notification;
+use App\Models\Address;
 use App\Models\Product;
 use App\Models\Setting;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Helpers\OrderNotificationData;
+use App\Facades\SettingFacade as AppSettings;
 
 
 class OrderService
@@ -70,38 +71,7 @@ class OrderService
         return $address->id;
     }
 
-    public function notificationAfterOrder($statusOrder = 'request')
-    {
-        $admins = User::where('type', 'admin')->where('is_notify', 1)->where('active', 1)->get();
-        $notificationData = OrderNotificationData::getData($statusOrder);
-        Notification::send($admins, $notificationData['title_ar'], $notificationData['title_en'], $notificationData['body_ar'], $notificationData['body_en']);
-        $dataFirebase = [
-            'title' => json_encode([
-                'ar' => $notificationData['title_ar'],
-                'en' => $notificationData['title_en'],
-            ]),
-            'body' => json_encode([
-                'ar' => $notificationData['body_ar'],
-                'en' => $notificationData['body_en'],
-            ]),
-        ];
-        $user = Auth::guard('api')->user();
-
-        foreach ($user->devices as $device) {
-            $this->firebaseNotification->sendNotificationWithDevice(
-                $device,
-                $notificationData['title_ar'],
-                $notificationData['body_ar'],
-                $dataFirebase,
-            );
-        }
-    }
-
-
-
-
-
-
+   
     public function getOrderShippingProducts($userId)
     {
         $user = User::find($userId);
@@ -112,10 +82,6 @@ class OrderService
         }
         return $totalShipping;
     }
-
-
-
-
 
     public function checkCoupon($code, $userId)
     {
@@ -200,5 +166,17 @@ class OrderService
         $priceAfterDiscountBeforeCoupon = $this->getOrderDiscountBeforeCoupon($userId);
         return $priceAfterDiscountBeforeCoupon +
             $this->getOrderDiscountAfterCoupon($priceAfterDiscountBeforeCoupon, $couponType, $couponDiscount);
+    }
+
+
+    public function getCityId($addressId)
+    {
+        $address = Address::find($addressId);
+        return $address->city_id;
+    }
+    public function getRegionId($addressId)
+    {
+        $address = Address::find($addressId);
+        return $address->region_id;
     }
 }

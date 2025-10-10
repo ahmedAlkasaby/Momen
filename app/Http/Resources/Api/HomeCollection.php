@@ -7,9 +7,7 @@ use App\Http\Resources\Api\UserResource;
 use App\Models\Category;
 use App\Models\Page;
 use App\Models\Product;
-use App\Models\Service;
-use App\Models\Setting;
-use App\Models\Slider;
+
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;

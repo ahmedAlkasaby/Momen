@@ -31,7 +31,9 @@ class OrderController extends MainController
     {
         $auth = Auth()->guard('api')->user();
         $user = User::find($auth->id);
-        $data = ['user', 'address', 'delivery', 'payment', 'deliveryTime', 'orderItems.product'];
+        $data = ['user', 'address', 'delivery', 'payment', 'deliveryTime', 
+        'orderItems.product','orderItems.productChild',
+         'coupon', 'region', 'city'];
         $orders = $user->orders()->with($data)->paginate($this->perPage);
         return $this->sendData(new OrderCollection($orders));
     }
@@ -52,6 +54,8 @@ class OrderController extends MainController
         }
         DB::transaction(function () use ($user, $data) {
             $data['address_id'] = $this->orderService->getAddressId($user->id, $data['address_id'] ?? null);
+            $data['city_id'] = $this->orderService->getCityId($data['address_id']);
+            $data['region_id'] = $this->orderService->getRegionId($data['address_id']);
             $data['price'] = $user->totalPriceInCartBeforeDiscount();
             $data['shipping_address'] = $this->orderService->getShippingAddress($data['address_id']);
             $data['shipping_products'] = $this->orderService->getOrderShippingProducts($user->id);
@@ -78,8 +82,9 @@ class OrderController extends MainController
     {
         $auth = Auth()->guard('api')->user();
         $user = User::find($auth->id);
-        $data = ['user', 'address', 'delivery', 'payment', 'deliveryTime', 'orderItems.product'];
-
+         $data = ['user', 'address', 'delivery', 'payment', 'deliveryTime', 
+        'orderItems.product','orderItems.productChild',
+         'coupon', 'region', 'city'];
         $order = $user->orders()->with($data)->where('id', $id)->first();
         if (!$order) {
             return $this->messageError(__('api.order_not_found'));
@@ -96,9 +101,10 @@ class OrderController extends MainController
         if (!$order) {
             return $this->messageError(__('api.order_not_found'));
         }
-        DB::transaction(function () use ($order, $data) {
+        DB::transaction(function () use ($order, $data,$user) {
             $order->update($data);
-            $this->orderService->notificationAfterOrder($order->status->value);
+            SendOrderNotificationJob::dispatch($user->id,$order->status);
+
         });
 
         return $this->messageSuccess(__('api.order_updated'));

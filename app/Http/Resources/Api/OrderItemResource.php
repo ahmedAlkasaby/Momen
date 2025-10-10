@@ -16,15 +16,28 @@ class OrderItemResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'product_id' => $this->product_id,
             'order_id' => $this->order_id,
-            'amount' => $this->amount,
+            'product_id' => $this->product_id,
+            'product_child_id' => $this->product_child_id,
+            'offer_price' => $this->offer_price,
             'price' => $this->price,
-            'discount' => $this->discount,
-            'shipping_cost' => $this->shipping_cost,
+            'amount' => $this->amount,
+            'price_addition' => $this->price_addition,
+            'amount_addition' => $this->amount_addition,
+            'offer_amount' => $this->offer_amount,
+            'offer_amount_add' => $this->offer_amount_add,
+            'free_amount' => $this->free_amount,
+            'total_amount' => $this->total_amount,
+            'shipping' => $this->shipping,
+            'total' => $this->total,
+            'total_price' => $this->total_price,
+            'is_return' => $this->is_return,
+            'return_at' => $this->return_at,
+            'created_at' => formatDate($this->created_at),
+            'updated_at' => formatDate($this->updated_at),
             'product' => new ProductResource($this->whenLoaded('product')),
-            'order' => new OrderResource($this->whenLoaded('order')),
-
+            'product_child' => new ProductResource($this->whenLoaded('productChild')),
+           
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatusOrderEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends MainModel
@@ -46,7 +47,9 @@ class Order extends MainModel
 
         'is_read',
     ];
-
+    protected $cast=[
+        'status'=>StatusOrderEnum::class
+    ];
     public function setCityIdAttribute($value)
     {
         if ($this->address_id) {
@@ -76,6 +79,11 @@ class Order extends MainModel
     {
         return $this->belongsTo(User::class);
     }
+    public function deliveryTime()
+    {
+        return $this->belongsTo(DeliveryTime::class);
+    }
+
 
     public function cancelBy()
     {
