@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Setting;
+use App\Observers\OrderObserver;
 use App\Observers\ProductObserver;
 use App\Observers\SettingObserver;
 use App\Services\FirebaseNotificationService;
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Product::observe(ProductObserver::class);
         Setting::observe(SettingObserver::class);
+        Order::observe(OrderObserver::class);
 
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Enums\StatusOrderEnum;
+use App\Helpers\OrderHelper;
 use App\Helpers\OrderNotificationData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\OrderRequest;
@@ -11,6 +12,7 @@ use App\Http\Resources\Api\OrderCollection;
 use App\Http\Resources\Api\OrderResource;
 use App\Jobs\SendOrderNotificationJob;
 use App\Models\Notification;
+use App\Models\Order;
 use App\Models\User;
 use App\Services\FirebaseNotificationService;
 use App\Services\OrderService;
@@ -31,9 +33,7 @@ class OrderController extends MainController
     {
         $auth = Auth()->guard('api')->user();
         $user = User::find($auth->id);
-        $data = ['user', 'address', 'delivery', 'payment', 'deliveryTime', 
-        'orderItems.product','orderItems.productChild',
-         'coupon', 'region', 'city'];
+        $data = OrderHelper::getOrderRelations();
         $orders = $user->orders()->with($data)->paginate($this->perPage);
         return $this->sendData(new OrderCollection($orders));
     }
@@ -82,9 +82,7 @@ class OrderController extends MainController
     {
         $auth = Auth()->guard('api')->user();
         $user = User::find($auth->id);
-         $data = ['user', 'address', 'delivery', 'payment', 'deliveryTime', 
-        'orderItems.product','orderItems.productChild',
-         'coupon', 'region', 'city'];
+        $data = OrderHelper::getOrderRelations();
         $order = $user->orders()->with($data)->where('id', $id)->first();
         if (!$order) {
             return $this->messageError(__('api.order_not_found'));
