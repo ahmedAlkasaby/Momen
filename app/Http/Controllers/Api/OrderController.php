@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\StatusOrderEnum;
 use App\Helpers\OrderNotificationData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\OrderRequest;
 use App\Http\Requests\Api\UpdateOrderRequest;
 use App\Http\Resources\Api\OrderCollection;
 use App\Http\Resources\Api\OrderResource;
+use App\Jobs\SendOrderNotificationJob;
 use App\Models\Notification;
 use App\Models\User;
 use App\Services\FirebaseNotificationService;
@@ -63,9 +65,9 @@ class OrderController extends MainController
             $order = $user->orders()->create($data);
             $items = $user->cart->cartItems()->get();
             $order->orderItems()->createMany($items->toArray());
-            // $this->orderService->createOrderItems($items, $order);
             $user->cart->delete();
-            // $this->orderService->notificationAfterOrder();
+            SendOrderNotificationJob::dispatch($user->id,StatusOrderEnum::Request->value);
+
         });
 
         return $this->messageSuccess(__('api.order_added'));

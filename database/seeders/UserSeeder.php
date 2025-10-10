@@ -39,6 +39,8 @@ class UserSeeder extends Seeder
               'locale'=>'en',
               'theme'=>'light',
               'type'=>fake()->randomElement(['admin', 'client','delivery']),
+              'active'=>1,
+              'is_notify'=>1
            ]);
 
            $user->devices()->create([

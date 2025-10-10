@@ -3,7 +3,6 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Log;
 use Kreait\Firebase\Factory;
-use Kreait\Firebase\Messaging;
 use Kreait\Firebase\Messaging\CloudMessage;
 
 class FirebaseNotificationService

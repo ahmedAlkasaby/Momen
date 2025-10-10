@@ -16,12 +16,12 @@ use Illuminate\Support\Facades\Log;
 class OrderService
 {
 
-    // protected $firebaseNotification;
+    protected $firebaseNotification;
 
-    // public function __construct(FirebaseNotificationService $firebaseNotification)
-    // {
-    //     $this->firebaseNotification = $firebaseNotification;
-    // }
+    public function __construct(FirebaseNotificationService $firebaseNotification)
+    {
+        $this->firebaseNotification = $firebaseNotification;
+    }
 
     public function getShippingAddress($addressId)
     {
@@ -35,40 +35,7 @@ class OrderService
         return $shipping;
     }
 
-    public function getDiscount($productId)
-    {
-        $product = Product::find($productId);
-        if (! $product->offer) {
-            return 0;
-        }
-        if ($product->offer_price) {
-            return $product->offer_price - $product->price;
-        } elseif ($product->offer_amount) {
-            $amount = $product->offer_amount;
-            $price = $product->price;
-            $totalPrice = (100 * $price) / (100 - $amount);
-            return ($totalPrice - $price);
-        } elseif ($product->offer_percent) {
-            return $product->offer_percent;
-        }
-    }
-
-    public function createOrderItems($items, $order)
-    {
-        foreach ($items as $item) {
-            $order->orderItems()->create([
-                'product_id' => $item->product_id,
-                'amount' => $item->amount,
-                'price' => $item->product->price,
-                'discount' => $this->getDiscount($item->product_id),
-                'shipping_cost' => $item->product->shipping_cost ?? 0,
-            ]);
-            $product = Product::find($item->product_id);
-            $product->decrement('amount', $item->amount);
-        }
-    }
-
-
+   
     public function canCreateOrder($userId)
     {
         $user = User::find($userId);
@@ -105,7 +72,7 @@ class OrderService
 
     public function notificationAfterOrder($statusOrder = 'request')
     {
-        $admins = User::where('type', 'admin')->where('notify', 1)->where('active', 1)->get();
+        $admins = User::where('type', 'admin')->where('is_notify', 1)->where('active', 1)->get();
         $notificationData = OrderNotificationData::getData($statusOrder);
         Notification::send($admins, $notificationData['title_ar'], $notificationData['title_en'], $notificationData['body_ar'], $notificationData['body_en']);
         $dataFirebase = [
@@ -171,7 +138,11 @@ class OrderService
     public function getDataCouponInOrder(?string $code = null): array
     {
         if (empty($code)) {
-            return [];
+            return [
+                'coupon_id'       => null,
+                'coupon_type'     => null,
+                'coupon_discount' => null,
+            ];
         }
 
         $coupon = Coupon::query()
