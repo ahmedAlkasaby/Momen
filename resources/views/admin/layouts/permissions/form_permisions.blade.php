@@ -16,7 +16,7 @@ $types = ['index', 'show', 'store', 'update', 'active', 'destroy', 'forceDelete'
                     @foreach ($types as $type)
                     <th>
                         <input type="checkbox" class="form-check-input select-type " data-type="{{ $type }}" />
-                        <label class="fw-bold">@lang('site.'.$type)</label>
+                        <label class="fw-bold">@lang('permissions.'.$type)</label>
                     </th>
 
                     @endforeach
@@ -50,7 +50,7 @@ $types = ['index', 'show', 'store', 'update', 'active', 'destroy', 'forceDelete'
                             />
                             <label class="form-check-label d-flex align-items-center">
                                 <span class="text-dark fw-bold">
-                                    @lang('site.' . $type)
+                                    @lang('permissions.' . $type)
                                 </span>
                             </label>
                         </div>
