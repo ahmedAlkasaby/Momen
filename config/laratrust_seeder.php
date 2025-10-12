@@ -12,27 +12,50 @@ return [
     'truncate_tables' => true,
 
     'roles_structure' => [
-        'superadministrator' => [
-            'users' => 'c,r,u,d',
-            'payments' => 'c,r,u,d',
-            'profile' => 'r,u',
+        'super_admin' => [
+            'roles' => 'i,sh,s,u,a,d',
+            'users' => 'i,sh,s,u,a,d',
+            "units" => 'i,sh,s,u,a,d',
+            "brands" => 'i,sh,s,u,a,d',
+            "sizes" => 'i,sh,s,u,a,d',
+            "services" => 'i,sh,s,u,a,d',
+            "categories" => 'i,sh,s,u,a,d',
+            "products" => 'i,sh,s,u,a,d',
+            'additions' => 'i,sh,s,u,a,d',
+            'wishlists'=>'i,sh',
+            'home' => 'i',
+            "cities" => 'i,sh,s,u,a,d',
+            "regions" => 'i,sh,s,u,a,d',
+            "settings" => 'i,sh,s,u,a,d',
+            "contacts" => 'i,sh,s,u,a,d',
+            "delivery_times"=>"i,sh,s,u,a,d",
+            "pages" => 'i,sh,s,u,a,d',
+            "payments" => 'i,sh,s,u,a,d',
+            "addresses" => 'i,sh,s,u,a,d',
+            "sliders" => 'i,sh,s,u,a,d',
+            "wishlists" => 'i',
+            "orders" => 'i,sh,s,u,a,d',
+            "coupons" => 'i,sh,s,u,a,d',
+            "reviews" => 'i,sh,s,u,a,d',
+            'activity_logs' => 'i',
+            'notifications' => 'i,s,sh',
+            'trash_buckets'=>'i',
+
+
         ],
-        'administrator' => [
-            'users' => 'c,r,u,d',
-            'profile' => 'r,u',
+        'admin' => [
+            'users' => 'i,sh,s,u,d,a',
+
         ],
-        'user' => [
-            'profile' => 'r,u',
-        ],
-        'role_name' => [
-            'module_1_name' => 'c,r,u,d',
-        ],
+
     ],
 
     'permissions_map' => [
-        'c' => 'create',
-        'r' => 'read',
+        'i' => 'index',
+        's' => 'store',
         'u' => 'update',
-        'd' => 'delete',
+        'd' => 'destroy',
+        'a'=>'active',
+        'sh' => 'show',
     ],
 ];

@@ -18,14 +18,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
+
         
 
 
 
         
         $this->call([
-            UserSeeder::class,
+            // basics
+            LaratrustSeeder::class,
+            AdminSeeder::class,
             SettingSeeder::class,
+
+
+            UserSeeder::class,
             PaymentSeeder::class,
             DeliveryTimeSeeder::class,
             CitySeeder::class,

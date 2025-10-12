@@ -14,14 +14,16 @@ class AdminSeeder extends Seeder
     public function run(): void
     {
          $user=User::create([
-           'first_name'=>'Ahmed',
-           'last_name'=>'Alkasaby',
+           'name_first'=>'Ahmed',
+           'name_last'=>'Alkasaby',
            'email'=>'alkasaby145@gmail.com',
            'password'=>'ahmed145',
-           'phone'=>'01000000000',
-           'lang'=>'en',
+           'phone'=>'01016192604',
+           'locale'=>'ar',
            'theme'=>'light',
-           'type'=>'admin'
+           'type'=>'admin',
+           'active'=>1,
+           'is_notify'=>1,
        ]);
        $user->addRole('super_admin');
     }

@@ -13,11 +13,12 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
+            'auth' => \App\Http\Middleware\Authenticate::class,
+            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'check.permission' => \App\Http\Middleware\PermissionMiddleware::class,
             'auth-api' => \App\Http\Middleware\ApiAuthMiddleware::class,
             'userLangApi' => \App\Http\Middleware\SetUserApiLangMiddleware::class,
             'checkSettingOpen' => \App\Http\Middleware\CheckSettingOpenMiddleware::class,
-          
-
         ]);
     })
 
