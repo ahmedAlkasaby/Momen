@@ -12,7 +12,7 @@ class DeliveryTimeController extends MainController
 {
     public function index(){
         $deliveryTimes=DeliveryTime::active()->paginate($this->perPage);
-        return $this->sendData(new DeliveryTimeCollection($deliveryTimes));
+        return $this->sendDataCollection(new DeliveryTimeCollection($deliveryTimes));
     }
 
     public function show(string $id){

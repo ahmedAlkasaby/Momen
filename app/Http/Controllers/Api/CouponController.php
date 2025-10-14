@@ -13,7 +13,7 @@ class CouponController extends MainController
     public function index()
     {
         $coupons=Coupon::activeCoupons()->paginate($this->perPage);
-        return $this->sendData(new CouponCollection($coupons));
+        return $this->sendDataCollection(new CouponCollection($coupons));
     }
 
     public function show($id)

@@ -12,7 +12,7 @@ class PaymentController extends MainController
 {
     public function index(){
         $payments=Payment::active()->paginate($this->perPage);
-        return $this->sendData(new PaymentCollection($payments));
+        return $this->sendDataCollection(new PaymentCollection($payments));
     }
 
     public function show(string $id){

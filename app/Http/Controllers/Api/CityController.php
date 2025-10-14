@@ -13,7 +13,7 @@ class CityController extends MainController
     public function index()
     {
         $cities=City::filter()->paginate($this->perPage);
-        return $this->sendData(new CityCollection($cities));
+        return $this->sendDataCollection(new CityCollection($cities),__('site.cities'));
     }
 
     public function show(string $id)

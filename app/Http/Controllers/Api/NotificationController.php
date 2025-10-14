@@ -12,7 +12,7 @@ class NotificationController extends MainController
         $auth=Auth()->guard('api')->user();
         $user=User::find($auth->id);
         $notifications = $user->notificationsUnread()->paginate($this->perPage);
-        return $this->sendData(new NotificationCollection($notifications));
+        return $this->sendDataCollection(new NotificationCollection($notifications));
     }
 
     public function read($id)

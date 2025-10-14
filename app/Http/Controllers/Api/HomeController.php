@@ -3,21 +3,31 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\Api\HomeCollection;
+use App\Http\Resources\Api\ProductCollection;
 use App\Models\Product;
 use App\Models\Slider;
+use App\Services\HomeApiService;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 class HomeController extends MainController
 {
+    protected $homeApiService;
+
+    public function __construct(HomeApiService $homeApiService)
+    {
+        $this->homeApiService = $homeApiService;
+    }
+
     public function index(){
-        $data = ['categories','unit', 'size', 'brand'];
+        $data = ['categories','unit', 'brand'];
         $products = Product::with($data)
             ->filter()->paginate($this->perPage);
 
-        $data=new HomeCollection($products);
+        $data=new ProductCollection($products);
+        $extra = $this->homeApiService->getExtraInCollection();
 
-        return $this->sendData($data);
+        return $this->sendDataCollection($data,__('site.home'),$extra);
     }
 
 

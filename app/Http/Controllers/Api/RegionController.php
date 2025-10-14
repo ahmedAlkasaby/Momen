@@ -14,7 +14,7 @@ class RegionController extends MainController
     public function index(RegionRequest $requst)
     {
         $regions=Region::with('city')->filter()->paginate($this->perPage);
-        return $this->sendData(new RegionCollection($regions));
+        return $this->sendDataCollection(new RegionCollection($regions));
     }
 
     public function show(string $id)

@@ -10,6 +10,15 @@ use App\Models\Cart;
 
 class CartItemsService
 {
+
+    public function getExtraInCollection($cartId){
+        $cart=Cart::where('id',$cartId)->first();
+        return [
+            'total'=>$cart->cartItems->sum('total'),
+            'total_price'=>$cart->cartItems->sum('total_price'),
+            'total_items'=>$cart->cartItems->count(),
+        ];
+    }  
     public function canPlaceProductInCart($productId, $amount, $userId)
     {
         $product = Product::find($productId);

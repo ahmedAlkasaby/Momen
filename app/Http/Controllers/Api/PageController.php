@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\PageHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\PageRequest;
 use App\Http\Resources\Api\PageCollection;
@@ -13,7 +14,8 @@ class PageController extends MainController
 {
     public function index(PageRequest $request){
         $pages=Page::where('type','page')->filter($request)->paginate($this->perPage);
-        return $this->sendData(new PageCollection($pages));
+        $extra['page_types'] = PageHelper::getPagesTypes();
+        return $this->sendDataCollection(new PageCollection($pages),__('site.pages'),$extra);
     }
 
     public function show($id){

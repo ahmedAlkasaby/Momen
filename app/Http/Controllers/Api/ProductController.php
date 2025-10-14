@@ -25,7 +25,7 @@ class ProductController extends MainController
         $products = Product::with($data)
             ->filter($request)->paginate($this->perPage);
 
-        return $this->sendData(new ProductCollection($products));
+        return $this->sendDataCollection(new ProductCollection($products));
     }
 
 

@@ -25,7 +25,7 @@ class AddressController extends MainController
         $auth=Auth::guard('api')->user();
         $user=User::find($auth->id);
         $addresses=$user->addresses()->with('city','region')->paginate($this->perPage);
-        return $this->sendData(new AddressCollection($addresses));
+        return $this->sendDataCollection(new AddressCollection($addresses));
     }
 
     public function show(string $id)

@@ -15,7 +15,7 @@ class CategoryController extends MainController
     public function index(CategoryRequest $request)
     {
         $categories = Category::filter($request)->with(['parent','children'])->paginate($this->perPage);
-        return $this->sendData(new CategoryCollection($categories));
+        return $this->sendDataCollection(new CategoryCollection($categories));
     }
 
 

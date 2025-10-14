@@ -28,7 +28,8 @@ class CartItemController extends MainController
             return $this->messageError(__('site.cart_is_empty'), 404);
         }
         $cartItems = CartItem::with('product','productChild')->where('cart_id', $cart->id)->paginate($this->perPage);
-        return $this->sendData(new CartItemCollection($cartItems), __('site.cart_items'));
+        $extra = $this->cartItemsService->getExtraInCollection($cart->id);
+        return $this->sendDataCollection(new CartItemCollection($cartItems), __('site.cart_items'), $extra);
     }
 
 

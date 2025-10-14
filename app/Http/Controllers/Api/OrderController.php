@@ -35,7 +35,7 @@ class OrderController extends MainController
         $user = User::find($auth->id);
         $data = OrderHelper::getOrderRelations();
         $orders = $user->orders()->with($data)->paginate($this->perPage);
-        return $this->sendData(new OrderCollection($orders));
+        return $this->sendDataCollection(new OrderCollection($orders));
     }
 
     public function store(OrderRequest $request)
