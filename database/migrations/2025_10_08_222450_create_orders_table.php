@@ -34,6 +34,7 @@ return new class extends Migration
             $table->double('price')->default(0);
             $table->double('shipping')->default(0);
             $table->double('discount')->default(0);
+            $table->double('price_returned')->defoult(0);
             $table->double('total')->default(0);
             $table->double('paid')->default(0);
             $table->double('wallet')->default(0);
@@ -48,7 +49,7 @@ return new class extends Migration
             $table->foreignId('parent_id')->nullable()->constrained('orders')->nullOnDelete();
             $table->foreignId('delivery_time_id')->nullable()->constrained('delivery_times')->nullOnDelete();
             $table->text('polygon')->nullable();
-            // $table->foreignId('order_reject_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('order_reject_id')->nullable()->constrained('order_rejects')->nullOnDelete();
 
             $table->text('note')->nullable();
             $table->text('delivery_note')->nullable();

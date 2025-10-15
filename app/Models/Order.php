@@ -26,6 +26,7 @@ class Order extends MainModel
         'price',
         'shipping',
         'discount',
+        'price_returned',
         'total',
 
         'paid',

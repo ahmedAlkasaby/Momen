@@ -13,6 +13,7 @@ enum StatusOrderEnum: string
     case DeliveryGo = 'deliveryGo';
     case Delivered = 'delivered';
     case Canceled = 'canceled';
+    case ReturnedPartial = 'returnedPartial';
     case Returned = 'returned';
 
     public function label(): string

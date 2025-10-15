@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Color;
+use App\Models\Reason;
 use App\Models\Wishlist;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
@@ -32,6 +33,8 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
 
 
+            ReasonSeeder::class,
+            OrderRejectSeeder::class,
             UserSeeder::class,
             PaymentSeeder::class,
             DeliveryTimeSeeder::class,

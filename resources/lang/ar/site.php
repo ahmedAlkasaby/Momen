@@ -649,5 +649,6 @@ return [
     'mobile' => 'جوال',
     'trash_buckets' => 'سلة المهملات',
     'cart_is_empty' => 'السلة فارغة',
+    'returnedPartial' => 'استرجاع جزئي',
 ];
 
