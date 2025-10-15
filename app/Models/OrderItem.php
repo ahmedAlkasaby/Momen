@@ -44,4 +44,9 @@ class OrderItem extends MainModel
     {
         return $this->belongsTo(Product::class, 'product_child_id','id');
     }
+
+    public function OrderItemReturn()
+    {
+        return $this->hasOne(OrderItemReturn::class);
+    }
 }

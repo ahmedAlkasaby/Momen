@@ -30,7 +30,7 @@ class OrderObserver
 
         OrderStatus::create([
             'order_id'  => $order->id,
-            'status'    => $order->status,
+            'status'    => StatusOrderEnum::Request->value,
             'user_id'   => $auth['id'],
             'type_user' => $auth['type'],
         ]);

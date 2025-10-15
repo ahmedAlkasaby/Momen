@@ -16,7 +16,7 @@ return new class extends Migration
 
             $table->foreignId('order_id')->constrained('orders')->cascadeOnDelete();
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
-            $table->foreignId('product_child_id')->constrained('products')->onDelete('cascade');
+            $table->foreignId('product_child_id')->nullable()->constrained('products')->onDelete('cascade');
             $table->double('offer_price')->nullable();
             $table->double('price');
             $table->integer('amount');

@@ -414,6 +414,8 @@ return [
     "active_required"=>"Active is required",
     "active_boolean"=>"Active must be boolean",
 
+    'order_item_return_exists' => 'The order item return already exists.',
+
 
 
 

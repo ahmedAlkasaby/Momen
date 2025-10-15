@@ -440,4 +440,6 @@ return [
     "active_required" => "الحالة مطلوبة",
     "active_boolean" => "يجب أن تكون الحالة منطقية",
 
+    'order_item_return_exists' => 'العنصر في الطلب المرتجع موجود بالفعل.',
+
 ];

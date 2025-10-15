@@ -34,7 +34,7 @@ return new class extends Migration
             $table->double('price')->default(0);
             $table->double('shipping')->default(0);
             $table->double('discount')->default(0);
-            $table->double('price_returned')->defoult(0);
+            $table->double('price_returned')->default(0);
             $table->double('total')->default(0);
             $table->double('paid')->default(0);
             $table->double('wallet')->default(0);

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('order_item_returns', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('order_id')->constrained('orders')->nullOnDelete();
-            $table->foreignId('order_item_id')->constrained('order_items')->cascadeOnDelete();
+            $table->foreignId('order_id')->constrained('orders');
+            $table->foreignId('order_item_id')->constrained('order_items');
             $table->foreignId('reason_id')->nullable()->constrained('reasons')->nullOnDelete();
             $table->foreignId('coupon_id')->nullable()->constrained('coupons')->nullOnDelete();
 
@@ -42,6 +42,12 @@ return new class extends Migration
             $table->dateTime('returned_at')->nullable();
 
             $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->dateTime('approved_at')->nullable();
+
+            $table->foreignId('rejected_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->dateTime('rejected_at')->nullable();
+
+            $table->unique('order_item_id');
             $table->timestamps();
             $table->softDeletes();
         });
