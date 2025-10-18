@@ -70,7 +70,7 @@ class ProductSeeder extends Seeder
             'price'=>rand(100,1000),
 
             'order_limit'=>rand(1,2),
-            'max_order'=>rand(1,10),
+            'max_order'=>rand(3,10),
 
             'active'=>rand(0,1),
             'is_stock'=>rand(0,1),

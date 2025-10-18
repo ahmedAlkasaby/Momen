@@ -47,9 +47,9 @@ class DatabaseSeeder extends Seeder
             AddressSeeder::class,
             NotificationSeeder::class,
             CouponSeeder::class,    
+            OrderSeeder::class
             // ContactSeeder::class,
             // AddressSeeder::class,
-            // OrderSeeder::class
         ]);
        
 

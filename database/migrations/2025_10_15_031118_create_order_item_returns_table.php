@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('order_item_returns', function (Blueprint $table) {
             $table->id();
-
+            $table->foreignId('user_id')->constrained('users');
             $table->foreignId('order_id')->constrained('orders');
             $table->foreignId('order_item_id')->constrained('order_items');
             $table->foreignId('reason_id')->nullable()->constrained('reasons')->nullOnDelete();

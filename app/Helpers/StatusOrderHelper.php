@@ -44,19 +44,16 @@ class StatusOrderHelper
 
             StatusOrderEnum::Canceled->value => StatusOrderEnum::only([
                 StatusOrderEnum::Canceled,
-                StatusOrderEnum::Returned,
-                StatusOrderEnum::Rejected
             ]),
 
             StatusOrderEnum::Returned->value => StatusOrderEnum::only([
-                StatusOrderEnum::Canceled,
                 StatusOrderEnum::Returned,
-                StatusOrderEnum::Rejected
+            ]),
+            StatusOrderEnum::ReturnedPartial->value => StatusOrderEnum::only([
+                StatusOrderEnum::ReturnedPartial,
             ]),
 
             StatusOrderEnum::Rejected->value => StatusOrderEnum::only([
-                StatusOrderEnum::Canceled,
-                StatusOrderEnum::Returned,
                 StatusOrderEnum::Rejected
             ]),
         ];

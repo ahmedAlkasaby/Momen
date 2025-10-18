@@ -24,10 +24,9 @@ class OrderService
         $this->firebaseNotification = $firebaseNotification;
     }
 
-    public function getShippingAddress($addressId)
+    public function getShippingAddress($addressId,$userId)
     {
-        $auth = Auth::guard('api')->user();
-        $user = User::find($auth->id);
+        $user = User::find($userId);
         $address = $user->addresses()->where('id', $addressId)->first();
         $shipping = $address->city->shipping;
         if ($address->region_id) {
@@ -95,7 +94,7 @@ class OrderService
         }
         $totalPriceAfterDiscountBeforeCoupon = $user->totalPriceInCart();
 
-        if ($coupon->min_order >= $totalPriceAfterDiscountBeforeCoupon) {
+        if ($coupon->min_order > $totalPriceAfterDiscountBeforeCoupon) {
             return __('api.coupon_min_order', ['min_order' => $coupon->min_order]);
         }
         return true;

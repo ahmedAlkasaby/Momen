@@ -63,6 +63,17 @@ return [
     'coupon'=>'الكوبون',    
     'coupon_user_limit'=>'لا يمكنك استخدام هذا الكوبون اكثر من :user_limit مرة',
     'coupon_min_order'=>'قيمة الطلب يجب ان تكون على الاقل :min_order جنيه لاستخدام هذا الكوبون',
+    'order_item_not_found_in_your_order'=>'العنصر غير موجود في الطلب الخاص بك',
+    'order_not_deliveried'=>'الطلب غير مستلم',
+    'order_item_not_returnable'=>'العنصر غير قابل للاسترجاع',
+    'order_item_return_expired'=>'العنصر غير قابل للاسترجاع',
+    'cant_amount_returned_bigger_than_total_amount'=>'لا يمكن استرجاع المبلغ اكثر من المبلغ الكلي',
+    'order_item_return_amount_bigger_than_amount_free'=>'لا يمكن استرجاع المبلغ اكثر من المبلغ المجاني',
+    'order_item_not_found'=>'العنصر غير موجود',
+    'order_item_returned'=>'تم استرجاع العنصر بنجاح',
+    'order_item_return_not_found'=>'العنصر غير موجود',
+    'order_item_return_exists'=>'العنصر مسترجاع بالفعل',
+    
 
 
 

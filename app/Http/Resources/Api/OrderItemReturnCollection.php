@@ -5,7 +5,7 @@ namespace App\Http\Resources\Api;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class OrderCollection extends ResourceCollection
+class OrderItemReturnCollection extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -15,7 +15,7 @@ class OrderCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         return [
-            'orders' =>$this->collection,
+            'order_item_returns' => $this->collection,
         ];
     }
 }

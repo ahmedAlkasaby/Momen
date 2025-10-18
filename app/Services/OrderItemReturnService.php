@@ -63,6 +63,7 @@ class OrderItemReturnService
         $orderItem = OrderItem::find($data['order_item_id']);
         $order = $orderItem->order;
         $orderPrice = $this->getOrderPriceBeforeDiscountCouponBeforeShipping($order->id);
+        $data['user_id'] = $order->user_id;
         $data['order_id'] = $order->id;
         $data['coupon_id'] = $order->coupon_id;
         $data['coupon_type'] = $order->coupon_type;

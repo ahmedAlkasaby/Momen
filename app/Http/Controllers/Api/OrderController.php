@@ -57,7 +57,7 @@ class OrderController extends MainController
             $data['city_id'] = $this->orderService->getCityId($data['address_id']);
             $data['region_id'] = $this->orderService->getRegionId($data['address_id']);
             $data['price'] = $user->totalPriceInCartBeforeDiscount();
-            $data['shipping_address'] = $this->orderService->getShippingAddress($data['address_id']);
+            $data['shipping_address'] = $this->orderService->getShippingAddress($data['address_id'], $user->id);
             $data['shipping_products'] = $this->orderService->getOrderShippingProducts($user->id);
             $data['shipping'] = $data['shipping_address'] + $data['shipping_products'];
             $couponData = $this->orderService->getDataCouponInOrder($data['coupon_code'] ?? null);

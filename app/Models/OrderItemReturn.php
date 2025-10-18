@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class OrderItemReturn extends MainModel
 {
     protected $fillable = [
+        'user_id',
         'order_id',
         'order_item_id',
         'reason_id',
@@ -33,6 +34,12 @@ class OrderItemReturn extends MainModel
         'rejected_by',
         'rejected_at',
     ];
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }   
 
     public function order()
     {

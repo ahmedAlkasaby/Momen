@@ -51,25 +51,7 @@ class Order extends MainModel
     protected $cast=[
         'status'=>StatusOrderEnum::class
     ];
-    public function setCityIdAttribute($value)
-    {
-        if ($this->address_id) {
-            $address = Address::find($this->address_id);
-            $this->attributes['city_id'] = $address?->city_id ?? $value;
-        } else {
-            $this->attributes['city_id'] = $value;
-        }
-    }
-
-    public function setRegionIdAttribute($value)
-    {
-        if ($this->address_id) {
-            $address = Address::find($this->address_id);
-            $this->attributes['region_id'] = $address?->region_id ?? $value;
-        } else {
-            $this->attributes['region_id'] = $value;
-        }
-    }
+   
 
     public function user()
     {
@@ -84,7 +66,6 @@ class Order extends MainModel
     {
         return $this->belongsTo(DeliveryTime::class);
     }
-
 
     public function cancelBy()
     {
@@ -115,11 +96,13 @@ class Order extends MainModel
     {
         return $this->belongsTo(City::class);
     }
-
-
-
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function orderItemReturns()
+    {
+        return $this->hasMany(OrderItemReturn::class);
     }
 }

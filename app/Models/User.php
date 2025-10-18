@@ -121,7 +121,11 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
     }
     public function orders()
     {
-        return $this->hasMany(Order::class, 'user_id', 'id');
+        return $this->hasMany(Order::class);
+    }
+    public function orderItemReturns()
+    {
+        return $this->hasMany(OrderItemReturn::class);
     }
 
    

@@ -62,6 +62,17 @@ return [
     'coupon'=>'Coupon', 
     'coupon_user_limit'=>'You can not use this coupon more than :user_limit time',
     'coupon_min_order'=>'The order value must be at least :min_order to use this coupon',
+    'order_item_not_found_in_your_order'=>'Order item not found in your order',
+    'order_not_deliveried'=>'Order not deliveried',
+    'order_item_not_returnable'=>'Order item not returnable',
+    'order_item_return_expired'=>'Order item return expired',
+    'cant_amount_returned_bigger_than_total_amount'=>'The amount returned cannot be greater than the total amount',
+    'order_item_return_amount_bigger_than_amount_free'=>'The amount returned cannot be greater than the amount free',
+    'order_item_not_found'=>'Order item not found',
+    'order_item_returned'=>'Order item returned successfully',
+    'order_item_return_not_found'=>'Order item return not found',
+    'order_item_return_exists'=>'Order item return already exists',
+
 
 
 ];
