@@ -323,18 +323,11 @@ class Product extends MainModel
         return $this->all_cart_items->where('cart_id', $cart->id)->isNotEmpty();
     }
 
-    public function checkProductInFavorite()
+    public function checkProductInFavorites()
     {
         $UserId = Auth::guard('api')->id();
         if (!$UserId) return 'no';
-        return $this->favorites()->where('user_id', $UserId)->first()->favorite ;
-    }
-
-    public function checkProductInWishlists(): bool
-    {
-        $userId = Auth::guard('api')->id();
-        if (!$userId) return false;
-        return $this->wishlists->where('id', $userId)->isNotEmpty();
+        return $this->favorites()->where('user_id', $UserId)->first()->favorite ?? 'no' ;
     }
 
 
@@ -352,16 +345,6 @@ class Product extends MainModel
 
 
 
-    // public function amountInAllCarts()
-    // {
-    //     return $this->cartItems->sum('amount');
-    // }
-
-
-    // public function availableAmount()
-    // {
-    //     return $this->amount - $this->amountInAllCarts();
-    // }
 
     // public function reviews()
     // {

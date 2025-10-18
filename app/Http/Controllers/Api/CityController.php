@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\Api\CityCollection;
 use App\Http\Resources\Api\CityResource;
-use App\Http\Resources\Api\MainCollection;
 use App\Models\City;
 
 
@@ -14,7 +13,7 @@ class CityController extends MainController
     public function index()
     {
         $cities=City::filter()->paginate($this->perPage);
-        return $this->sendDataCollection(new MainCollection($cities,'cities'),__('site.cities'));
+        return $this->sendDataCollection(new CityCollection($cities),__('site.cities'));
     }
 
     public function show(string $id)

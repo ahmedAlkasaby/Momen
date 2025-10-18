@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\OrderItemReturnRequest;
-use App\Http\Resources\Api\MainCollection;
 use App\Http\Resources\Api\OrderItemReturnCollection;
 use App\Http\Resources\Api\OrderItemReturnResource;
 use App\Models\Order;
@@ -25,7 +24,7 @@ class OrderItemReturnController extends MainController
     public function index(){
         $auth = Auth()->guard('api')->user();
         $orderItemReturns=$auth->orderItemReturns()->with('orderItem.product','orderItem.productChild')->paginate($this->perPage);
-        return $this->sendDataCollection(new MainCollection ($orderItemReturns,'order_item_returns'));
+        return $this->sendDataCollection(new OrderItemReturnCollection ($orderItemReturns));
     }
 
     

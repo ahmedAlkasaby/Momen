@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\Api\StoreCartItemsRequest;
 use App\Http\Resources\Api\CartItemCollection;
 use App\Http\Resources\Api\CartItemResource;
-use App\Http\Resources\Api\MainCollection;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\User;
@@ -30,7 +29,7 @@ class CartItemController extends MainController
         }
         $cartItems = CartItem::with('product','productChild')->where('cart_id', $cart->id)->paginate($this->perPage);
         $extra = $this->cartItemsService->getExtraInCollection($cart->id);
-        return $this->sendDataCollection(new MainCollection($cartItems,'cart_items'), __('site.cart_items'), $extra);
+        return $this->sendDataCollection(new CartItemCollection($cartItems), __('site.cart_items'), $extra);
     }
 
 

@@ -28,7 +28,7 @@ class HomeApiService
         $sliderFeature = Page::where('type', 'slider')->where('feature', 1)->active()->paginate(10);
         $categories = Category::filter()->paginate(10);
 
-        $data = ['categories', 'unit', 'brand'];
+        $data = ['categories', 'unit', 'brand','favorites'];
 
         $newProducts = Product::with($data)->where('is_new', 1)
             ->filter()->paginate(10);

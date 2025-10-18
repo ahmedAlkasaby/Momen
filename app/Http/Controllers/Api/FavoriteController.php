@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProductRequest;
 use App\Http\Requests\Api\ToggleWishlistRequest;
-use App\Http\Resources\Api\MainCollection;
+use App\Http\Resources\Api\FavoriteCollection;
+use App\Http\Resources\Api\ProductCollection;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -14,13 +15,13 @@ use Illuminate\Support\Facades\Auth;
 class FavoriteController extends MainController
 {
 
-    public function index(ProductRequest $request)
+    public function index()
     {
         $auth=Auth::guard('api')->user();
         $user=User::find($auth->id);
-        $favorites=$user->favorites()->where('favorite','yes')->filter($request)->paginate($this->perPage);
+        $favorites=$user->favorites()->with('product')->where('favorite','yes')->paginate($this->perPage);
 
-        return $this->sendData(new MainCollection($favorites,'favorites'), __('site.favorites'));
+        return $this->sendData(new FavoriteCollection($favorites), __('site.favorites'));
     }
 
     public function toggle(ToggleWishlistRequest $request)

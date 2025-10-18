@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Api\MainCollection;
 use App\Http\Resources\Api\PaymentCollection;
 use App\Http\Resources\Api\PaymentResource;
 use App\Models\Payment;
@@ -13,7 +12,7 @@ class PaymentController extends MainController
 {
     public function index(){
         $payments=Payment::active()->paginate($this->perPage);
-        return $this->sendDataCollection(new MainCollection($payments,'payments'));
+        return $this->sendDataCollection(new PaymentCollection($payments));
     }
 
     public function show(string $id){

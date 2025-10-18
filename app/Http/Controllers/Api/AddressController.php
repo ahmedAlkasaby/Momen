@@ -6,7 +6,6 @@ use App\Enums\TypeAddressEnum;
 use App\Http\Requests\Api\AddressRequest;
 use App\Http\Resources\Api\AddressCollection;
 use App\Http\Resources\Api\AddressResource;
-use App\Http\Resources\Api\MainCollection;
 use App\Models\Address;
 use App\Models\User;
 use App\Services\CheckValidateAddressService;
@@ -29,7 +28,7 @@ class AddressController extends MainController
         $extraData['address_types']=  collect(TypeAddressEnum::cases())->mapWithKeys(function ($case) {
                return [$case->value => $case->label()];
             });
-        return $this->sendDataCollection(new MainCollection($addresses,'addresses'),$extraData);
+        return $this->sendDataCollection(new AddressCollection($addresses),$extraData);
     }
 
     public function show(string $id)

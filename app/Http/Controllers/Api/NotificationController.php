@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\Api\MainCollection;
 use App\Http\Resources\Api\NotificationCollection;
 use App\Models\User;
 
@@ -13,7 +12,7 @@ class NotificationController extends MainController
         $auth=Auth()->guard('api')->user();
         $user=User::find($auth->id);
         $notifications = $user->notificationsUnread()->paginate($this->perPage);
-        return $this->sendDataCollection(new MainCollection($notifications,'notifications'));
+        return $this->sendDataCollection(new NotificationCollection($notifications));
     }
 
     public function read($id)
