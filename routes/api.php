@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PaymobController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\ReasonController;
 use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\StoreController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\Api\StoreTypeController;
 use App\Http\Controllers\Api\WishListController;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -59,6 +61,7 @@ Route::group(['middleware' => ['userLangApi', 'checkSettingOpen']], function () 
   Route::apiResource('cities', CityController::class)->only(['index', 'show']);
   Route::apiResource('regions', RegionController::class)->only(['index', 'show']);
   Route::apiResource('payments', PaymentController::class)->only(['index', 'show']);
+  Route::apiResource('reasons', ReasonController::class)->only(['index', 'show']);
   Route::apiResource('delivery_times', DeliveryTimeController::class)->only(['index', 'show']);
   Route::apiResource('pages', PageController::class)->only(['index', 'show']);
   Route::apiResource('coupons', CouponController::class)->only(['index', 'show']);

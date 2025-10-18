@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\MainController;
 use App\Http\Requests\Api\ProductRequest;
+use App\Http\Resources\Api\MainCollection;
 use App\Http\Resources\Api\ProductCollection;
 use App\Http\Resources\Api\ProductResource;
 use App\Models\Product;
@@ -25,7 +26,7 @@ class ProductController extends MainController
         $products = Product::with($data)
             ->filter($request)->paginate($this->perPage);
 
-        return $this->sendDataCollection(new ProductCollection($products));
+        return $this->sendDataCollection(new MainCollection($products,'products'));
     }
 
 

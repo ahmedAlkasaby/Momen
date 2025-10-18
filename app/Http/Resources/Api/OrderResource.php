@@ -61,6 +61,7 @@ class OrderResource extends JsonResource
             'city' => new CityResource($this->whenLoaded('city')),
             'order_items' => OrderItemResource::collection($this->whenLoaded('orderItems')),
             'order_item_returns' => OrderItemReturnResource::collection($this->whenLoaded('orderItemReturns')),
+            'order_reject' => new OrderRejectResource($this->whenLoaded('orderReject')),
         ];
     }
 }

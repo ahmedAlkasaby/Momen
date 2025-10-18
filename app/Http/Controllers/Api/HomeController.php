@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\Api\HomeCollection;
+use App\Http\Resources\Api\MainCollection;
 use App\Http\Resources\Api\ProductCollection;
 use App\Models\Product;
 use App\Models\Slider;
@@ -24,7 +25,7 @@ class HomeController extends MainController
         $products = Product::with($data)
             ->filter()->paginate($this->perPage);
 
-        $data=new ProductCollection($products);
+        $data=new MainCollection($products,'products');
         $extra = $this->homeApiService->getExtraInCollection();
 
         return $this->sendDataCollection($data,__('site.home'),$extra);

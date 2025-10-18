@@ -39,6 +39,7 @@ class Order extends MainModel
         'status',
 
         'delivery_time_id',
+        'order_reject_id',
 
 
         'note',
@@ -104,5 +105,9 @@ class Order extends MainModel
     public function orderItemReturns()
     {
         return $this->hasMany(OrderItemReturn::class);
+    }
+    public function orderReject()
+    {
+        return $this->belongsTo(OrderReject::class);
     }
 }

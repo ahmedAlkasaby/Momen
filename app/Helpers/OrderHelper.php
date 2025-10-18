@@ -15,6 +15,7 @@ class OrderHelper
             'coupon',
             'region',
             'city',
+            'orderReject',
         ];
     }
     public static function getOrderRelationsInSinglePage() :array
@@ -33,6 +34,7 @@ class OrderHelper
             'coupon',
             'region',
             'city',
+            'orderReject',  
         ];
     }
 }

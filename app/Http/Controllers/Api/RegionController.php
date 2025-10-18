@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\RegionRequest;
+use App\Http\Resources\Api\MainCollection;
 use App\Http\Resources\Api\RegionCollection;
 use App\Http\Resources\Api\RegionResource;
 use App\Models\Region;
@@ -14,7 +15,7 @@ class RegionController extends MainController
     public function index(RegionRequest $requst)
     {
         $regions=Region::with('city')->filter()->paginate($this->perPage);
-        return $this->sendDataCollection(new RegionCollection($regions));
+        return $this->sendDataCollection(new MainCollection($regions,'regions'));
     }
 
     public function show(string $id)

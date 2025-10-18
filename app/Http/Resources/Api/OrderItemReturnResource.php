@@ -40,7 +40,7 @@ class OrderItemReturnResource extends JsonResource
             'created_at' => formatDate($this->created_at), 
             'updated_at' => formatDate($this->updated_at),
             'order_item' => new OrderItemResource($this->whenLoaded('orderItem')),
-            // 'reason' => new ReasonReturnResource($this->whenLoaded('reason')),
+            'reason' => new ReasonResource($this->whenLoaded('reason')),
           
         ];
     }

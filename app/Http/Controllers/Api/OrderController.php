@@ -8,6 +8,7 @@ use App\Helpers\OrderNotificationData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\OrderRequest;
 use App\Http\Requests\Api\UpdateOrderRequest;
+use App\Http\Resources\Api\MainCollection;
 use App\Http\Resources\Api\OrderCollection;
 use App\Http\Resources\Api\OrderResource;
 use App\Jobs\SendOrderNotificationJob;
@@ -35,7 +36,7 @@ class OrderController extends MainController
         $user = User::find($auth->id);
         $data = OrderHelper::getOrderRelations();
         $orders = $user->orders()->with($data)->paginate($this->perPage);
-        return $this->sendDataCollection(new OrderCollection($orders));
+        return $this->sendDataCollection(new MainCollection($orders,'orders'));
     }
 
     public function store(OrderRequest $request)
