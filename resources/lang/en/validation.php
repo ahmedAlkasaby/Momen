@@ -417,6 +417,8 @@ return [
     'order_item_return_exists' => 'The order item return already exists.',
     'product_not_found'=>'Product not found',
     'order_not_found'=>'Order not found',
+    'review_order_exists'=>'Review order exists',
+    'review_product_exists'=>'Review product exists',
 
 
 

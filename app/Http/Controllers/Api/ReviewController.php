@@ -40,14 +40,20 @@ class ReviewController extends MainController
             'order'   => Order::class,
         };
         $auth = Auth()->guard('api')->user();
+        $review = $auth->reviews()->where('reviewable_id', $data['reviewable_id'])->where('reviewable_type', $data['reviewable_type'])->first();
+        if ($review) {
+            
+            $review->update($data);
+            return $this->messageSuccess(__('api.review_updated'));
+        }
 
         $review = $auth->reviews()->create($data);
         return $this->messageSuccess(__('api.review_created'));
     }
-    public function update(ReviewUpdateRequest $request, Review $review)
+    public function update(ReviewUpdateRequest $request,$id)
     {
         $auth = Auth()->guard('api')->user();
-        $review = $auth->reviews()->where('id', $review->id)->first();
+        $review = $auth->reviews()->where('id', $id)->first();
         if (!$review) {
             return $this->messageError(__('api.review_not_found'));
         }

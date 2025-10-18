@@ -443,5 +443,7 @@ return [
     'order_item_return_exists' => 'العنصر في الطلب المرتجع موجود بالفعل.',
     'product_not_found' => 'المنتج غير موجود',
     'order_not_found' => 'الطلب غير موجود',
+    'review_order_exists'=>'تم تقييم هذا الطلب من قبل',
+    'review_product_exists'=>'تم تقييم هذا المنتج من قبل',  
 
 ];

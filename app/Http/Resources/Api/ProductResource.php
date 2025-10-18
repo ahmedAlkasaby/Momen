@@ -58,8 +58,9 @@ class ProductResource extends JsonResource
             'is_color' => $this->is_color,
 
 
-            // 'reviews_count'  => $this->reviews_count ?? 0,
-            // 'average_rating' => $this->active_reviews_avg_rating ?? 0,
+            'rate_all' => $this->rate_all,
+            'rate_count' => $this->rate_count,
+            'rate' => $this->rate,
 
             'unit_id' => $this->unit_id,
             'brand_id' => $this->brand_id,

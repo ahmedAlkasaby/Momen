@@ -37,7 +37,7 @@ class ReviewController extends MainController
     {
         $data = $request->validated();
 
-        $data['reviewable_type'] = \App\Models\Product::class;
+        $data['reviewable_type'] = Product::class;
         $data['reviewable_id'] = $data['product_id'];
 
         unset($data['product_id']);

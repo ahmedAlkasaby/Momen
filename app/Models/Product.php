@@ -69,6 +69,11 @@ class Product extends MainModel
 
         // order
         'order_id',
+
+        // rate
+        'rate_count',
+        'rate_all',
+        'rate'
     ];
 
     protected $searchable = [
