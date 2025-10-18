@@ -128,5 +128,13 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
         return $this->hasMany(OrderItemReturn::class);
     }
 
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+   
+    
+
+
    
 }

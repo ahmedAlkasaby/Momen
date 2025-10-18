@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\CouponController;
 use App\Http\Controllers\Api\DeliveryTimeController;
+use App\Http\Controllers\Api\FavoriteController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\OrderController;
@@ -81,6 +82,8 @@ Route::group(['middleware' => ['userLangApi', 'checkSettingOpen']], function () 
     Route::resource('notifications', NotificationController::class)->only(['index', 'destroy']);
     Route::put('notifications/read-all', [NotificationController::class, 'readAll']);
     Route::put('notifications/read/{id}', [NotificationController::class, 'read']);
+    Route::get('favorites', [FavoriteController::class, 'index']);
+    Route::post('favorites',[FavoriteController::class,'toggle']);
     Route::apiResource('addresses',AddressController::class);
     Route::apiResource('orders',OrderController::class)->except('destroy');
     Route::apiResource('order_item_returns',OrderItemReturnController::class)->except('destroy');

@@ -67,9 +67,9 @@ class ProductResource extends JsonResource
             'color_id' => $this->color_id,
             'parent_id' => $this->parent_id,
             'order_id' => $this->order_id,
-            // 'in_wishlists' =>$this->whenLoaded('wishlists', function (){
-            //     return $this->checkProductInWishlists();
-            // }),
+            'in_favorites' =>$this->whenLoaded('favorites', function (){
+                return $this->checkProductInFavorites();
+            }),
             'in_cart' => $this->checkProductInCart(),
             'id_in_cart' => $this->productIdInCart(),
             'count_in_cart' => $this->countInCart(),

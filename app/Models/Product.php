@@ -128,10 +128,12 @@ class Product extends MainModel
         return $this->hasMany(Product::class, 'parent_id', 'id');
     }
 
-    // public function wishlists()
-    // {
-    //     return $this->belongsToMany(User::class, 'wishlists', 'product_id', 'user_id')->withTimestamps();
-    // }
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class);
+    }
+
+
 
     public function parentCartItems()
     {
@@ -319,6 +321,13 @@ class Product extends MainModel
         $cart = Cart::where('user_id', $userId)->first();
         if (!$cart) return false;
         return $this->all_cart_items->where('cart_id', $cart->id)->isNotEmpty();
+    }
+
+    public function checkProductInFavorite()
+    {
+        $UserId = Auth::guard('api')->id();
+        if (!$UserId) return 'no';
+        return $this->favorites()->where('user_id', $UserId)->first()->favorite ;
     }
 
     public function checkProductInWishlists(): bool

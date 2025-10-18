@@ -630,5 +630,6 @@ return [
     'trash_buckets' => 'Trash Buckets',
     'cart_is_empty' => 'Cart is empty',
     'returnedPartial' => 'Returned Partial',
+    'favorites' => 'Favorites',
 
 ];

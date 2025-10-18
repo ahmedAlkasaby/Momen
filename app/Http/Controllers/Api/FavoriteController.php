@@ -4,24 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ProductRequest;
-use App\Http\Requests\Api\StoreWishlistRequest;
 use App\Http\Requests\Api\ToggleWishlistRequest;
-use App\Http\Resources\Api\ProductCollection;
+use App\Http\Resources\Api\MainCollection;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class WishListController extends MainController
+class FavoriteController extends MainController
 {
 
     public function index(ProductRequest $request)
     {
         $auth=Auth::guard('api')->user();
         $user=User::find($auth->id);
-        $wishlists=$user->wishlists()->filter($request)->paginate($this->perPage);
+        $favorites=$user->favorites()->where('favorite','yes')->filter($request)->paginate($this->perPage);
 
-        return $this->sendData(new ProductCollection($wishlists), __('site.wishlists'));
+        return $this->sendData(new MainCollection($favorites,'favorites'), __('site.favorites'));
     }
 
     public function toggle(ToggleWishlistRequest $request)
@@ -32,15 +31,19 @@ class WishListController extends MainController
         if(! $product){
             return $this->messageError(__('api.product_not_found'));
         }
-        $product=$user->wishlists()->where('product_id',$request->product_id)->first();
-        if($product){
-            $user->wishlists()->detach($request->product_id);
-            return $this->messageSuccess(__('site.wishlist_removed'));
+        $favorite=$user->favorites()->where('product_id',$request->product_id)->first();
+        if($favorite){
+            $favorite->update(['favorite'=>$favorite->favorite=='yes'?'no':'yes']);
+            $message=$favorite->favorite=='no'?'site.wishlist_removed':'site.wishlist_added';
+            return $this->messageSuccess(__($message ));
         }else{
-            $user->wishlists()->attach($request->product_id);
+            $user->favorites()->create([
+                'product_id'=>$request->product_id,
+                'favorite'=>'yes'
+            ]);
             return $this->messageSuccess(__('site.wishlist_added'));
-
         }
+      
     }
 
 
