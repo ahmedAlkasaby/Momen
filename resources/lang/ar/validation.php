@@ -441,5 +441,7 @@ return [
     "active_boolean" => "يجب أن تكون الحالة منطقية",
 
     'order_item_return_exists' => 'العنصر في الطلب المرتجع موجود بالفعل.',
+    'product_not_found' => 'المنتج غير موجود',
+    'order_not_found' => 'الطلب غير موجود',
 
 ];

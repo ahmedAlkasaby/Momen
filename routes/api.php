@@ -21,12 +21,14 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ReasonController;
 use App\Http\Controllers\Api\RegionController;
+use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\StoreController;
 use App\Http\Controllers\Api\StoreTypeController;
 use App\Http\Controllers\Api\WishListController;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -86,6 +88,7 @@ Route::group(['middleware' => ['userLangApi', 'checkSettingOpen']], function () 
     Route::post('favorites',[FavoriteController::class,'toggle']);
     Route::apiResource('addresses',AddressController::class);
     Route::apiResource('orders',OrderController::class)->except('destroy');
+    Route::apiResource('reviews',ReviewController::class)->except('destroy');
     Route::apiResource('order_item_returns',OrderItemReturnController::class)->except('destroy');
 
     Route::group(['prefix' => 'profile'], function () {

@@ -73,6 +73,9 @@ return [
     'order_item_return_not_found'=>'Order item return not found',
     'order_item_return_exists'=>'Order item return already exists',
     'reason_not_found'=>'Reason not found',
+    'review_not_found'=>'Review not found',
+    'review_created'=>'Review created successfully',
+    'review_updated'=>'Review updated successfully',
 
 
 

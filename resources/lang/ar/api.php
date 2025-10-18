@@ -74,6 +74,10 @@ return [
     'order_item_return_not_found'=>'العنصر غير موجود',
     'order_item_return_exists'=>'العنصر مسترجاع بالفعل',
     'reason_not_found'=>'السبب غير موجود',
+    'review_not_found'=>'المراجعة غير موجودة',
+    'review_created'=>'تم اضافه المراجعة بنجاح',
+    'review_updated'=>'تم تحديث المراجعة بنجاح',
+
 
 
 
