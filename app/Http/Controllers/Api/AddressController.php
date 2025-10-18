@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\TypeAddressEnum;
 use App\Http\Requests\Api\AddressRequest;
 use App\Http\Resources\Api\AddressCollection;
 use App\Http\Resources\Api\AddressResource;
+use App\Http\Resources\Api\MainCollection;
 use App\Models\Address;
-
 use App\Models\User;
 use App\Services\CheckValidateAddressService;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +26,10 @@ class AddressController extends MainController
         $auth=Auth::guard('api')->user();
         $user=User::find($auth->id);
         $addresses=$user->addresses()->with('city','region')->paginate($this->perPage);
-        return $this->sendDataCollection(new AddressCollection($addresses));
+        $extraData['address_types']=  collect(TypeAddressEnum::cases())->mapWithKeys(function ($case) {
+               return [$case->value => $case->label()];
+            });
+        return $this->sendDataCollection(new MainCollection($addresses,'addresses'),$extraData);
     }
 
     public function show(string $id)

@@ -36,6 +36,5 @@ class AppServiceProvider extends ServiceProvider
         Product::observe(ProductObserver::class);
         Setting::observe(SettingObserver::class);
         Order::observe(OrderObserver::class);
-
     }
 }

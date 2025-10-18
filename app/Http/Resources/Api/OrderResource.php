@@ -51,7 +51,6 @@ class OrderResource extends JsonResource
             'delivery_cost'=>AppSettings::get('delivery_cost'),
             'created_at' => formatDate($this->created_at),
             'updated_at' => formatDate($this->updated_at),
-            'order_items' => OrderItemResource::collection($this->whenLoaded('orderItems')),
             'user' => new UserResource($this->whenLoaded('user')),
             'address' => new AddressResource($this->whenLoaded('address')),
             'payment' => new PaymentResource($this->whenLoaded('payment')),
@@ -60,6 +59,8 @@ class OrderResource extends JsonResource
             'coupon' => new CouponResource($this->whenLoaded('coupon')),
             'region' => new RegionResource($this->whenLoaded('region')),            
             'city' => new CityResource($this->whenLoaded('city')),
+            'order_items' => OrderItemResource::collection($this->whenLoaded('orderItems')),
+            'order_item_returns' => OrderItemReturnResource::collection($this->whenLoaded('orderItemReturns')),
         ];
     }
 }

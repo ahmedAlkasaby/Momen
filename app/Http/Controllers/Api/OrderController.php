@@ -82,7 +82,7 @@ class OrderController extends MainController
     {
         $auth = Auth()->guard('api')->user();
         $user = User::find($auth->id);
-        $data = OrderHelper::getOrderRelations();
+        $data = OrderHelper::getOrderRelationsInSinglePage();
         $order = $user->orders()->with($data)->where('id', $id)->first();
         if (!$order) {
             return $this->messageError(__('api.order_not_found'));
