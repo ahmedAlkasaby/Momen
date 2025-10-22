@@ -82,7 +82,9 @@ Route::group(['middleware' => ['userLangApi', 'checkSettingOpen']], function () 
     Route::get('favorites', [FavoriteController::class, 'index']);
     Route::post('favorites',[FavoriteController::class,'toggle']);
     Route::apiResource('addresses',AddressController::class);
-    Route::apiResource('orders',OrderController::class)->except('destroy');
+    Route::post('orders/reorder/{id}', [OrderController::class, 'reOrder']);
+    Route::post('orders/cancel/{id}', [OrderController::class, 'cancel']);
+    Route::apiResource('orders',OrderController::class)->except('destroy','update');
     Route::apiResource('reviews',ReviewController::class)->except('destroy');
     Route::apiResource('order_item_returns',OrderItemReturnController::class)->except('destroy');
 

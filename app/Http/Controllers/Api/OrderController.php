@@ -8,12 +8,15 @@ use App\Helpers\OrderNotificationData;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\OrderRequest;
 use App\Http\Requests\Api\UpdateOrderRequest;
+use App\Http\Resources\Api\CartItemCollection;
+use App\Http\Resources\Api\CartItemResource;
 use App\Http\Resources\Api\OrderCollection;
 use App\Http\Resources\Api\OrderResource;
 use App\Jobs\SendOrderNotificationJob;
 use App\Models\Notification;
 use App\Models\Order;
 use App\Models\User;
+use App\Services\CartItemsService;
 use App\Services\FirebaseNotificationService;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
@@ -23,10 +26,13 @@ use Illuminate\Support\Facades\Log;
 class OrderController extends MainController
 {
     protected $orderService;
+    protected $cartItemsService;
 
-    public function __construct(OrderService $orderService)
+
+    public function __construct(OrderService $orderService, CartItemsService $cartItemsService)
     {
         $this->orderService = $orderService;
+        $this->cartItemsService = $cartItemsService;
     }
 
     public function index()
@@ -43,7 +49,7 @@ class OrderController extends MainController
         $data = $request->validated();
 
         $user = Auth()->guard('api')->user();
-        
+
         if ($this->orderService->canCreateOrder($user->id) !== true) {
             return $this->messageError($this->orderService->canCreateOrder($user->id));
         }
@@ -64,14 +70,13 @@ class OrderController extends MainController
             if (!empty($couponData)) {
                 $data = array_merge($data, $couponData);
             }
-            $data['discount']=$this->orderService->getOrderDiscount($user->id,$data['coupon_type'],$data['coupon_discount']);
+            $data['discount'] = $this->orderService->getOrderDiscount($user->id, $data['coupon_type'], $data['coupon_discount']);
             $data['total'] = $data['price'] + $data['shipping'] - $data['discount'];
             $order = $user->orders()->create($data);
             $items = $user->cart->cartItems()->get();
             $order->orderItems()->createMany($items->toArray());
             $user->cart->delete();
-            SendOrderNotificationJob::dispatch($user->id,StatusOrderEnum::Request->value);
-
+            SendOrderNotificationJob::dispatch($user->id, StatusOrderEnum::Request->value);
         });
 
         return $this->messageSuccess(__('api.order_added'));
@@ -90,21 +95,63 @@ class OrderController extends MainController
         return $this->sendData(new OrderResource($order));
     }
 
-    public function update(UpdateOrderRequest $request, string $id)
+    public function cancel( string $id)
     {
-        $data = $request->validated();
         $auth = Auth()->guard('api')->user();
         $user = User::find($auth->id);
         $order = $user->orders()->where('id', $id)->first();
         if (!$order) {
             return $this->messageError(__('api.order_not_found'));
         }
-        DB::transaction(function () use ($order, $data,$user) {
-            $order->update($data);
-            SendOrderNotificationJob::dispatch($user->id,$order->status);
+        $canCancel = $this->orderService->canCancelOrder($order->status);
+        if ($canCancel !== true) {
+            return $this->messageError($canCancel);
+        }
 
+        DB::transaction(function () use ($order,  $user) {
+            $order->update([
+                'status' => StatusOrderEnum::Canceled->value,
+            ]);
+            SendOrderNotificationJob::dispatch($user->id, $order->status);
         });
 
         return $this->messageSuccess(__('api.order_updated'));
+    }
+
+
+    public function reOrder(string $id)
+    {
+        $user = auth()->guard('api')->user();
+
+        $order = $user->orders()->where('id', $id)->first();
+        if (!$order) {
+            return $this->messageError(__('api.order_not_found'));
+        }
+
+        $messages = [];
+        DB::transaction(function () use ($order, $user) {
+            $cart = $user->cart;
+            if (!$cart) {
+                $cart = $user->cart()->create();
+            } else {
+                $cart->cartItems()->delete();
+            }
+            $items = $order->orderItems()->get();
+            foreach ($items as $item) {
+                $productId = $item->product_child_id ?? $item->product_id;
+                $canPlaceProductInCart = $this->cartItemsService->canPlaceProductInCart( $user->id, $item->amount, $productId);
+                if ($canPlaceProductInCart === true) {
+                    $cartItemData = $this->cartItemsService->getDataCartItem($productId, $item->amount);
+                    $cart->cartItems()->create($cartItemData);
+                } else {
+                    $messages[] = $canPlaceProductInCart;
+                }
+            }
+        });
+
+        return $this->sendData([
+            'cart_items' => CartItemResource::collection($user->cart->cartItems),
+            'messages' => $messages,
+        ], __('api.reorder_done'));
     }
 }

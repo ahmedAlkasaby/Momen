@@ -76,6 +76,7 @@ return [
     'review_not_found'=>'Review not found',
     'review_created'=>'Review created successfully',
     'review_updated'=>'Review updated successfully',
+    'reorder_done'=>'Reorder done successfully',
 
 
 

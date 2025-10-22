@@ -32,6 +32,8 @@ return new class extends Migration
             $table->tinyInteger('active')->default(1);
             $table->timestamps();
             $table->softDeletes();
+
+           
         });
     }
 

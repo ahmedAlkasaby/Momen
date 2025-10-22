@@ -77,6 +77,7 @@ return [
     'review_not_found'=>'المراجعة غير موجودة',
     'review_created'=>'تم اضافه المراجعة بنجاح',
     'review_updated'=>'تم تحديث المراجعة بنجاح',
+    'reorder_done'=>'تم اعادة الطلب بنجاح',
 
 
 

@@ -25,21 +25,21 @@ class CartItemsService
 
 
         if ($product->children()->exists()) {
-            return __('api.you_must_choose_from_children');
+            return __('api.you_must_choose_from_children', ['product_name' => $product->nameLang()]);
         }
         if (! $product->active) {
-            return __('api.product_not_active');
+            return __('api.product_not_active', ['product_name' => $product->nameLang()]);
         }
 
         if ($product->is_stock == 0) {
-            return __('api.product_not_available_amount');
+            return __('api.product_not_available_amount', ['product_name' => $product->nameLang()]);
         }
 
         if ($amount > $product->max_order) {
-            return __('api.max_order', ['max_order' => $product->max_order]);
+            return __('api.max_order', ['max_order' => $product->max_order, 'product_name' => $product->nameLang()]);
         }
         if ($amount < $product->order_limit) {
-            return __('api.order_limit', ['order_limit' => $product->order_limit]);
+            return __('api.order_limit', ['order_limit' => $product->order_limit, 'product_name' => $product->nameLang()]);
         }
 
 

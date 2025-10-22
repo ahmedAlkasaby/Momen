@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\StatusOrderEnum;
 use App\Models\User;
 use App\Models\Coupon;
 use App\Models\Address;
@@ -35,11 +36,22 @@ class OrderService
         return $shipping;
     }
 
+    public function canCancelOrder($orignalStatus)
+    {
+        if (in_array($orignalStatus, [ StatusOrderEnum::Delivered->value, StatusOrderEnum::Canceled->value])) {
+            return __('api.cannot_cancel_order');
+        }
+        return true;
+    }
+
+   
+
    
     public function canCreateOrder($userId)
     {
         $user = User::find($userId);
-        $setting = AppSettings::all();
+        $minOrder=AppSettings::get('min_order');
+        $maxOrder=AppSettings::get('max_order');
 
         if (!$user->cart || $user->cart->cartItems->isEmpty()) {
             return __('api.cart_is_empty');
@@ -49,11 +61,11 @@ class OrderService
             return __('api.address_not_found');
         }
 
-        if ($totalPrice < $setting['min_order']) {
-            return __('api.min_order', ['min_order' => $setting['min_order']]);
+        if ($totalPrice < $minOrder) {
+            return __('api.min_order', ['min_order' => $minOrder]);
         }
-        if ($totalPrice > $setting['max_order']) {
-            return __('api.max_order', ['max_order' => $setting['max_order']]);
+        if ($totalPrice > $maxOrder) {
+            return __('api.max_order', ['max_order' => $maxOrder]);
         }
 
         return true;
