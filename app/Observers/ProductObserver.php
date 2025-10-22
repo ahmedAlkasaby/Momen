@@ -13,7 +13,7 @@ class ProductObserver
     {
         if ($product->parent_id != null) {
             $productParent = Product::find($product->parent_id);
-            $productParent->updateQuietly([
+            $productParent->update([
                 'is_size' => $productParent->children->where('size_id', '!=', null)->count() > 0 ? 1 : 0,
                 'is_color' => $productParent->children->where('color_id', '!=', null)->count() > 0 ? 1 : 0,
                 'price_start' => $productParent->children->min('price') ?? 0,
@@ -24,6 +24,13 @@ class ProductObserver
 
     public function updated(Product $product): void
     {
+        if($product->wasChanged(['active','is_stock'])) {
+            if($product->active==0 || $product->is_stock==0) {
+                CartItem::where('product_id', $product->id)
+                    ->orWhere('product_child_id', $product->id)
+                    ->delete();
+            }
+        }
         if ($product->wasChanged([
             'price',
             'offer_price',

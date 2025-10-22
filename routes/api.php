@@ -16,17 +16,12 @@ use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderItemReturnController;
 use App\Http\Controllers\Api\PageController;
 use App\Http\Controllers\Api\PaymentController;
-use App\Http\Controllers\Api\PaymobController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ReasonController;
 use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\ReviewController;
-use App\Http\Controllers\Api\ServiceController;
-use App\Http\Controllers\Api\StoreController;
-use App\Http\Controllers\Api\StoreTypeController;
-use App\Http\Controllers\Api\WishListController;
-use App\Models\Payment;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -81,9 +76,9 @@ Route::group(['middleware' => ['userLangApi', 'checkSettingOpen']], function () 
   });
   Route::group(['middleware' => ['auth-api']], function () {
     Route::apiResource('cart_items', CartItemController::class)->except(('update'));
-    Route::resource('notifications', NotificationController::class)->only(['index', 'destroy']);
     Route::put('notifications/read-all', [NotificationController::class, 'readAll']);
     Route::put('notifications/read/{id}', [NotificationController::class, 'read']);
+    Route::resource('notifications', NotificationController::class)->only(['index', 'destroy']);
     Route::get('favorites', [FavoriteController::class, 'index']);
     Route::post('favorites',[FavoriteController::class,'toggle']);
     Route::apiResource('addresses',AddressController::class);
