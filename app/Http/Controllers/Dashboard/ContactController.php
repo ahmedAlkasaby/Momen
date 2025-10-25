@@ -5,24 +5,22 @@ namespace App\Http\Controllers\Dashboard;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use App\Notifications\NotifyUser;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Notification;
+use App\Http\Controllers\Dashboard\MainController;
 
 class ContactController extends MainController
 {
     /**
      * Display a listing of the resource.
      */
-
-    public function __construct()
-    {
+    public function __construct(){
         parent::__construct();
         $this->setClass('contacts');
     }
     public function index()
     {
 
-        $contacts = Contact::paginate($this->perPage);
+        $contacts = Contact::filter(request())->paginate($this->perPage);
         return view('admin.contacts.index', compact('contacts'));
     }
 
@@ -48,7 +46,7 @@ class ContactController extends MainController
     public function show(string $id)
     {
         $contact = Contact::findOrFail($id);
-        $contact->seen = true;
+        $contact->is_read = true;
         $contact->save();
         return view('admin.contacts.show', compact('contact'));
     }
@@ -64,13 +62,19 @@ class ContactController extends MainController
     /**
      * Update the specified resource in storage.
      */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
 
     /**
      * Remove the specified resource from storage.
      */
-
-    
-    public function sendMessage($id, Request $request)
+    public function destroy(string $id)
+    {
+        //
+    }
+        public function sendMessage($id, Request $request)
     {
         $request->validate([
             "title" => "required|string|max:255",

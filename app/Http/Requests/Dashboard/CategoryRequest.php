@@ -19,18 +19,18 @@ class CategoryRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-     public function rules(): array
+    public function rules(): array
     {
+        $categoryId = $this->route('category');
         return [
-            "name.ar" => "required|string|max:255",
-            "name.en" => "required|string|max:255",
-            "description.ar" => "nullable|string|max:1000",
-            "description.en" => "nullable|string|max:1000",
-            "image" => "nullable|image|mimes:jpg,jpeg,png,gif,webp|max:2048",
+            'name.en' => 'required|string|max:50|unique:categories,name->en,' . $categoryId,
+            'name.ar' => 'required|string|max:50|unique:categories,name->ar,' . $categoryId,
+            "content.ar" => "nullable|string|max:1000",
+            "content.en" => "nullable|string|max:1000",
+            "image" => $categoryId ? "nullable|image|mimes:jpg,jpeg,png,gif,webp|max:2048" : "required|image|mimes:jpg,jpeg,png,gif,webp|max:2048",
             "parent_id" => "nullable|exists:categories,id",
-            "service_id" => "nullable|exists:services,id",
-            "active" => "nullable|boolean",
-            "order_id" => "nullable|integer|min:0",
+            "active" => "boolean",
+            "order_id" => "integer|min:0",
         ];
     }
     public function messages(): array
@@ -48,8 +48,13 @@ class CategoryRequest extends FormRequest
             "name.en.string" => __("validation.string", ["attribute" =>  __("site.name")]),
             "name.ar.max" => __("validation.max.string", ["attribute" =>  __("site.name"), "max" => 255]),
             "name.en.max" => __("validation.max.string", ["attribute" =>  __("site.name"), "max" => 255]),
-
-
+            "name.ar.unique" => __("validation.unique", ["attribute" => __("site.name")]),
+            "name.en.unique" => __("validation.unique", ["attribute" => __("site.name")]),
+            "content.ar.string" => __("validation.string", ["attribute" => __("site.content")]),
+            "content.en.string" => __("validation.string", ["attribute" => __("site.content")]),
+            "content.ar.max" => __("validation.max.string", ["attribute" => __("site.content"), "max" => 1000]),
+            "content.en.max" => __("validation.max.string", ["attribute" => __("site.content"), "max" => 1000]),
+            
         ];
     }
     protected function prepareForValidation()

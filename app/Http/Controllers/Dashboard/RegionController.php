@@ -6,15 +6,13 @@ use App\Models\City;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\dashboard\RegionRequest;
-use App\Http\Controllers\Dashboard\MainController;
+use App\Http\Requests\Dashboard\RegionRequest;
 
 class RegionController extends MainController
 {
     /**
      * Display a listing of the resource.
      */
-
     public function __construct()
     {
         parent::__construct();
@@ -22,8 +20,11 @@ class RegionController extends MainController
     }
     public function index()
     {
-        $regions = Region::with('city')->paginate($this->perPage);
-        return view('admin.regions.index', compact('regions'));
+        $regions = Region::filter(request())->with('city')->paginate($this->perPage);
+        $cities = City::all()->mapWithKeys(function ($city) {
+            return [$city->id => $city->nameLang()];
+        })->toArray();
+        return view('admin.regions.index', compact('regions', 'cities'));
     }
 
     /**
@@ -31,17 +32,18 @@ class RegionController extends MainController
      */
     public function create()
     {
-        $cities = City::all();
+        $cities = City::all()->mapWithKeys(function ($city) {
+            return [$city->id => $city->nameLang()];
+        });;
         return view('admin.regions.create', compact('cities'));
     }
-
     /**
      * Store a newly created resource in storage.
      */
     public function store(RegionRequest $request)
     {
         Region::create($request->all());
-        return redirect()->route('dashboard.regions.index')->with('success', __('site.region_created_successfully'));
+        return redirect()->route('dashboard.regions.index')->with('success', __('site.added_successfully'));
     }
 
     /**
@@ -50,9 +52,10 @@ class RegionController extends MainController
     public function show(string $id)
     {
         $region = Region::find($id);
-        $cities = City::all();
-
-        return view('admin.regions.show', compact('region', "cities"));
+        $cities = City::all()->mapWithKeys(function ($city) {
+            return [$city->id => $city->nameLang()];
+        });;
+        return view('admin.regions.edit', compact('region', 'cities'));
     }
 
     /**
@@ -61,19 +64,20 @@ class RegionController extends MainController
     public function edit(string $id)
     {
         $region = Region::find($id);
-        $cities = City::all();
-
-        return view('admin.regions.edit', compact('region', "cities"));
+        $cities = City::all()->mapWithKeys(function ($city) {
+            return [$city->id => $city->nameLang()];
+        });;
+        return view('admin.regions.edit', compact('region', 'cities'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(RegionRequest $request, string $id)
     {
         $region = Region::find($id);
         $region->update($request->all());
-        return redirect()->route('dashboard.regions.index')->with('success', __('site.region_updated_successfully'));
+        return redirect()->route('dashboard.regions.index')->with('success', __('site.updated_successfully'));
     }
 
     /**
@@ -81,13 +85,20 @@ class RegionController extends MainController
      */
     public function destroy(string $id)
     {
-        if (Region::find($id)->orders()->count() > 0) {
-            return redirect()->route('dashboard.regions.index')->with('error', __('site.region_has_orders'));
-        }
         $region = Region::find($id);
         $region->delete();
-        return redirect()->route('dashboard.regions.index')->with('success', __('site.region_deleted_successfully'));
+        return redirect()->back()->with('success', __('site.deleted_successfully'));
     }
-
-    
+    public function forceDelete(string $id)
+    {
+        $region = Region::withTrashed()->find($id);
+        $region->forceDelete();
+        return redirect()->back()->with('success', __('site.deleted_successfully'));
+    }
+    public function restore(string $id)
+    {
+        $region = Region::withTrashed()->find($id);
+        $region->restore();
+        return redirect()->back()->with('success', __('site.restored_successfully'));
+    }
 }

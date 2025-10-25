@@ -38,11 +38,14 @@
 
 
             <!-- User -->
+            @php
+                $user = auth()->user()->with('roles')->first();
+            @endphp
             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                     <div class="avatar avatar-online">
-                        @if (auth()->user()->image)
-                            <img src={{ url(auth()->user()->image) }} alt class="h-auto rounded-circle" />
+                        @if ($user->image)
+                            <img src={{ url($user->image) }} alt class="h-auto rounded-circle" />
                         @else
                             <img src={{ url('admin/assets/img/avatars/1.png') }} alt class="h-auto rounded-circle" />
                         @endif
@@ -60,7 +63,7 @@
                                     </div>
                                 </div>
                                 <div class="flex-grow-1">
-                                    <span class="fw-medium d-block">{{ auth()->user()->name_first }}</span>
+                                    <span class="fw-medium d-block">{{ $user->name_first }}</span>
                                     <small class="text-muted">{{ __('site.admin') }}</small>
                                 </div>
                             </div>
@@ -79,7 +82,7 @@
                     </li>
 
                     <li>
-                        <a class="dropdown-item" href="{{ route('dashboard.logout') }}" target="_blank">
+                        <a class="dropdown-item"  href="{{ route('dashboard.logout') }}" >
                             <i class="ti ti-logout me-2 ti-sm"></i>
                             <span class="align-middle">{{ __('site.logout') }}</span>
                         </a>

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Events\NotificationEvent;
-use App\Helpers\ActionNotificationHelper;
-use App\Http\Controllers\Controller;
-use App\Models\Notification;
 use App\Models\User;
-use App\Services\FirebaseNotificationService;
+use App\Models\Notification;
 use Illuminate\Http\Request;
+use App\Events\NotificationEvent;
+use App\Http\Controllers\Controller;
+use App\Helpers\ActionNotificationHelper;
+use App\Services\FirebaseNotificationService;
 
 class NotificationController extends MainController
 {
@@ -24,9 +24,9 @@ class NotificationController extends MainController
 
     public function index()
     {
-        $notifications = Notification::filter()->with('user')->paginate($this->perPage);
+        $notifications = Notification::with('user')->paginate($this->perPage);
         $users = User::get()->mapWithKeys(function ($user) {
-            return [$user->id => $user->name];
+            return [$user->id => $user->name_first . ' ' . $user->name_last];
         })->toArray();
         if (request('action') == 'delete') {
             return  $this->deleteAll();
@@ -43,7 +43,7 @@ class NotificationController extends MainController
     {
         $types = ActionNotificationHelper::getTypes();
         $devices = ActionNotificationHelper::getDevices();
-        $users = User::all()->mapWithKeys(fn($user) => [$user->id => $user->name])->toArray();
+        $users = User::all()->mapWithKeys(fn($user) => [$user->id => $user->name_first . ' ' . $user->name_last])->toArray();
 
         return view('admin.notifications.create', compact('types', 'devices', 'users'));
     }
@@ -54,7 +54,7 @@ class NotificationController extends MainController
 
         if ($request->type == 'all' || $request->type == 'database') {
             $notification = Notification::create($request->all());
-            event(new NotificationEvent($notification));
+            // event(new NotificationEvent($notification));
         }
         if ($request->type == 'all' || $request->type == 'firebase') {
             $dataFirebase = [
@@ -63,8 +63,8 @@ class NotificationController extends MainController
                     'en' => $request->name['en'],
                 ]),
                 'body' => json_encode([
-                    'ar' => $request->description['ar'],
-                    'en' => $request->description['en'],
+                    'ar' => $request->content['ar'],
+                    'en' => $request->content['en'],
                 ]),
             ];
             $user = User::find($request->user_id);
@@ -75,7 +75,7 @@ class NotificationController extends MainController
                         $this->firebaseNotification->sendNotificationWithDevice(
                             $device,
                             $request->name['ar'],
-                            $request->description['ar'],
+                            $request->content['ar'],
                             $dataFirebase,
                         );
                     }

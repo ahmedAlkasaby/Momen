@@ -21,24 +21,28 @@ class SizeRequest extends FormRequest
      */
     public function rules(): array
     {
+        $sizeId = $this->route('size');
         return [
-            'name.ar' => 'required|string|max:255',
-            'name.en' => 'required|string|max:255',
-            'description.en' => 'nullable|string|max:1000',
-            'description.ar' => 'nullable|string|max:1000',
-            'active' => 'boolean',
-            'order_id' => 'nullable|integer',
+            'name.en' => 'required|string|max:50|unique:sizes,name->en,' . $sizeId,
+            'name.ar' => 'required|string|max:50|unique:sizes,name->ar,' . $sizeId,
+            "active" => "required|boolean",
+            "order_id" => "integer|min:0",
         ];
     }
-    public function messages(): array
-    {
+    public function messages(){
         return [
-            'name.ar.required' => __('validation.name_ar_required'),
-            'name.en.required' => __('validation.name_en_required'),
-            'description.en.max' => __('validation.description_en_max', ['max' => 1000]),
-            'description.ar.max' => __('validation.description_ar_max', ['max' => 1000]),
-            'active.boolean' => __('validation.active_boolean'),
-            'order_id.exists' => __('validation.order_id_required'),
+            "active.boolean" => __("validation.boolean", ["attribute" => "active"]),
+            "active.required" => __("validation.required", ["attribute" => "active"]),
+            "order_id.integer" => __("validation.integer", ["attribute" => "order_id"]),
+            "order_id.min" => __("validation.min.numeric", ["attribute" => "order_id", "min" => 0]),
+            "name.ar.required" => __("validation.required", ["attribute" => __("site.name")]),
+            "name.en.required" => __("validation.required", ["attribute" => __("site.name")]),
+            "name.ar.string" => __("validation.string", ["attribute" =>  __("site.name")]),
+            "name.en.string" => __("validation.string", ["attribute" =>  __("site.name")]),
+            "name.ar.max" => __("validation.max.string", ["attribute" =>  __("site.name"), "max" => 255]),
+            "name.en.max" => __("validation.max.string", ["attribute" =>  __("site.name"), "max" => 255]),
+            "name.ar.unique" => __("validation.unique", ["attribute" => __("site.name")]),
+            "name.en.unique" => __("validation.unique", ["attribute" => __("site.name")]),
         ];
     }
 }

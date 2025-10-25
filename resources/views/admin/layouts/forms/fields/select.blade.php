@@ -17,11 +17,12 @@ if (isset($is_multiple)) {
 if(isset($select2)) $array_control['class'] .= ' select2';
 
 // لو معرفش select_id نعمله id فريد
-if (!isset($select_id)) {
-    $array_control['id'] = $field_name . '_' . uniqid();
-} else {
+if (isset($select_id)) {
     $array_control['id'] = $select_id;
-}
+} 
+if (isset($select_class)) {
+    $array_control['class'] = $select_class;
+} 
 @endphp
 
 @include('admin.layouts.forms.fields.form-group-head', ['field_name' => $field_name])

@@ -22,25 +22,33 @@ class RegionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name.ar' => 'required|string|max:255',
-            'name.en' => 'required|string|max:255',
+            'name.en' => 'required|string|max:50|unique:regions,name->en,' . $this->route('region'),
+            'name.ar' => 'required|string|max:50|unique:regions,name->ar,' . $this->route('region'),
+            "oreder" => "integer|min:0",
             'active' => 'required|boolean',
-            "order_id" => "nullable|integer",
-            "city_id" => "required|exists:cities,id",
-            "shipping" => "required|numeric",
+            'city_id' => 'required|exists:cities,id',
+            'shipping' => 'required|numeric|min:0',
         ];
     }
-
-    public function message(){
+    public function messages()
+    {
         return [
-            "name.ar.required" => __("validation.name_ar_required"),
-            "name.en.required" => __("validation.name_en_required"),
-            "active.required" => __("validation.active_required"),
-            "active.boolean" => __("validation.boolean"),
-            "order_id.exists" => __("validation.order_id_required"),
-            "city_id.exists" => __("validation.city_id_required"),
-            "shipping.required" => __("validation.shipping_required"),
-            "shipping.numeric" => __("validation.shipping_numeric"),
+            "active.boolean" => __("validation.boolean", ["attribute" => "active"]),
+            "active.required" => __("validation.required", ["attribute" => "active"]),
+            "order_id.integer" => __("validation.integer", ["attribute" => "order_id"]),
+            "order_id.min" => __("validation.min.numeric", ["attribute" => "order_id", "min" => 0]),
+            "name.ar.required" => __("validation.required", ["attribute" => __("site.name")]),
+            "name.en.required" => __("validation.required", ["attribute" => __("site.name")]),
+            "name.ar.string" => __("validation.string", ["attribute" =>  __("site.name")]),
+            "name.en.string" => __("validation.string", ["attribute" =>  __("site.name")]),
+            "name.ar.max" => __("validation.max.string", ["attribute" =>  __("site.name"), "max" => 255]),
+            "name.en.max" => __("validation.max.string", ["attribute" =>  __("site.name"), "max" => 255]),
+            "name.ar.unique" => __("validation.unique", ["attribute" => __("site.name")]),
+            "name.en.unique" => __("validation.unique", ["attribute" => __("site.name")]),
+            "city_id.exists" => __("validation.exists", ["attribute" => "city_id"]),
+            "shipping.required" => __("validation.required", ["attribute" => "shipping"]),
+            "shipping.numeric" => __("validation.numeric", ["attribute" => "shipping"]),
+            "shipping.min" => __("validation.min.numeric", ["attribute" => "shipping", "min" => 0]),
         ];
     }
 }

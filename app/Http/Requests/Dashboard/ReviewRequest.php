@@ -24,8 +24,8 @@ class ReviewRequest extends FormRequest
         return [
             'product_id' => 'required|exists:products,id',
             'user_id' => 'required|exists:users,id',
-            "rate" => "required|integer|min:1|max:5",
-            "comment" => "required|string",
+            "rating" => "required|integer|min:1|max:5",
+            "comment" => "nullable|string",
             "active" => "required|boolean",
         ];
     }
@@ -36,11 +36,10 @@ class ReviewRequest extends FormRequest
             'product_id.exists' => __("validation.product_id_exists"),
             'user_id.required' => __("validation.user_id_required"),
             'user_id.exists' => __("validation.user_id_exists"),
-            'rate.required' => __("validation.rate_required"),
-            'rate.integer' => __("validation.rate_integer"),
-            'rate.min' => __("validation.rate_min"),
-            'rate.max' => __("validation.rate_max"),
-            'comment.required' => __("validation.comment_required"),
+            'rating.required' => __("validation.rating_required"),
+            'rating.integer' => __("validation.rating_integer"),
+            'rating.min' => __("validation.rating_min"),
+            'rating.max' => __("validation.rating_max"),
             'comment.string' => __("validation.comment_string"),
             'active.required' => __("validation.active_required"),
             'active.boolean' => __("validation.active_boolean"),

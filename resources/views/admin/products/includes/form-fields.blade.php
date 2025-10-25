@@ -22,16 +22,16 @@
     </div>
 
     <div class="col-md-6">
-        @include('admin.layouts.forms.fields.select', [
-        'select_name' => 'categories',
-        'select_function' => $categories,
-        'select_value' => $product->categories ?? old("categories"),
-        'select_class' => 'select2',
-        'select2' => true,
-        'label_req' => true,
-        'select_id' => 'categories',
-        'is_multiple' => true
-        ])
+        <div class="form-group mb-4">
+            <label class="form-label text-muted opacity-75 fw-medium">{{ __('site.categories') }}</label>
+            <select name="categories[]" class="form-select select2" multiple>
+                @foreach ($categories as $id => $name)
+                <option value="{{ $id }}" @if(in_array($id, $product?->categories->pluck('id')->toArray() ?? [])) selected @endif>
+                    {{ $name }}
+                </option>
+                @endforeach
+            </select>
+        </div>
     </div>
 
 </div>
@@ -81,10 +81,20 @@
 @include('admin.products.includes.price_fields')
 
 {{-- @include('admin.products.includes.date_fields') --}}
+@php
 
+// 1. تجهيز مصفوفة PHP من روابط الصور، وليس نص JSON.
+$imageUrls = [];
+if ($product && $product->images && $product->images->count()) {
+$imageUrls = $product->images->pluck('image')->map(function ($imagePath) {
+return asset($imagePath);
+})->toArray();
+}
+@endphp
 
 @include('admin.layouts.forms.fields.multi_dropzone', [
 "name" => "images",
+"existing_images" => $imageUrls
 ])
 
 <div class="form-repeater">

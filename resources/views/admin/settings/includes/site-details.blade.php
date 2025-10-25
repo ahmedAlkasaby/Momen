@@ -40,6 +40,22 @@
                 'label_req' => true,
             ])
         </div>
+        <div class="col-sm-6">
+            @include('admin.layouts.forms.fields.text', [
+                'text_name' => 'tax',
+                'text_value' => $tax ?? null,
+                'label_name' => __('site.tax'),
+                'label_req' => true,
+            ])
+        </div>
+        <div class="col-sm-6">
+            @include('admin.layouts.forms.fields.text', [
+                'text_name' => 'fees',
+                'text_value' => $fees ?? null,
+                'label_name' => __('site.fees'),
+                'label_req' => true,
+            ])
+        </div>
         {{-- <div class="col-sm-6">
             @include('admin.layouts.forms.fields.select', [
                'select_name' => 'result',

@@ -41,7 +41,7 @@ class PaymentController extends MainController
     {
         $imageUrl = $this->imageService->uploadImage('payments', $request);
         $data = $request->except('image');
-        $data['image'] = $imageUrl;
+        $data['image'] = $imageUrl['image']??null;
         Payment::create($data);
         return redirect()->route('dashboard.payments.index')->with('success', __('site.payment_created_successfully'));
     }
@@ -73,7 +73,7 @@ class PaymentController extends MainController
         $imgUrl = $this->imageService->editImage($request, $payment, 'payments');
         $data = $request->except('image');
 
-        $data['image'] = $imgUrl ;
+        $data['image'] = $imgUrl['image']; ;
 
         $payment->update($data);
         return redirect()->route('dashboard.payments.index')->with('success', __('site.payment_updated_successfully'));
@@ -87,6 +87,17 @@ class PaymentController extends MainController
         $payment = Payment::findOrFail($id);
         $payment->delete();
         return redirect()->route('dashboard.payments.index')->with('success', __('site.payment_deleted_successfully'));
+    }
+    public function forceDelete(string $id){
+        $payment = Payment::withTrashed()->findOrFail($id);
+        $this->imageService->deleteImage($payment->image);
+        $payment->forceDelete();
+        return redirect()->route('dashboard.payments.index')->with('success', __('site.deleted_successfully'));
+    }
+    public function restore(string $id){
+        $payment = Payment::withTrashed()->findOrFail($id);
+        $payment->restore();
+        return redirect()->route('dashboard.payments.index')->with('success', __('site.restored_successfully'));
     }
 
     

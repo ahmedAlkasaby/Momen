@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Models\Page;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Services\ImageHandlerService;
-use App\Http\Requests\dashboard\PageRequest;
-use App\Http\Controllers\Dashboard\MainController;
+use App\Http\Requests\Dashboard\PageRequest;
 
 class PageController extends MainController
 {
@@ -15,16 +15,17 @@ class PageController extends MainController
      * Display a listing of the resource.
      */
     protected $imageService;
-    public function __construct(ImageHandlerService $ImageService)
+    public function __construct(ImageHandlerService $ImageHandlerService)
     {
         parent::__construct();
         $this->setClass('pages');
-        $this->imageService = $ImageService;
+        $this->imageService = $ImageHandlerService;
     }
     public function index()
     {
-        $pages = Page::paginate($this->perPage);
-        return view('admin.pages.index', compact('pages'));
+        $pages = Page::filter(request())->paginate($this->perPage);
+        $products = Product::where('parent_id', null)->select('id', 'name')->get()->mapWithKeys(fn($product) => [$product->id => $product->nameLang()])->toArray();
+        return view('admin.pages.index', compact('pages', 'products'));
     }
 
     /**
@@ -32,7 +33,8 @@ class PageController extends MainController
      */
     public function create()
     {
-        return view('admin.pages.create');
+        $products = Product::where('parent_id', null)->select('id', 'name')->get()->mapWithKeys(fn($product) => [$product->id => $product->nameLang()])->toArray();
+        return view('admin.pages.create', compact('products'));
     }
 
     /**
@@ -40,11 +42,13 @@ class PageController extends MainController
      */
     public function store(PageRequest $request)
     {
-        $imageUrl = $this->imageService->uploadImage('pages', $request);
-        $data=$request->except('image');
-        $data['image'] = $imageUrl;
+        $data = $request->except('image');
+        $imageUrl = $this->imageService->uploadImage('pages', $request, 800, 600);
+        $data['image'] = $imageUrl['image'] ?? null;
+
         Page::create($data);
-        return redirect()->route('dashboard.pages.index')->with('success', __('site.page_created_successfully'));
+        
+        return redirect()->route('dashboard.pages.index')->with('success', __('site.added_successfully'));
     }
 
     /**
@@ -53,7 +57,9 @@ class PageController extends MainController
     public function show(string $id)
     {
         $page = Page::findOrFail($id);
-        return view('admin.pages.edit',compact('page'));
+        $products = Product::where('parent_id', null)->select('id', 'name')->get()->mapWithKeys(fn($product) => [$product->id => $product->nameLang()])->toArray();
+
+        return view('admin.pages.edit', compact('page', 'products'));
     }
 
     /**
@@ -62,7 +68,9 @@ class PageController extends MainController
     public function edit(string $id)
     {
         $page = Page::findOrFail($id);
-        return view('admin.pages.edit', compact('page'));
+        $products = Product::where('parent_id', null)->select('id', 'name')->get()->mapWithKeys(fn($product) => [$product->id => $product->nameLang()])->toArray();
+
+        return view('admin.pages.edit', compact('page', 'products'));
     }
 
     /**
@@ -71,11 +79,11 @@ class PageController extends MainController
     public function update(PageRequest $request, string $id)
     {
         $page = Page::findOrFail($id);
-        $imageUrl=$this->imageService->editImage($request,$page,'pages');
         $data=$request->except('image');
-        $data["image"]=$imageUrl;
+        $imageUrl = $this->imageService->editImage($request, $page, 'pages');
+        $data['image'] = $imageUrl['image'] ?? $page->image;
         $page->update($data);
-        return redirect()->route('dashboard.pages.index')->with('success', __('site.page_updated_successfully'));
+        return redirect()->route('dashboard.pages.index')->with('success', __('site.updated_successfully'));
     }
 
     /**
@@ -84,10 +92,19 @@ class PageController extends MainController
     public function destroy(string $id)
     {
         $page = Page::findOrFail($id);
-        $this->imageService->deleteImage($page,'pages');
         $page->delete();
-        return redirect()->route('dashboard.pages.index')->with('success', __('site.page_deleted_successfully'));
+        return redirect()->back()->with('success', __('site.deleted_successfully'));
     }
-
-    
+    public function restore(string $id)
+    {
+        $page = Page::withTrashed()->findOrFail($id);
+        $page->restore();
+        return redirect()->back()->with('success', __('site.restored_successfully'));
+    }
+    public function forceDelete(string $id)
+    {
+        $page = Page::withTrashed()->findOrFail($id);
+        $page->forceDelete();
+        return redirect()->back()->with('success', __('site.deleted_successfully'));
+    }
 }

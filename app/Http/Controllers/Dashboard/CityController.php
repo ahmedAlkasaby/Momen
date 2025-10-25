@@ -2,28 +2,24 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Dashboard\MainController;
 use App\Models\City;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\dashboard\CityRequest;
+use App\Http\Requests\Dashboard\CityRequest;
 
 class CityController extends MainController
 {
-
-
-    public function __construct()
+    /**
+     * Display a listing of the resource.
+     */
+   public function __construct()
     {
         parent::__construct();
         $this->setClass('cities');
     }
-
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $cities = City::paginate($this->perPage);
+        $cities = City::filter(request())->paginate($this->perPage);
         return view('admin.cities.index', compact('cities'));
     }
 
@@ -40,8 +36,9 @@ class CityController extends MainController
      */
     public function store(CityRequest $request)
     {
+        $request['country_id'] = 1;
         City::create($request->all());
-        return redirect()->route('dashboard.cities.index')->with('success', __('site.city_created_successfully'));
+        return redirect()->route('dashboard.cities.index')->with('success', __('site.added_successfully'));
     }
 
     /**
@@ -50,7 +47,7 @@ class CityController extends MainController
     public function show(string $id)
     {
         $city = City::find($id);
-        return view('admin.cities.show', compact('city'));
+        return view('admin.cities.edit', compact('city'));
     }
 
     /**
@@ -69,7 +66,7 @@ class CityController extends MainController
     {
         $city = City::find($id);
         $city->update($request->all());
-        return redirect()->route('dashboard.cities.index')->with('success', __('site.city_updated_successfully'));
+        return redirect()->route('dashboard.cities.index')->with('success', __('site.updated_successfully'));
     }
 
     /**
@@ -78,16 +75,19 @@ class CityController extends MainController
     public function destroy(string $id)
     {
         $city = City::find($id);
-
-        if ($city->orders()->count() > 0) {
-            return redirect()->route('dashboard.cities.index')->with('error', __('site.city_has_orders'));
-        }
-        if ($city->Regions()->count() > 0) {
-            return redirect()->route('dashboard.cities.index')->with('error', __('site.city_has_regions'));
-        }
         $city->delete();
-        return redirect()->route('dashboard.cities.index')->with('success', __('site.city_deleted_successfully'));
+        return redirect()->back()->with('success', __('site.deleted_successfully'));
     }
-
-    
+    public function restore(string $id)
+    {
+        $city = City::withTrashed()->find($id);
+        $city->restore();
+        return redirect()->back()->with('success', __('site.restored_successfully'));
+    }
+    public function forceDelete(string $id)
+    {
+        $city = City::withTrashed()->find($id);
+        $city->forceDelete();
+        return redirect()->back()->with('success', __('site.deleted_successfully'));
+    }
 }

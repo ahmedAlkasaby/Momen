@@ -2,197 +2,184 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\ProductRequest;
-use App\Models\Brand;
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\Service;
 use App\Models\Size;
-use App\Models\Unit;
-use App\Services\ImageHandlerService;
-use App\Services\ProductService;
+use App\Models\Brand;
+use App\Models\Color;
+use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
+use App\Services\ProductService;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Event;
+use App\Services\ProductImagesService;
+use App\Http\Requests\Dashboard\ProductRequest;
 
 class ProductController extends MainController
 {
-    protected $imageService;
-    protected $productService;
-
-    public function __construct(ImageHandlerService $imageService, ProductService $productService)
+    /**
+     * Display a listing of the resource.
+     */
+    protected $productService, $productImagesService;
+    public function __construct(ProductImagesService $ImageService, ProductService $ProductService)
     {
         parent::__construct();
         $this->setClass('products');
-        $this->imageService = $imageService;
-        $this->productService = $productService;
+        $this->productImagesService = $ImageService;
+        $this->productService = $ProductService;
     }
-
     public function index(Request $request)
     {
-        $data = ['categories', 'service', 'unit', 'size', 'brand', 'children', 'parent'];
-        $products = Product::with($data)->filter($request, 'admin')->paginate($this->perPage);
+        $data = ['categories', 'sizes', 'brand', 'children', 'parent'];
+        $products = Product::with($data)->filter($request, 'admin')
+            ->where('parent_id', null)->paginate($this->perPage);
 
-        $units = Unit::active()->get()->mapWithKeys(function ($unit) {
-            return [$unit->id => $unit->nameLang()];
-        })->toArray();
-        $brands = Brand::active()->get()->mapWithKeys(function ($brand) {
+        $colors = Color::active()->select(
+            'id',
+            'name'
+        )->get()->mapWithKeys(function ($color) {
+            return [$color->id => $color->nameLang()];
+        });
+        $brands = Brand::active()->select(
+            'id',
+            'name'
+        )->get()->mapWithKeys(function ($brand) {
             return [$brand->id => $brand->nameLang()];
         })->toArray();
-        $categories = Category::active()
+        $categories = Category::active()->select(
+            'id',
+            'name'
+        )
             ->with('parent')
             ->get()
             ->mapWithKeys(function ($category) {
-                $label = $category->parent ? $category->parent->nameLang() . ' > ' . $category->nameLang() : $category->nameLang();
-                return [$category->id => $label];
+                return [$category->id =>  $category->nameLang()];
             })->toArray();
         return view('admin.products.index', get_defined_vars());
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        $services = Service::active()->get();
-        $brands = Brand::active()->get();
-        $units = Unit::active()->get();
-        $sizes = Size::active()->get();
+        $brands = Brand::active()->select('id', 'name')->get()->mapWithKeys(function ($brand) {
+            return [$brand->id => $brand->nameLang()];
+        })->toArray();
+        $sizes = Size::active()->select('id', 'name')->get()->mapWithKeys(function ($size) {
+            return [$size->id => $size->nameLang()];
+        })->toArray();
 
         $categories = Category::active()
             ->with('parent')
             ->get()
             ->mapWithKeys(function ($category) {
-                $label = $category->parent ? $category->parent->nameLang() . ' > ' . $category->nameLang() : $category->nameLang();
-                return [$category->id => $label];
-            });
-
+                return [$category->id => $category->nameLang()];
+            })->toArray();
+        $colors = Color::active()->get()->mapWithKeys(function ($color) {
+            return [$color->id => $color->nameLang()];
+        })->toArray();
         return view('admin.products.create', get_defined_vars());
     }
 
-
-
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(ProductRequest $request)
     {
-        $image = $this->imageService->uploadImage('products', $request);
         try {
-            DB::transaction(function () use ($request, $image) {
-                $data = $request->except('image');
-                $data['image'] = $image;
+            DB::transaction(function () use ($request) {
+
+                $data = $request->except('images');
 
                 $product = Product::create($data);
                 $product->categories()->sync($request->categories);
 
                 $this->productService->handleProductChildren($request, $product);
+
+                $images = $this->productImagesService->uploadImage('products', $request, $product->id);
+
+                if ($images && count($images) > 0) {
+                    $product->update(['image' => $images[0]->image]);
+                }
             });
         } catch (\Throwable $e) {
-            if (isset($data['image'])) {
-                $this->imageService->deleteImage('products', $data['image']);
-            }
-
             return redirect()->back()
-                ->with('error', __('site.something_went_wrong'))
+                ->with('error', $e->getMessage())
                 ->withInput();
         }
 
-        return redirect()->route('dashboard.products.index')->with('success', __('site.added_successfully'));
+        return redirect()->route('dashboard.products.index')
+            ->with('success', __('site.added_successfully'));
     }
 
 
 
     public function show(string $id)
     {
-        $product = Product::with('children')->findOrFail($id);
-
-        $services = Service::active()->get();
-        $brands = Brand::active()->get();
-        $units = Unit::active()->get();
-        $sizes = Size::active()->get();
-
-        $categories = Category::active()
-            ->with('parent')
-            ->get()
-            ->mapWithKeys(function ($category) {
-                $label = $category->parent ? $category->parent->nameLang() . ' > ' . $category->nameLang() : $category->nameLang();
-                return [$category->id => $label];
-            });
-
-        return view('admin.products.edit', get_defined_vars());
+        return $this->edit($id);
     }
-
     public function edit(string $id)
     {
-        $product = Product::with('children')->findOrFail($id);
+        
+        $product = Product::with('children', 'images', 'categories', 'children.images','children.sizes')->findOrFail($id);
 
-        $services = Service::active()->get();
-        $brands = Brand::active()->get();
-        $units = Unit::active()->get();
-        $sizes = Size::active()->get();
+        $brands = Brand::active()->select('id', 'name')->get()->mapWithKeys(function ($brand) {
+            return [$brand->id => $brand->nameLang()];
+        })->toArray();
+        $sizes = Size::active()->select('id', 'name')->get()->mapWithKeys(function ($size) {
+            return [$size->id => $size->nameLang()];
+        })->toArray();
 
         $categories = Category::active()
             ->with('parent')
             ->get()
             ->mapWithKeys(function ($category) {
-                $label = $category->parent ? $category->parent->nameLang() . ' > ' . $category->nameLang() : $category->nameLang();
-                return [$category->id => $label];
-            });
+                return [$category->id => $category->nameLang()];
+            })->toArray();
+        $colors = Color::active()->get()->mapWithKeys(function ($color) {
+            return [$color->id => $color->nameLang()];
+        })->toArray();
 
         return view('admin.products.edit', get_defined_vars());
     }
 
-
-    public function update(ProductRequest $request, Product $product)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(ProductRequest $request, $id)
     {
-        $data = $request->except('image');
-
-
-        if ($request->hasFile('image')) {
-            $data['image'] = $this->imageService->uploadImage('products', $request);
-        }
-
+        $product = Product::findOrFail($id);
+        $data = $request->except('images');
         try {
             DB::transaction(function () use ($product, $data, $request) {
-
                 $product->update($data);
+
                 $product->categories()->sync($request->categories);
+
                 $product->deleteChildrenOldWhenNotSendInUpdate();
+
                 $this->productService->handleProductChildren($request, $product);
+
+                $images = $this->productImagesService->editImages($request->file('images'), $product, 'products');
+                if ($images && count($images) > 0) {
+                    $product->update(['image' => $images[0]->image]);
+                }
             });
         } catch (\Throwable $th) {
-            if (isset($data['image'])) {
-                $this->imageService->deleteImage('products', $data['image']);
-            }
-
             return redirect()->back()
                 ->with('error', __('site.something_went_wrong'))
                 ->withInput();
         }
 
-        return redirect()->route('dashboard.products.index')->with('success', __('site.updated_successfully'));
+        return redirect()->route('dashboard.products.index')
+            ->with('success', __('site.updated_successfully'));
     }
 
 
-
-
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(string $id)
     {
         //
-    }
-    
-    
-
-
-    public function getCategoryByService($id)
-    {
-        $categories = Category::where('service_id', $id)->active()
-            ->with('parent')
-            ->get()
-            ->mapWithKeys(function ($category) {
-                $label = $category->parent ? $category->parent->nameLang() . ' > ' . $category->nameLang() : $category->nameLang();
-                return [$category->id => $label];
-            })->toArray();
-        return response()->json([
-            'success' => true,
-            'categories' => $categories,
-        ]);
     }
 }

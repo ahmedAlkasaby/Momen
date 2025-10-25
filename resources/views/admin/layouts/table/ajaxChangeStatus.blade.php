@@ -4,7 +4,6 @@
         let newStatus = select.val();
         let selectId = select.attr('id');
         let orderId = selectId.replace('status', '');
-
         $.ajax({
             url: '{{ route('dashboard.orders.change_status', ':id') }}'.replace(':id', orderId),
             method: 'POST',
@@ -25,10 +24,7 @@
                         select.append(
                             `<option value="${value}" ${isSelected}>${label}</option>`);
                     });
-                    console.log(("#cancel-" + orderId));
-                    if (['canceled', 'rejected', 'returned', 'delivered'].includes(newStatus)) {
-                        $("#cancel-" + orderId).remove();
-                    }
+                   
 
 
                     if (select.hasClass('select2')) {

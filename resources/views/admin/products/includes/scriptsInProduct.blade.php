@@ -12,10 +12,7 @@
 <script src="{{ asset('admin/assets/vendor/libs/jquery-repeater/jquery-repeater.js') }}"></script>
 <script src="{{ asset('admin/assets/vendor/libs/dropzone/dropzone.js') }}"></script>
 <script src="{{ asset('admin/assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
-@include('admin.layouts.forms.multi_dropzone', [
-'inputName' => 'images',
-'existingImages' => isset($product) && $product->images ? $product->images : [],
-])
+
 
 <script>
     $(document).ready(function() {

@@ -17,8 +17,7 @@ class MainController extends Controller
 
     public function __construct()
     {
-        $this->setSettingsInView();
-        $this->result=AppSettings::get('result');
+
         $this->perPage = request()->get('per_page', $this->result);
         if ($this->perPage > 250) {
             $this->perPage = 250;
@@ -29,13 +28,6 @@ class MainController extends Controller
     protected function setClass($class)
     {
         $this->class = $class;
-        View::share('class', $class); 
+        View::share('class', $class);
     }
-
-    protected function setSettingsInView()
-    {
-        $settings = AppSettings::all();
-        View::share('settings', $settings);
-    }
-
 }
