@@ -22,13 +22,13 @@ class AddressRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
             "user_id" =>  "required|exists:users,id",
             "region_id" => "required|exists:regions,id",
             "city_id" => "required|exists:cities,id",
             "type" => "required",
-            'name' => 'nullable|string',
-            "phone" => "numeric|digits:11",
+            "phone" => "nullable|numeric|digits:11",
             "address" => "required|string",
             "building" => "nullable|string",
             "floor" => "nullable|string",
@@ -51,10 +51,7 @@ class AddressRequest extends FormRequest
             "address.required" => __("validation.required", ["attribute" => "Address"]),
             "latitude.required" => __("validation.required", ["attribute" => "Latitude"]),
             "longitude.required" => __("validation.required", ["attribute" => "Longitude"]),
-            'user_id.exists' => __("validation.exists", ["attribute" => "User ID"]),
-            'region_id.exists' => __("validation.exists", ["attribute" => "Region ID"]),
-            'city_id.exists' => __("validation.exists", ["attribute" => "City ID"]),
-            'name.string' => __("validation.string", ["attribute" => "Name"]),
+
         ];
     }
 }

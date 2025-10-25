@@ -4,7 +4,7 @@ namespace App\Http\Requests\Dashboard;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PaymentRequest extends FormRequest
+class UnitRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,21 +24,22 @@ class PaymentRequest extends FormRequest
         return [
             "name.ar" => "required|string|max:255",
             "name.en" => "required|string|max:255",
-            // "type" => "required|string|max:255",
-            "active" => "nullable|boolean",
-            "order_id" => "nullable|integer",
-            "image" => "nullable|image|mimes:jpg,jpeg,png,gif,webp|max:2048",
-            "description.ar" => "nullable|string|max:1000",
             "description.en" => "nullable|string|max:1000",
+            "description.ar" => "nullable|string|max:1000",
+            "active" => "boolean",
+            "order_id" => "nullable|integer",
         ];
     }
+
     public function messages(): array
     {
         return [
-            "name.ar.required" => __("site.name_ar_required"),
-            "name.en.required" => __("site.name_en_required"),
-            // "type.required" => __("site.type_required"),
-            "active.boolean" => __("site.active_boolean"),
+            "name.ar.required" => __("validation.name_ar_required"),
+            "name.en.required" => __("validation.name_en_required"),
+            "description.en.max" => __("validation.description_en_max", ["max" => 1000]),
+            "description.ar.max" => __("validation.description_ar_max", ["max" => 1000]),
+            "active.boolean" => __("validation.active_boolean"),
+            "order_id.exists" => __("validation.order_id_required"),
         ];
     }
 }

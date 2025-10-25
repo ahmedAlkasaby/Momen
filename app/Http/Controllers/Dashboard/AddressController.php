@@ -20,26 +20,6 @@ class AddressController extends MainController
         parent::__construct();
         $this->setClass('addresses');
     }
-    private function getFormData()
-    {
-        $users = User::select('id', 'name_first', 'name_last')
-            ->get()
-            ->mapWithKeys(fn($user) => [$user->id => $user->name_first . ' ' . $user->name_last])
-            ->toArray();
-
-        $cities = City::select('id', 'name')
-            ->get()
-            ->mapWithKeys(fn($city) => [$city->id => $city->namelang()])
-            ->toArray();
-
-        $regions = Region::select('id', 'name')
-            ->get()
-            ->mapWithKeys(fn($region) => [$region->id => $region->namelang()])
-            ->toArray();
-
-        return compact('users', 'cities', 'regions');
-    }
-
     public function index()
     {
         $addresses = Address::with("city", "region", "user")->paginate($this->perPage);
@@ -51,8 +31,10 @@ class AddressController extends MainController
      */
     public function create()
     {
-        $data = $this->getFormData();
-        return view('admin.addresses.create', $data);
+        $users = User::all()->mapWithKeys(fn($user) => [$user->id => $user->name])->toArray();
+        $cities = City::all()->mapWithKeys(fn($city) => [$city->id => $city->namelang()])->toArray();
+        $regions = Region::all()->mapWithKeys(fn($region) => [$region->id => $region->namelang()])->toArray();
+        return view('admin.addresses.create', compact('users', 'cities', 'regions'));
     }
 
     /**
@@ -60,7 +42,7 @@ class AddressController extends MainController
      */
     public function store(AddressRequest $request)
     {
-        Address::create($request->validated());
+         Address::create($request->all());
         return redirect()->route('dashboard.addresses.index')->with('success', __('site.address_created_successfully'));
     }
 
@@ -69,9 +51,10 @@ class AddressController extends MainController
      */
     public function show(string $id)
     {
-        $address = Address::findOrFail($id);
-        $data = $this->getFormData();
-        return view('admin.addresses.show', array_merge($data, compact('address')));
+         $users = User::all()->mapWithKeys(fn($user) => [$user->id => $user->name])->toArray();
+        $cities = City::all()->mapWithKeys(fn($city) => [$city->id => $city->namelang()])->toArray();
+        $regions = Region::all()->mapWithKeys(fn($region) => [$region->id => $region->namelang()])->toArray();
+        return view('admin.addresses.show', compact('users', 'cities', 'regions'));
     }
 
     /**
@@ -80,8 +63,10 @@ class AddressController extends MainController
     public function edit(string $id)
     {
         $address = Address::findOrFail($id);
-        $data = $this->getFormData();
-        return view('admin.addresses.edit', array_merge($data, compact('address')));
+        $users = User::all()->mapWithKeys(fn($user) => [$user->id => $user->name])->toArray();
+        $cities = City::all()->mapWithKeys(fn($city) => [$city->id => $city->namelang()])->toArray();
+        $regions = Region::all()->mapWithKeys(fn($region) => [$region->id => $region->namelang()])->toArray();
+        return view('admin.addresses.edit', compact('users', 'cities', 'regions', 'address'));
     }
 
     /**
@@ -90,7 +75,7 @@ class AddressController extends MainController
     public function update(AddressRequest $request, string $id)
     {
         $address = Address::findOrFail($id);
-        $address->update($request->validated());
+        $address->update($request->all());
         return redirect()->route('dashboard.addresses.index')->with('success', __('site.address_updated_successfully'));
     }
 
@@ -102,18 +87,5 @@ class AddressController extends MainController
         $address = Address::findOrFail($id);
         $address->delete();
         return redirect()->route('dashboard.addresses.index')->with('success', __('site.address_deleted_successfully'));
-    }
-
-    public function forceDelete(string $id)
-    {
-        $address = Address::withTrashed()->findOrFail($id);
-        $address->forceDelete();
-        return redirect()->route('dashboard.addresses.index')->with('success', __('site.deleted_successfully'));
-    }
-    public function restore(string $id)
-    {
-        $address = Address::withTrashed()->findOrFail($id);
-        $address->restore();
-        return redirect()->route('dashboard.addresses.index')->with('success', __('site.restored_successfully'));
     }
 }

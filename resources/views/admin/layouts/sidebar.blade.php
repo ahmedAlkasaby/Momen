@@ -16,7 +16,7 @@
                         fill="#ffd036ff" />
                 </svg>
             </span>
-            <span class="app-brand-text demo menu-text fw-bold">{{ $site_title }}</span>
+            <span class="app-brand-text demo menu-text fw-bold">laravel</span>
         </a>
 
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
@@ -116,14 +116,14 @@
                 </a>
             </li>
         @endif
-        @if (auth()->user()->hasPermission('activity_logs.index'))
+        {{-- @if (auth()->user()->hasPermission('activity_logs.index'))
             <li class="menu-item @if ($class == 'activity_logs') active @endif">
                 <a href="{{ route('dashboard.activity_logs.index') }}" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-smart-home"></i>
                     <div>{{ __('site.activity_logs') }}</div>
                 </a>
             </li>
-        @endif
+        @endif --}}
         @if (auth()->user()->hasPermission('pages.index'))
             <li class="menu-item @if ($class == 'pages') active @endif">
                 <a href="{{ route('dashboard.pages.index') }}" class="menu-link">

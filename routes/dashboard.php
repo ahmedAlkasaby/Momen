@@ -74,14 +74,10 @@ Route::group(['middleware' => ['auth', 'admin', 'check.permission']], function (
     Route::delete('brands/force_delete/{brand}', [BrandController::class, 'forceDelete'])->name('brands.force_delete');
 
     // Resource routes for units
-    Route::resource('units', UnitController::class);
-    Route::get('units/restore/{unit}', [UnitController::class, 'restore'])->name('units.restore');
-    Route::delete('units/force_delete/{unit}', [UnitController::class, 'forceDelete'])->name('units.force_delete');
-    // Resource routes for additions
-    Route::resource('additions', AdditionController::class);
-    Route::get('additions/restore/{addition}', [AdditionController::class, 'restore'])->name('additions.restore');
-    Route::delete('additions/force_delete/{addition}', [AdditionController::class, 'forceDelete'])->name('additions.force_delete');
-
+    // Route::resource('units', UnitController::class);
+    // Route::get('units/restore/{unit}', [UnitController::class, 'restore'])->name('units.restore');
+    // Route::delete('units/force_delete/{unit}', [UnitController::class, 'forceDelete'])->name('units.force_delete');
+  
     //Resource routes for categories
     Route::resource('categories', CategoryController::class);
     Route::get('categories/restore/{category}', [CategoryController::class, 'restore'])->name('categories.restore');
@@ -116,11 +112,7 @@ Route::group(['middleware' => ['auth', 'admin', 'check.permission']], function (
     //Resourse route for addresses
     Route::resource('addresses', AddressController::class);
 
-    //Resource route for Slider
-    Route::resource('sliders', SliderController::class);
-
-    //Resourse route for Favourites
-    Route::resource('wishlists', WishlistController::class);
+   
 
     //Resource route for Orders
     Route::resource('orders', OrderController::class);
@@ -136,10 +128,10 @@ Route::group(['middleware' => ['auth', 'admin', 'check.permission']], function (
     Route::resource('reviews', ReviewController::class);
 
     //Resource route for activity_logs
-    Route::get('activity_logs', [ActivityLogController::class, 'index'])->name('activity_logs.index');
+    // Route::get('activity_logs', [ActivityLogController::class, 'index'])->name('activity_logs.index');
 
-    Route::get('trash_buckets', [TrashBucketController::class, 'index'])->name('trash_buckets.index');
-    Route::get('trash_buckets/restore/{id}', [TrashBucketController::class, 'restore']);
+    // Route::get('trash_buckets', [TrashBucketController::class, 'index'])->name('trash_buckets.index');
+    // Route::get('trash_buckets/restore/{id}', [TrashBucketController::class, 'restore']);
 
 
     //Resource route for notifications
@@ -149,7 +141,7 @@ Route::group(['middleware' => ['auth', 'admin', 'check.permission']], function (
 
 
     // Cache management
-    Route::get('cache/clear', [CacheController::class, 'index'])->name('cache');
+    // Route::get('cache/clear', [CacheController::class, 'index'])->name('cache');
 
     //toggle
     Route::get('users/active/{user}', [AjaxController::class, 'userActive'])->name('users.active');
@@ -176,4 +168,5 @@ Route::group(['middleware' => ['auth', 'admin', 'check.permission']], function (
     Route::get('products/feature/{product}', [AjaxController::class, 'feature'])->name('products.feature');
     Route::get('products/returned/{product}', [AjaxController::class, 'returned'])->name('products.returned');
     Route::delete('sessions/{id}', [AjaxController::class, 'destroySession']);
+    Route::patch('settings/update-single', [SettingController::class, 'update'])->name('settings.update-single');
 });

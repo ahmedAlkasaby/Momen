@@ -31,15 +31,14 @@ class CouponController extends MainController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CouponRequest $request)
-    {
+    public function store(CouponRequest $request) {
         $coupon = Coupon::create($request->all());
         return redirect()->route('dashboard.coupons.index')->with('success', __('site.coupon_created_successfully'));
     }
 
+    
 
-
-
+    
     public function edit(string $id)
     {
         $coupon = Coupon::findOrFail($id);
@@ -59,4 +58,9 @@ class CouponController extends MainController
     /**
      * Remove the specified resource from storage.
      */
+   
+
+    
+
+    
 }

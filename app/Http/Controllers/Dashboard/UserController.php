@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Models\User;
-
+use App\Models\Permission;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\UserRequest;
 use App\Models\Role;
 use App\Services\ImageHandlerService;
@@ -14,15 +16,14 @@ class UserController extends MainController
     public function __construct(ImageHandlerService $imageService)
     {
         parent::__construct();
-        $this->setClass('users');
+        $this->setClass(request('type'));
         $this->imageService = $imageService;
     }
 
     public function index()
     {
-        $roles = Role::pluck('name', 'id')->toArray();
-        $users = User::with('roles')->filter(request())->where('id', '!=', auth()->user()->id)->paginate($this->perPage);
-        return view('admin.users.index', compact('users', 'roles'));
+        $users = User::filter()->paginate($this->perPage);
+        return view('admin.users.index', compact('users'));
     }
 
 
@@ -36,7 +37,7 @@ class UserController extends MainController
     {
         $imageUrl = $this->imageService->uploadImage('users', $request);
         $data = $request->except('image');
-        $data['image'] = $imageUrl['image'] ?? null;
+        $data['image'] = $imageUrl;
         $user = User::create($data);
         $user->addRoles($request->roles);
         return redirect()->route('dashboard.users.index')->with('success', __('site.added_successfully'));
@@ -72,8 +73,8 @@ class UserController extends MainController
         $user = User::find($id);
         $imgUrl = $this->imageService->editImage($request, $user, 'users');
         $data = $request->except('image');
-        $data['image'] = $imgUrl['image'] ?? null;
-        $user->update($data);
+        $data['image'] = $imgUrl;
+        $user->update( $data);
         $user->syncRoles($request->roles);
         return redirect()->route('dashboard.users.index')->with('success', __('site.updated_successfully'));
     }
@@ -83,20 +84,8 @@ class UserController extends MainController
      */
     public function destroy(string $id)
     {
-        $user = User::find($id);
-        $user->delete();
-        return redirect()->route('dashboard.users.index')->with('success', __('site.deleted_successfully'));
+        //
     }
-    public function forceDelete(string $id)
-    {
-        $user = User::withTrashed()->findOrFail($id);
-        $user->forceDelete();
-        return redirect()->route('dashboard.users.index')->with('success', __('site.deleted_successfully'));
-    }
-    public function restore(string $id)
-    {
-        $user = User::withTrashed()->findOrFail($id);
-        $user->restore();
-        return redirect()->route('dashboard.users.index')->with('success', __('site.restored_successfully'));
-    }
+
+    
 }

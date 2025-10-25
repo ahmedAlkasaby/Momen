@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Dashboard\BrandRequest;
 use App\Models\Brand;
-use App\Services\ImageHandlerService;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Dashboard\MainController;
+use App\Http\Requests\dashboard\BrandRequest;
+use App\Services\ImageHandlerService;
 
 class BrandController extends MainController
 {
+    /**
+     * Display a listing of the resource.
+     */
     protected $imageService;
+
     public function __construct(ImageHandlerService $imageService)
     {
         parent::__construct();
@@ -19,7 +23,7 @@ class BrandController extends MainController
     }
     public function index()
     {
-        $brands = Brand::filter(request())->paginate($this->perPage);
+        $brands = Brand::filter(request(), "dashboard")->paginate($this->perPage);
         return view('admin.brands.index', compact('brands'));
     }
 
@@ -36,62 +40,54 @@ class BrandController extends MainController
      */
     public function store(BrandRequest $request)
     {
-        $imageUrl = $this->imageService->uploadImage('brands', $request, 800, 600);
-        $data = $request->validated();
-        $data['image'] = $imageUrl['image'] ?? null;
+        $imageUrl = $this->imageService->uploadImage('brands', $request);
+        $data = $request->except('image');
 
+        $data['image'] = $imageUrl;
         Brand::create($data);
-        return redirect()->route('dashboard.brands.index')->with('success', __('site.added_successfully'));
+        return redirect()->route('dashboard.brands.index')->with('success', __('site.brand_created_successfully'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Brand $brand)
+    public function show(string $id)
     {
-        return view('admin.brands.edit', compact('brand'));
+        $brand = Brand::findOrFail($id);
+        return view('admin.brands.show', compact('brand'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Brand $brand)
+    public function edit(string $id)
     {
+        $brand = Brand::findOrFail($id);
         return view('admin.brands.edit', compact('brand'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(BrandRequest $request, Brand $brand)
-    {
-        $imageUrl = $this->imageService->editImage($request, $brand, 'brands');
-        $data = $request->validated();
-        $data['image'] = $imageUrl['image'] ?? $brand->image ?? null;
-        $brand->update($data);
-        return redirect()->route('dashboard.brands.index')->with('success', __('site.updated_successfully'));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function update(Request $request, string $id)
     {
         $brand = Brand::findOrFail($id);
-        $brand->delete();
-        return redirect()->back()->with('success', __('site.deleted_successfully'));
+        $imgUrl = $this->imageService->editImage($request, $brand, 'brands');
+        $data = $request->except('image');
+
+        $data['image'] = $imgUrl ?? $brand->image;
+        $brand->update($data);
+        return redirect()->route('dashboard.brands.index')->with('success', __('site.brand_updated_successfully'));
     }
-    public function restore(string $id)
+
+    public function destroy(Brand $brand)
     {
-        $brand = Brand::withTrashed()->findOrFail($id);
-        $brand->restore();
-        return redirect()->back()->with('success', __('site.restored_successfully'));
-    }
-    public function forceDelete(string $id)
-    {
-        $brand = Brand::withTrashed()->findOrFail($id);
+        if ($brand->products()->count() > 0) {
+            return redirect()->route('dashboard.brands.index')->with('error', __('site.brand_has_products'));
+        }
         $this->imageService->deleteImage($brand->image);
-        $brand->forceDelete();
-        return redirect()->back()->with('success', __('site.deleted_successfully'));
+        $brand->delete();
+        return redirect()->route('dashboard.brands.index')->with('success', __('site.brand_deleted_successfully'));
     }
+    
 }

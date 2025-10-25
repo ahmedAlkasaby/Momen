@@ -4,7 +4,7 @@ namespace App\Http\Requests\Dashboard;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AuthRequest extends FormRequest
+class LoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -32,7 +32,7 @@ class AuthRequest extends FormRequest
         return [
             'email.required' => __('validation.email_required'),
             'email.email' => __('validation.email_invalid'),
-            'password.required' => __('validation.password_required'),
+            'password.required' =>__('validation.password_required'),
             'password.min' => __('validation.password_min', ['min' => 6]),
             'password.max' => __('validation.password_max', ['max' => 255]),
         ];

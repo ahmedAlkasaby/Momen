@@ -1,36 +1,51 @@
-<!-- Default Wizard -->
-<div class="col-12 mb-4">
-    <small class="text-light fw-medium"></small>
-    <div class="bs-stepper wizard-numbered mt-2">
-        @if (!isset($show))
-            <div class="bs-stepper-header">
-                <div class="step" data-target="#site-details">
-                    <button type="button" class="step-trigger">
-                        <span class="bs-stepper-circle"><i class=" ti ti-world"></i></span>
-                        <span class="bs-stepper-label">
-                            <span class="bs-stepper-title">{{ __('site.site_details') }} </span>
-                            <span class="bs-stepper-subtitle">{{ __('site.add_site_details') }} </span>
-                        </span>
-                    </button>
-                </div>
-                <div class="line">
-                    <i class="ti ti-chevron-right"></i>
-                </div>
-                <div class="step" data-target="#site-links">
-                    <button type="button" class="step-trigger">
-                        <span class="bs-stepper-circle"><i class="ti ti-link"></i></span>
-                        <span class="bs-stepper-label">
-                            <span class="bs-stepper-title">{{ __('site.site_links') }} </span>
-                            <span class="bs-stepper-subtitle">{{ __('site.add_site_links') }}</span>
-                        </span>
-                    </button>
-                </div>
-            </div>
-        @endif
-        <div class="bs-stepper-content">
-            <form onSubmit="return false">
-                <!-- site Details -->
-                @include('admin.settings.includes.site-details')
+<tr>
+    {{-- Key/اسم الإعداد --}}
+    <td>
+        <strong>{{ $setting->key }}</strong> 
+        {{-- افترضنا أن لديك ملف ترجمة وأن المفتاح موجود فيه --}}
+    </td>
+    
+    {{-- القيمة الحالية (هذا العنصر سيتم استبداله بحقل إدخال عند التعديل) --}}
+    <td>
+        <span id="value-span-{{ $setting->key }}">{{ $setting->value }}</span>
+    </td>
+    
+    <td>
+        <span >{{ $setting->group }}</span>
+    </td>
+    
+    {{-- الأكشنز (الأزرار) --}}
+    <td>
+        {{-- زر التعديل (يظهر بشكل افتراضي) --}}
+        <button 
+            id="edit-btn-{{ $setting->key }}" 
+            class="btn btn-sm btn-icon btn-outline-primary"
+            onclick="enableEdit('{{ $setting->key }}')"
+            title="{{ __('site.edit') }}"
+        >
+            <i class="ti ti-edit"></i>
+        </button>
 
-                <!-- site-links -->
-                @include('admin.settings.includes.site-links')
+        {{-- زر الحفظ (يظهر عند التعديل) --}}
+        <button 
+            id="save-btn-{{ $setting->key }}" 
+            class="btn btn-sm btn-icon btn-success"
+            onclick="saveSetting('{{ $setting->key }}')"
+            title="{{ __('site.save') }}"
+            style="display: none;"
+        >
+            <i class="ti ti-check"></i>
+        </button>
+
+        {{-- زر الإلغاء (يظهر عند التعديل) --}}
+        <button 
+            id="cancel-btn-{{ $setting->key }}" 
+            class="btn btn-sm btn-icon btn-secondary"
+            onclick="cancelEdit('{{ $setting->key }}')"
+            title="{{ __('site.cancel') }}"
+            style="display: none;"
+        >
+            <i class="ti ti-x"></i>
+        </button>
+    </td>
+</tr>

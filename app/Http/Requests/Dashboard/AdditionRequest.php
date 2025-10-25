@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Dashboard;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class BrandRequest extends FormRequest
+class AdditionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,6 +30,8 @@ class BrandRequest extends FormRequest
             "active" => "boolean",
             "order_id" => "nullable|integer",
             "image" => "nullable|image|mimes:jpg,jpeg,png,gif,webp|max:2048",
+            'type' => ['required', Rule::in(['free', 'paid'])],
+            "price" => "required|numeric",
         ];
     }
     public function messages(): array
@@ -43,6 +46,9 @@ class BrandRequest extends FormRequest
             "image.image" => __("validation.image_image"),
             "image.mimes" => __("validation.image_mimes", ["mimes" => "jpg,jpeg,png,gif,webp"]),
             "image.max" => __("validation.image_max", ["max" => 2048]),
+            "type.required" => __("validation.type_required"),
+            "price.required" => __("validation.price_required"),
+            "price.numeric" => __("validation.price_numeric"),
         ];
     }
 }

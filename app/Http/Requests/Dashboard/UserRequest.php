@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests\Dashboard;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Foundation\Http\FormRequest;
 
 class UserRequest extends FormRequest
 {
@@ -20,35 +21,21 @@ class UserRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-     public function rules(Request $request): array
+    public function rules(Request $request): array
     {
-        $userId = $request->input("id");
-        $route = $request->route();
-        $isProfileRoute= $route->getName() == 'dashboard.profile.update';
-        $rules = [
-            'name_first' => ['required', 'string', 'max:255'],
-            'name_last' => ['required', 'string', 'max:255'],
+        $userId = $request->input('id');
+        return [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'phone' => $userId ? 'required|string|regex:/^01[0125][0-9]{8}$/|unique:users,phone,' . $userId : 'required|string|regex:/^01[0125][0-9]{8}$/|unique:users,phone',
             'email' => $userId ? 'required|string|email|unique:users,email,' . $userId : 'required|email|unique:users,email',
             'password' => $userId ? 'nullable|confirmed|min:8|max:32' : 'required|confirmed|min:8|max:32',
+            "roles.*" => "required|exists:roles,id",
+            "vip" => "boolean",
+            "notify" => "boolean",
             "image" => "nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048",
+            "Lang" => "in:ar,en",
+            "type" => "required"
         ];
-
-        if (!$isProfileRoute) {
-            $rules = array_merge($rules, [
-                "roles.*" => "required|exists:roles,id",
-                "vip" => "boolean",
-                "is_notify" => "boolean",
-                "locale" => "in:ar,en",
-                "type" => "required"
-            ]);
-        }else{
-            $rules = array_merge($rules, [
-                "locale" => "in:ar,en",
-                "theme" => "in:light,dark"
-            ]);
-        }
-
-        return $rules;
     }
 }

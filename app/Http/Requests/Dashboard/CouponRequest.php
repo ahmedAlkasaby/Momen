@@ -23,7 +23,7 @@ class CouponRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'content' => 'nullable|string',
+            'description' => 'nullable|string',
 
             'code' => 'required|string|max:100|unique:coupons,code',
 
@@ -33,7 +33,7 @@ class CouponRequest extends FormRequest
 
             'finish' => 'required|boolean',
 
-            'user_limit' => 'nullable|integer|min:0',
+            'use_limit' => 'nullable|integer|min:0',
             'use_count' => 'nullable|integer|min:0',
 
             'min_order' => 'nullable|integer|min:0',
@@ -43,7 +43,7 @@ class CouponRequest extends FormRequest
             'order_id' => 'nullable|exists:orders,id',
 
             'date_start' => 'nullable|date',
-            'date_expire' => 'nullable|date|after_or_equal:date_start',
+            'date_end' => 'nullable|date|after_or_equal:date_start',
         ];
     }
 
@@ -54,7 +54,7 @@ class CouponRequest extends FormRequest
             'name.string' => __('validation.string', ['attribute' => 'Name']),
             'name.max' => __('validation.max.string', ['attribute' => 'Name', 'max' => 255]),
 
-            'content.string' => __('validation.string', ['attribute' => 'content']),
+            'description.string' => __('validation.string', ['attribute' => 'Description']),
 
             'code.required' => __('validation.required', ['attribute' => 'Code']),
             'code.string' => __('validation.string', ['attribute' => 'Code']),

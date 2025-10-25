@@ -77,15 +77,5 @@ class DeliveryTimeController extends MainController
         $delivery_time->delete();
         return redirect()->route('dashboard.delivery_times.index');
     }
-    public function restore(string $id){
-        $delivery_time = DeliveryTime::withTrashed()->findOrFail($id);
-        $delivery_time->restore();
-        return redirect()->route('dashboard.delivery_times.index')->with('success', __('site.restored_successfully'));
-    }
-    public function forceDelete(string $id){
-        $delivery_time = DeliveryTime::withTrashed()->findOrFail($id);
-        $delivery_time->forceDelete();
-        return redirect()->route('dashboard.delivery_times.index')->with('success', __('site.deleted_successfully'));
-    }
     
 }

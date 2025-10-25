@@ -24,8 +24,8 @@ class DeliveryTimeRequest extends FormRequest
         return [
             "name.ar" => "required|string|max:255",
             "name.en" => "required|string|max:255",
-            "hour_start" => "required|date_format:H:i",
-            "hour_end" => "required|date_format:H:i",
+            "start_hour" => "required|date_format:H:i",
+            "end_hour" => "required|date_format:H:i",
             "order_id" => "nullable|integer",
             "active" => "nullable|boolean",
         ];

@@ -2,6 +2,7 @@
 $classOfHeaderTable= 'card-header';
 $classDivTable = 'table-responsive text-nowrap';
 $classTable='table ';
+$isCreate = true;
 
 
 @endphp
@@ -17,6 +18,8 @@ $classTable='table ';
             <i class="fa fa-filter me-1"></i> {{ __('site.filter') }}
         </button>
         @endif
+        @if (isset($issCreate) && $issCreate == true)
+            
         @if(isset($routeToCreate))
         @if (auth()->user()->hasPermission($model.'.store'))
 
@@ -31,6 +34,7 @@ $classTable='table ';
         </button>
         @endif
 
+        @endif
         @endif
 
     </div>

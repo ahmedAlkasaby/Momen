@@ -21,6 +21,8 @@ return new class extends Migration
             $table->tinyInteger('autoload')->default(0);
             $table->foreignId('parent_id')->nullable()->constrained('settings')->onDelete('cascade');
             $table->timestamps();
+
+            $table->index(['group', 'key']);
         });
     }
 

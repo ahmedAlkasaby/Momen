@@ -46,7 +46,7 @@ class OrderController extends MainController
         $regions = Region::get()->mapWithKeys(function ($region) {
             return [$region->id => $region->nameLang()];
         })->toArray();
-        $orders = Order::with("user", "orderItems", "address")->paginate($this->perPage);
+        $orders = Order::with("user", "orderItems","address")->filter($request)->paginate($this->perPage);
         $transactionsStatuses = collect(StatusOrderEnum::cases())
             ->mapWithKeys(fn($status) => [$status->value => $status->label()])
             ->toArray();
@@ -58,8 +58,10 @@ class OrderController extends MainController
 
     public function show(string $id)
     {
-        $data = ['user', 'address', 'delivery', 'payment', 'deliveryTime', 'orderItems.product', 'orderStatuses'];
+        $data=['user','address','delivery','payment','deliveryTime','orderItems.product','statusTrackingOrders'];
         $order = Order::with($data)->findOrFail($id);
         return view('admin.orders.show', compact('order'));
     }
+
+    
 }

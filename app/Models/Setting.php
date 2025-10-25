@@ -11,4 +11,17 @@ class Setting extends Model
         'key',
         'value',
     ];
+
+
+    public function scopeFilter($query, $request)
+    {
+        if ($request->has('group') && $request->group != 'all') {
+            $query->where('group', $request->group);
+        }
+        
+        return $query;
+    }
+
+
+    
 }   
