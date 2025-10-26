@@ -32,6 +32,22 @@
 
             let htmlInput = '';
             switch (inputType) {
+                case 'select':
+                    // هذا هو الحقل الذي تريده (الـ options): 10, 20, 50, 100, 250
+                    let selectOptions = @json(getResultPaginateOptions());
+                    let optionsHtml = '';
+
+                    selectOptions.forEach(option => {
+                        let selected = (currentValue == option) ? 'selected' : '';
+                        optionsHtml += `<option value="${option}" ${selected}>${option}</option>`;
+                    });
+
+                    htmlInput = `
+                <select class="form-control form-control-sm" id="input-${key}">
+                    ${optionsHtml}
+                </select>
+            `;
+                    break;
                 case 'number':
                     htmlInput =
                         `<input type="number" step="any" class="form-control form-control-sm" value="${currentValue}" id="input-${key}" />`;
@@ -51,7 +67,13 @@
                     break;
                 case 'text':
                 case 'email':
+                    htmlInput =
+                        `<input type="${inputType}" class="form-control form-control-sm" value="${currentValue}" id="input-${key}" />`;
+                    break;
                 case 'url':
+                    htmlInput =
+                        `<input type="url" class="form-control form-control-sm" value="${currentValue}" id="input-${key}" />`;
+                    break;
                 default:
                     htmlInput =
                         `<input type="text" class="form-control form-control-sm" value="${currentValue}" id="input-${key}" />`;

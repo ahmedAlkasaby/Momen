@@ -80,5 +80,11 @@ if (! function_exists('getTableName')) {
         );
     }
 }
+if(! function_exists('getResultPaginateOptions')){
+    function getResultPaginateOptions() :array
+    {
+        return [10,25,50,100,200];
+    }
+}
 
 

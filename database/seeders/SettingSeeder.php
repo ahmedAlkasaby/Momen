@@ -29,7 +29,7 @@ class SettingSeeder extends Seeder
             'min_order'                   => [50,                     'number',   'required|integer|min:0', 80],
             'max_order'                   => [2000,                   'number',   'required|integer|min:50', 90],
             'return_period_days'          => [14,                     'number',   'required|integer|min:1', 100],
-            'result'                      => [100,                    'number',   'required|integer|min:0', 110], // ترك 'result' للأمان
+            'result'                      => [100,                    'select',   'required|integer|min:0|max:250', 110], // ترك 'result' للأمان
         ];
 
         foreach ($generalSettingsData as $key => $data) {
