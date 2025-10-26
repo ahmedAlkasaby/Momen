@@ -8,7 +8,7 @@ use App\Http\Requests\Dashboard\LoginRequest;
 class AuthController extends Controller
 {
     public function viewLogin(){
-        return view('admin.login.login');
+        return view('admin.auth.login');
     }
 
     public function login(LoginRequest $request){

@@ -14,11 +14,17 @@ return new class extends Migration
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
             $table->string('group');
-            $table->string('type')->nullable();
+            // 1. نضع 'type' أولاً
+            $table->string('type')->default('text');
+            
+            // 2. نضع 'validation_rules' مباشرة بعد 'type' ونحذف after()
+            $table->text('validation_rules')->nullable();
+            
             $table->string('key')->unique();
             $table->string('value');
             $table->string('locale')->default('en');
             $table->tinyInteger('autoload')->default(0);
+            $table->tinyInteger('order_id')->nullable();
             $table->foreignId('parent_id')->nullable()->constrained('settings')->onDelete('cascade');
             $table->timestamps();
 

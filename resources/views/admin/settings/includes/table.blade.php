@@ -1,16 +1,16 @@
 @include('admin.layouts.table.header', [
     'TitleTable' => __('site.settings'),
-    'routeToCreate' => route('dashboard.settings.create'),
+    'routeToCreate' => null,
     'filter' => false,
-    'issCreate' => false,
+    'isCreate' => false,
     "model" => "settings",
 ])
 
 @include('admin.layouts.table.thead_info', [
     'columns' => [
+        'site.group',
         'site.key',
         'site.value',
-        'site.group',
         'site.action',
     ],
 ])

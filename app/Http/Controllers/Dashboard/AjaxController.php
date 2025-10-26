@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Enums\StatusOrderEnum;
 use App\Helpers\StatusOrderHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Dashboard\UpdateSettingRequest;
 use App\Models\Addition;
 use App\Models\Brand;
 use App\Models\Category;
@@ -19,26 +20,33 @@ use App\Models\Product;
 use App\Models\Region;
 use App\Models\Review;
 use App\Models\Service;
+use App\Models\Setting;
 use App\Models\Size;
 use App\Models\Slider;
 use App\Models\Unit;
 use App\Models\User;
+use App\Services\ImageHandlerService;
 use App\Traits\Toggle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AjaxController extends Controller
 {
     use Toggle;
+    protected $imageService;
+
+    public function __construct(ImageHandlerService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
+
     public function userActive(User $user)
     {
         return $this->active($user);
     }
 
-    public function serviceActive(Service $service)
-    {
-        return $this->active($service);
-    }
+  
 
     public function sizeActive(Size $size)
     {
@@ -145,15 +153,15 @@ class AjaxController extends Controller
             'current' => $newStatus->value
         ]);
     }
-    public function seen(Contact $contact)
-    {
-        $contact->seen = true;
-        $contact->save();
-        return response()->json([
-            'success' => true,
-            'seen' => $contact->seen,
-        ]);
-    }
+    // public function seen(Contact $contact)
+    // {
+    //     $contact->seen = true;
+    //     $contact->save();
+    //     return response()->json([
+    //         'success' => true,
+    //         'seen' => $contact->seen,
+    //     ]);
+    // }
     public function finish(Coupon $coupon)
     {
         $coupon->update([
@@ -194,5 +202,54 @@ class AjaxController extends Controller
             'status' => 'success',
             'message' => 'Session deleted successfully'
         ]);
+    }
+
+    public function updateSetting(UpdateSettingRequest $request)
+    {
+        $key = $request->input('key');
+
+        $setting = Setting::where('key', $key)->first();
+
+
+
+        $value = $request->input('value');
+        $updated = false;
+
+        if ($setting->type === 'file' && $request->hasFile('value')) {
+
+            $file = $request->file('value');
+            $oldValue = $setting->value;
+
+            try {
+                $filePath = $this->imageService->uploadImage($file, 'Settings');
+                $updated = $setting->update(['value' => $filePath]);
+                $value = $filePath;
+
+                $this->imageService->deleteImage($oldValue);
+            } catch (\Exception $e) {
+                Log::error("File upload failed for setting {$key}: " . $e->getMessage());
+                return response()->json([
+                    'success' => false,
+                    'message' => __('site.image_upload_failed') . " - " . $e->getMessage(),
+                ], 500);
+            }
+        } elseif ($setting->type !== 'file') {
+            $updated = $setting->update(['value' => $value]);
+        }
+
+        if ($updated) {
+            return response()->json([
+                'success' => true,
+                'message' => __('site.updated_successfully'),
+                'key' => $key,
+                // إرجاع المسار الجديد للصورة (إن وجدت) أو القيمة الجديدة
+                'value' => $value,
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => __('site.something_went_wrong'),
+        ], 500);
     }
 }

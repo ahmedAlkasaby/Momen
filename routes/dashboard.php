@@ -94,7 +94,7 @@ Route::group(['middleware' => ['auth', 'admin', 'check.permission']], function (
     Route::delete('regions/force_delete/{region}', [RegionController::class, 'forceDelete'])->name('regions.force_delete');
 
     //Resource routes for settings
-    Route::resource('settings', SettingController::class);
+    Route::resource('settings', SettingController::class)->only('index');
 
     //contacts
     Route::resource('contacts', ContactController::class);
@@ -168,5 +168,5 @@ Route::group(['middleware' => ['auth', 'admin', 'check.permission']], function (
     Route::get('products/feature/{product}', [AjaxController::class, 'feature'])->name('products.feature');
     Route::get('products/returned/{product}', [AjaxController::class, 'returned'])->name('products.returned');
     Route::delete('sessions/{id}', [AjaxController::class, 'destroySession']);
-    Route::patch('settings/update-single', [SettingController::class, 'update'])->name('settings.update-single');
+    Route::post('settings/update-single', [AjaxController::class, 'updateSetting'])->name('settings.update-single');
 });

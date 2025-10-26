@@ -8,7 +8,7 @@ class ProfileController extends Controller
 {
     public function changeLang($lang){
         auth()->user()->update([
-            'lang' =>$lang
+            'locale' =>$lang
         ]);
         return redirect()->back();
     }

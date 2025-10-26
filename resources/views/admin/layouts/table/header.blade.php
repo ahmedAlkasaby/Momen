@@ -5,6 +5,8 @@ $classTable='table ';
 $isCreate = true;
 
 
+$isCreateAllowed = (isset($isCreate) && $isCreate == true && !is_null($routeToCreate)); 
+$routeToCreate = $routeToCreate ?? null;
 @endphp
 @if (!isset($create))
     <div class="px-3 py-3 d-flex justify-content-between align-items-center">
@@ -18,23 +20,20 @@ $isCreate = true;
             <i class="fa fa-filter me-1"></i> {{ __('site.filter') }}
         </button>
         @endif
-        @if (isset($issCreate) && $issCreate == true)
-            
-        @if(isset($routeToCreate))
-        @if (auth()->user()->hasPermission($model.'.store'))
+        
+        @if ($isCreateAllowed)
+            @if (auth()->user()->hasPermission($model.'.store'))
 
-        <a href="{{ $routeToCreate }}" class="btn btn-primary btn-lg px-4 py-2 d-flex align-items-center gap-2">
-            <i class="fa fa-plus fs-5"></i>
-            @lang('site.new')
-        </a>
-        @else
-        <button disabled class="btn btn-primary btn-lg px-4 py-2 d-flex align-items-center gap-2">
-            <i class="fa fa-plus fs-5"></i>
-            @lang('site.new')
-        </button>
-        @endif
-
-        @endif
+            <a href="{{ $routeToCreate }}" class="btn btn-primary btn-lg px-4 py-2 d-flex align-items-center gap-2">
+                <i class="fa fa-plus fs-5"></i>
+                @lang('site.new')
+            </a>
+            @else
+            <button disabled class="btn btn-primary btn-lg px-4 py-2 d-flex align-items-center gap-2">
+                <i class="fa fa-plus fs-5"></i>
+                @lang('site.new')
+            </button>
+            @endif
         @endif
 
     </div>
