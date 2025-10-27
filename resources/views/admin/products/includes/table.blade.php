@@ -11,7 +11,7 @@
         'site.code',
         'site.price',
         'site.categories',
-        'site.feature',
+        'site.is_special',
         'site.returned',
         'site.status',
         'site.action',

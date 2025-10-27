@@ -87,4 +87,19 @@ if(! function_exists('getResultPaginateOptions')){
     }
 }
 
+if (! function_exists('defaultOption')) {
+    function defaultOption($label = null)
+    {
+        return [null => $label ?? __('site.select_option')];
+    }
+
+}
+if (! function_exists('filterOption')) {
+    function filterOption($label = null)
+    {
+        return ['all' => $label ?? __('site.all')];
+    }
+
+}
+
 

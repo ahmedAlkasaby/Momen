@@ -80,7 +80,7 @@
 <div class="col-md-6">
     @include('admin.layouts.forms.fields.select', [
         'select_name' => 'category_id',
-        'select_function' => ['all' => __('site.all')] + $categories,
+        'select_function' =>  $categories,
         'select_value' => request('category_id') ?? null,
         'select_class' => 'select2',
         'select2' => true,
@@ -91,7 +91,7 @@
 <div class="col-md-6">
     @include('admin.layouts.forms.fields.select', [
         'select_name' => 'brand_id',
-        'select_function' => ['all' => __('site.all')] + $brands,
+        'select_function' =>  $brands,
         'select_value' =>  request('brand_id') ?? null,
         'select_class' => 'select2',
         'select2' => true,

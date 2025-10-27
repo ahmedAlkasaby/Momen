@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Helpers\ProductHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\ProductRequest;
 use App\Models\Brand;
@@ -32,22 +33,12 @@ class ProductController extends MainController
 
     public function index(Request $request)
     {
-        $data = ['categories', 'service', 'unit', 'size', 'brand', 'children', 'parent'];
+        $data = ProductHelper::getProductRelationsInIndexDashboard();
         $products = Product::with($data)->filter($request, 'admin')->paginate($this->perPage);
 
-        $units = Unit::active()->get()->mapWithKeys(function ($unit) {
-            return [$unit->id => $unit->nameLang()];
-        })->toArray();
-        $brands = Brand::active()->get()->mapWithKeys(function ($brand) {
-            return [$brand->id => $brand->nameLang()];
-        })->toArray();
-        $categories = Category::active()
-            ->with('parent')
-            ->get()
-            ->mapWithKeys(function ($category) {
-                $label = $category->parent ? $category->parent->nameLang() . ' > ' . $category->nameLang() : $category->nameLang();
-                return [$category->id => $label];
-            })->toArray();
+        $units = Unit::listForSelect('filter');
+        $brands = Brand::listForSelect('filter');
+        $categories = Category::listForSelect('filter');
         return view('admin.products.index', get_defined_vars());
     }
 

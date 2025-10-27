@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Enums\StatusOrderEnum;
+use App\Enums\StatusOrderItemReturnEnum;
 use App\Helpers\StatusOrderHelper;
+use App\Helpers\StatusOrderItemsReturnHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\UpdateSettingRequest;
-use App\Models\Addition;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\City;
@@ -14,124 +15,136 @@ use App\Models\Contact;
 use App\Models\Coupon;
 use App\Models\DeliveryTime;
 use App\Models\Order;
+use App\Models\OrderItemReturn;
+use App\Models\OrderStatus;
 use App\Models\Page;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Region;
 use App\Models\Review;
-use App\Models\Service;
 use App\Models\Setting;
 use App\Models\Size;
-use App\Models\Slider;
-use App\Models\Unit;
 use App\Models\User;
-use App\Services\ImageHandlerService;
-use App\Traits\Toggle;
+use App\Traits\ToggleTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class AjaxController extends Controller
 {
-    use Toggle;
-    protected $imageService;
+    use ToggleTrait;
 
-    public function __construct(ImageHandlerService $imageService)
+    public function categoryActive($id)
     {
-        $this->imageService = $imageService;
-    }
-
-    public function userActive(User $user)
-    {
-        return $this->active($user);
-    }
-
-  
-
-    public function sizeActive(Size $size)
-    {
-        return $this->active($size);
-    }
-
-    public function brandActive(Brand $brand)
-    {
-        return $this->active($brand);
-    }
-
-    public function unitActive(Unit $unit)
-    {
-        return $this->active($unit);
-    }
-
-    public function additionActive(Addition $addition)
-    {
-        return $this->active($addition);
-    }
-
-    public function categoryActive(Category $category)
-    {
+        $category = Category::withTrashed()->findOrFail($id);
         return $this->active($category);
     }
-
-    public function cityActive(City $city)
+    public function sizeActive($id)
     {
+        $size = Size::withTrashed()->findOrFail($id);
+        return $this->active($size);
+    }
+    public function cityActive($id)
+    {
+        $city = City::withTrashed()->findOrFail($id);
         return $this->active($city);
     }
-
-    public function regionActive(Region $region)
+    public function regionActive($id)
     {
+        $region = Region::withTrashed()->findOrFail($id);
         return $this->active($region);
     }
-
-    public function deliveryTimeActive(DeliveryTime $delivery_time)
+    public function pageActive($id)
     {
-        return $this->active($delivery_time);
-    }
-
-    public function pageActive(Page $page)
-    {
+        $page = Page::withTrashed()->findOrFail($id);
         return $this->active($page);
     }
-
-    public function paymentActive(Payment $payment)
+    public function contactActive($id)
     {
-        return $this->active($payment);
+        $contact = Contact::withTrashed()->findOrFail($id);
+        return $this->active($contact);
     }
-
-    public function sliderActive(Slider $slider)
+    public function brandActive($id)
     {
-        return $this->active($slider);
+        $brand = Brand::withTrashed()->findOrFail($id);
+        return $this->active($brand);
     }
-
-    public function couponActive(Coupon $coupon)
+    public function seen(Contact $contact)
     {
-        return $this->active($coupon);
-    }
-
-    public function productActive(Product $product)
-    {
-        return $this->active($product);
-    }
-
-    public function reviewActive(Review $review)
-    {
-        return $this->active($review);
-    }
-    public function cancel(string $id)
-    {
-        $order = Order::findOrFail($id);
-        $order->status = 'canceled';
-
-        $availableTransitions = collect(StatusOrderHelper::getAvailableTransitions($order->status))
-            ->mapWithKeys(fn($status) => [$status->value => $status->label()])
-            ->toArray();
-        $order->save();
+        $contact->is_read = true;
+        $contact->save();
         return response()->json([
             'success' => true,
-            "transitions" => $availableTransitions,
-            "current" => $order->status
+            'is_read' => $contact->is_read,
         ]);
     }
+    public function productActive($id)
+    {
+        $product = Product::withTrashed()->findOrFail($id);
+        return $this->active($product);
+    }
+    public function feature($id)
+    {
+        $product = Product::withTrashed()->findOrFail($id);
+
+        $product->update([
+            'feature' => ! ($product->feature),
+        ]);
+        return response()->json([
+            'success' => true,
+            'active' => $product->feature,
+        ]);
+    }
+
+    public function returned($id)
+    {
+        $product = Product::withTrashed()->findOrFail($id);
+        $product->update([
+            'is_returned' => ! ($product->is_returned),
+        ]);
+        // dd($product->is_returned);  
+        return response()->json([
+            'success' => true,
+            'active' => $product->is_returned,
+        ]);
+    }
+    public function special($id)
+    {
+        $product = Product::withTrashed()->findOrFail($id);
+        $product->update([
+            'is_special' => ! ($product->is_special),
+        ]);
+        // dd($product->is_returned);  
+        return response()->json([
+            'success' => true,
+            'active' => $product->is_special,
+        ]);
+    }
+    public function reviewActive($id)
+    {
+        $review = Review::withTrashed()->findOrFail($id);
+        return $this->active($review);
+    }
+    public function userActive($id)
+    {
+        $user = User::withTrashed()->findOrFail($id);
+        return $this->active($user);
+    }
+    public function paymentActive($id)
+    {
+        $payment = Payment::withTrashed()->findOrFail($id);
+        return $this->active($payment);
+    }
+    public function couponActive($id)
+    {
+        $coupon = Coupon::withTrashed()->findOrFail($id);
+        return $this->active($coupon);
+    }
+    public function deliveryTimeActive($id)
+    {
+        $delivery_time = DeliveryTime::withTrashed()->findOrFail($id);
+        return $this->active($delivery_time);
+    }
+   
 
     public function changeStatus(Request $request, Order $order)
     {
@@ -139,7 +152,10 @@ class AjaxController extends Controller
 
         $order->status = $newStatus;
         $order->save();
-
+        OrderStatus::create([
+            'order_id' => $order->id,
+            'status_id' => $newStatus->value
+        ]);
 
         $availableTransitions = collect(StatusOrderHelper::getAvailableTransitions($newStatus))
             ->mapWithKeys(fn($status) => [$status->value => $status->label()])
@@ -153,54 +169,25 @@ class AjaxController extends Controller
             'current' => $newStatus->value
         ]);
     }
-    // public function seen(Contact $contact)
-    // {
-    //     $contact->seen = true;
-    //     $contact->save();
-    //     return response()->json([
-    //         'success' => true,
-    //         'seen' => $contact->seen,
-    //     ]);
-    // }
-    public function finish(Coupon $coupon)
+    public function changeItemStatus(Request $request, OrderItemReturn $item)
     {
-        $coupon->update([
-            'finish' => !($coupon->finish),
-        ]);
-        return response()->json([
-            'success' => true,
-            'finish' => $coupon->finish,
-        ]);
-    }
-    public function feature(Product $product)
-    {
-        $product->update([
-            'feature' => ! ($product->feature),
-        ]);
-        return response()->json([
-            'success' => true,
-            'active' => $product->feature,
-        ]);
-    }
+        
+        $newStatus = StatusOrderItemReturnEnum::from($request->status);
 
-    public function returned(Product $product)
-    {
-        $product->update([
-            'returned' => ! ($product->returned),
-        ]);
-        return response()->json([
-            'success' => true,
-            'active' => $product->returned,
-        ]);
-    }
+        $item->status = $newStatus;
+        $item->save();
+        
+        
+        $availableTransitions = collect(StatusOrderItemsReturnHelper::getAvailableTransitions($newStatus))
+            ->mapWithKeys(fn($status) => [$status->value => $status->label()])
+            ->toArray();
 
-    public function destroySession($id)
-    {
-        DB::table('sessions')->where('id', $id)->delete();
 
         return response()->json([
-            'status' => 'success',
-            'message' => 'Session deleted successfully'
+            'success' => true,
+            'message' => 'Status updated.',
+            'transitions' => $availableTransitions,
+            'current' => $newStatus->value
         ]);
     }
 
@@ -242,7 +229,6 @@ class AjaxController extends Controller
                 'success' => true,
                 'message' => __('site.updated_successfully'),
                 'key' => $key,
-                // إرجاع المسار الجديد للصورة (إن وجدت) أو القيمة الجديدة
                 'value' => $value,
             ]);
         }

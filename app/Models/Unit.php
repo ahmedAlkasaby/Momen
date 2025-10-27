@@ -34,9 +34,5 @@ class Unit extends MainModel
         return $query;
     }
 
-    public function scopeActive($query)
-    {
-        return $query->where('active', 1)
-            ->orderBy('order_id', 'asc');
-    }
+    
 }

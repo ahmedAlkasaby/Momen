@@ -160,6 +160,7 @@ class Product extends MainModel
     public function scopeActiveProducts($query)
     {
         return $query
+            ->where('parent_id', null)
             ->where('active', 1)
             ->where('is_stock', 1)
             ->orderNo();

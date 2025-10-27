@@ -12,7 +12,7 @@
         'model' => 'products',
         'item' => $product,
         'param' => 'product',
-        'function' => 'feature',
+        'function' => 'is_special',
     ])
    
     {{-- returned --}}

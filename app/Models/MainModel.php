@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 
 class MainModel extends Model
 {
-    use HasFactory, SoftDeletes, ActivityLogTrait;
+    use HasFactory, SoftDeletes;
 
     protected $casts = [
         'name' => \App\Casts\UnescapedJson::class,
@@ -29,7 +29,7 @@ class MainModel extends Model
                 if (empty($model->link)) {
 
                     $name = $model->nameLang('en');
-                   
+
 
                     $slug = $name ? Str::slug($name) : Str::slug(Str::random(8));
                     $original = $slug;
@@ -44,6 +44,37 @@ class MainModel extends Model
             }
         });
     }
+
+    public static function listForSelect(
+        $type = null,
+        $key = 'id',
+        $valueMethod = 'nameLang',
+        $queryScope = 'active',
+        $columns = ['id', 'name'],
+    ) {
+        $query = static::query();
+
+        if (method_exists(static::class, 'scope' . ucfirst($queryScope))) {
+            $query = (new static)->$queryScope($query);
+        }
+
+        $query->select($columns);
+
+        $items = $query->get()->mapWithKeys(function ($item) use ($key, $valueMethod) {
+            return [$item->$key => $item->$valueMethod()];
+        })->toArray();
+
+        if ($type === 'default') {
+            $items = defaultOption() + $items;
+        } elseif ($type === 'filter') {
+            $items = filterOption() + $items;
+        }
+
+        return $items;
+    }
+
+
+
 
 
     public function nameLang($lang = null)
@@ -68,7 +99,7 @@ class MainModel extends Model
         return $data[$lang] ?? null;
     }
 
-     public function titleLang($lang = null)
+    public function titleLang($lang = null)
     {
         $data = $this->title;
         if ($lang === null) {
@@ -79,7 +110,7 @@ class MainModel extends Model
         return $data[$lang] ?? null;
     }
 
-   
+
 
     public function scopeMainSearch($query, $search)
     {
@@ -111,11 +142,11 @@ class MainModel extends Model
                 $query->where($column, $value);
             }
         }
-    
+
         return $query;
     }
 
-     public function scopeNewest($query)
+    public function scopeNewest($query)
     {
         return $query->orderByDesc('id');
     }
@@ -127,16 +158,12 @@ class MainModel extends Model
 
     public function scopeOrderNo($query)
     {
-        return $query->orderByRaw('order_id IS NULL') 
-                     ->orderBy('order_id', 'asc');
+        return $query->orderByRaw('order_id IS NULL')
+            ->orderBy('order_id', 'asc');
     }
 
     public function scopeActive($query)
     {
-        return $query->where('active', true)->orderNo();
+        return $query->where('active', 1)->orderNo();
     }
-
-
-
-   
 }

@@ -77,7 +77,7 @@ Route::group(['middleware' => ['auth', 'admin', 'check.permission']], function (
     // Route::resource('units', UnitController::class);
     // Route::get('units/restore/{unit}', [UnitController::class, 'restore'])->name('units.restore');
     // Route::delete('units/force_delete/{unit}', [UnitController::class, 'forceDelete'])->name('units.force_delete');
-  
+
     //Resource routes for categories
     Route::resource('categories', CategoryController::class);
     Route::get('categories/restore/{category}', [CategoryController::class, 'restore'])->name('categories.restore');
@@ -112,7 +112,7 @@ Route::group(['middleware' => ['auth', 'admin', 'check.permission']], function (
     //Resourse route for addresses
     Route::resource('addresses', AddressController::class);
 
-   
+
 
     //Resource route for Orders
     Route::resource('orders', OrderController::class);
@@ -144,29 +144,34 @@ Route::group(['middleware' => ['auth', 'admin', 'check.permission']], function (
     // Route::get('cache/clear', [CacheController::class, 'index'])->name('cache');
 
     //toggle
-    Route::get('users/active/{user}', [AjaxController::class, 'userActive'])->name('users.active');
-    Route::get('services/active/{service}', [AjaxController::class, 'serviceActive'])->name('services.active');
-    Route::get("sizes/active/{size}", [AjaxController::class, 'sizeActive'])->name('sizes.active');
-    Route::get('brands/active/{brand}', [AjaxController::class, 'brandActive'])->name('brands.active');
-    Route::get('units/active/{unit}', [AjaxController::class, 'unitActive'])->name('units.active');
-    Route::get('additions/active/{addition}', [AjaxController::class, 'additionActive'])->name('additions.active');
-    Route::get('categories/active/{category}', [AjaxController::class, 'categoryActive'])->name('categories.active');
-    Route::get('cities/active/{city}', [AjaxController::class, 'cityActive'])->name('cities.active');
-    Route::get('regions/active/{region}', [AjaxController::class, 'regionActive'])->name('regions.active');
-    Route::get('delivery_times/active/{delivery_time}', [AjaxController::class, 'deliveryTimeActive'])->name('delivery_times.active');
-    Route::get('pages/active/{page}', [AjaxController::class, 'pageActive'])->name('pages.active');
-    Route::get('payments/active/{payment}', [AjaxController::class, 'paymentActive'])->name('payments.active');
-    Route::get('sliders/active/{slider}', [AjaxController::class, 'sliderActive'])->name('sliders.active');
-    Route::get('coupons/active/{coupon}', [AjaxController::class, 'couponActive'])->name('coupons.active');
-    Route::get('products/active/{product}', [AjaxController::class, 'productActive'])->name('products.active');
-    Route::get('reviews/active/{review}', [AjaxController::class, 'reviewActive'])->name('reviews.active');
+    Route::prefix('active')->group(function () {
+        Route::get('users/{user}', [AjaxController::class, 'userActive'])->name('users.active');
+        Route::get('services/{service}', [AjaxController::class, 'serviceActive'])->name('services.active');
+        Route::get('sizes/{size}', [AjaxController::class, 'sizeActive'])->name('sizes.active');
+        Route::get('brands/{brand}', [AjaxController::class, 'brandActive'])->name('brands.active');
+        Route::get('units/{unit}', [AjaxController::class, 'unitActive'])->name('units.active');
+        Route::get('additions/{addition}', [AjaxController::class, 'additionActive'])->name('additions.active');
+        Route::get('categories/{category}', [AjaxController::class, 'categoryActive'])->name('categories.active');
+        Route::get('cities/{city}', [AjaxController::class, 'cityActive'])->name('cities.active');
+        Route::get('regions/{region}', [AjaxController::class, 'regionActive'])->name('regions.active');
+        Route::get('delivery_times/{delivery_time}', [AjaxController::class, 'deliveryTimeActive'])->name('delivery_times.active');
+        Route::get('pages/{page}', [AjaxController::class, 'pageActive'])->name('pages.active');
+        Route::get('payments/{payment}', [AjaxController::class, 'paymentActive'])->name('payments.active');
+        Route::get('sliders/{slider}', [AjaxController::class, 'sliderActive'])->name('sliders.active');
+        Route::get('coupons/{coupon}', [AjaxController::class, 'couponActive'])->name('coupons.active');
+        Route::get('reviews/{review}', [AjaxController::class, 'reviewActive'])->name('reviews.active');
+        Route::get('contacts/{contact}', [AjaxController::class, 'seen'])->name('contacts.seen');
+        Route::get('products/{product}', [AjaxController::class, 'productActive'])->name('products.active');
+    });
 
-    Route::get('contacts/active/{contact}', [AjaxController::class, 'seen'])->name('contacts.seen');
+    Route::prefix('products')->group(function () {
+        Route::get('returned/{product}', [AjaxController::class, 'returned'])->name('products.is_returned');
+        Route::get('special/{product}', [AjaxController::class, 'special'])->name('products.is_special');
+    });
     Route::get('orders/cancel/{order}', [AjaxController::class, 'cancel'])->name('orders.cancel');
     Route::post('orders/change_status/{order}', [AjaxController::class, 'changeStatus'])->name('orders.change_status');
     Route::get('coupons/finish/{coupon}', [AjaxController::class, 'finish'])->name('coupons.finish');
-    Route::get('products/feature/{product}', [AjaxController::class, 'feature'])->name('products.feature');
-    Route::get('products/returned/{product}', [AjaxController::class, 'returned'])->name('products.returned');
+    
     Route::delete('sessions/{id}', [AjaxController::class, 'destroySession']);
     Route::post('settings/update-single', [AjaxController::class, 'updateSetting'])->name('settings.update-single');
 });
