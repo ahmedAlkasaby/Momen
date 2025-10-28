@@ -49,17 +49,12 @@ class ProductController extends MainController
 
     public function create()
     {
-        $brands = Brand::active()->get();
-        $units = Unit::active()->get();
-        $sizes = Size::active()->get();
+        $brands = Brand::listForSelect('default');
+        $units = Unit::listForSelect('default');
+        $sizes = Size::listForSelect('default');
+        $categories = Category::listForSelect('default');
+        $colors = Color::listForSelect('default');
 
-        $categories = Category::active()
-            ->with('parent')
-            ->get()
-            ->mapWithKeys(function ($category) {
-                $label = $category->parent ? $category->parent->nameLang() . ' > ' . $category->nameLang() : $category->nameLang();
-                return [$category->id => $label];
-            });
 
         return view('admin.products.create', get_defined_vars());
     }
@@ -117,20 +112,12 @@ class ProductController extends MainController
     public function edit(string $id)
     {
         $product = Product::with('children')->findOrFail($id);
-
-        $services = Service::active()->get();
-        $brands = Brand::active()->get();
-        $units = Unit::active()->get();
-        $sizes = Size::active()->get();
-
-        $categories = Category::active()
-            ->with('parent')
-            ->get()
-            ->mapWithKeys(function ($category) {
-                $label = $category->parent ? $category->parent->nameLang() . ' > ' . $category->nameLang() : $category->nameLang();
-                return [$category->id => $label];
-            });
-
+        $brands = Brand::listForSelect('default');
+        $units = Unit::listForSelect('default');
+        $sizes = Size::listForSelect('default');
+        $colors = Color::listForSelect('default');
+        $categories = Category::listForSelect('default');
+       
         return view('admin.products.edit', get_defined_vars());
     }
 

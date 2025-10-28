@@ -23,10 +23,14 @@ if (isset($select_id)) {
 if (isset($select_class)) {
     $array_control['class'] = $select_class;
 } 
+$label_default = __("site." . $field_name);
+if(isset($label)){
+    $label_default = $label;
+}
 @endphp
 
 @include('admin.layouts.forms.fields.form-group-head', ['field_name' => $field_name])
-@include('admin.layouts.forms.fields.label',['label_default'=>__("site.".$field_name)])
+@include('admin.layouts.forms.fields.label',['label_default'=>$label_default])
 
 {{ html()->select($field_name, $select_function ?? booleanType(), $select_value ?? null)->attributes($array_control) }}
 

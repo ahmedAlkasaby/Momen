@@ -11,8 +11,41 @@
 
     <div class="col-md-6">
         @include('admin.layouts.forms.fields.select', [
+        'select_name' => 'unit_id',
+        'select_function' => $units,
+        'select_value' => $product->unit_id  ?? old("unit_id"),
+        'select_class' => 'select2',
+        'select2' => true,
+
+        ])
+    </div>
+    <div class="col-md-6">
+        @include('admin.layouts.forms.fields.select', [
+        'select_name' => 'categories[]',
+        'select_function' => $categories,
+        'select_value' => old('categories', isset($product) ? $product->categories->pluck('id')->toArray() : []),
+        'label_req' => true, 
+        'label' => __('site.categories'),
+       
+       
+        'is_multiple' => true,
+        'select_class' => 'select2',
+        'select2' => true,
+
+        ])
+    </div>
+
+    
+
+</div>
+
+
+<div class="row">
+
+    <div class="col-md-6">
+        @include('admin.layouts.forms.fields.select', [
         'select_name' => 'brand_id',
-        'select_function' => ['' => __('site.select_option')] + $brands,
+        'select_function' => $brands,
         'select_value' => $product->brand_id ?? old("brand_id"),
         'select_class' => 'select2',
         'select2' => true,
@@ -20,24 +53,6 @@
 
         ])
     </div>
-
-    <div class="col-md-6">
-        <div class="form-group mb-4">
-            <label class="form-label text-muted opacity-75 fw-medium">{{ __('site.categories') }}</label>
-            <select name="categories[]" class="form-select select2" multiple>
-                @foreach ($categories as $id => $name)
-                <option value="{{ $id }}" @if(in_array($id, $product?->categories->pluck('id')->toArray() ?? [])) selected @endif>
-                    {{ $name }}
-                </option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-
-</div>
-
-
-<div class="row">
 
     <div class="col-md-6">
         @include('admin.layouts.forms.fields.number', [
@@ -48,33 +63,12 @@
         'number_value' => $product->order_max ?? old("order_max"),
         'label_req' => true,
         ])
-
     </div>
-    <div class="col-md-6">
-        @include('admin.layouts.forms.fields.number', [
-        'number_name' => 'order_limit',
-        'number_id' => 'order_limit',
-        'min' => 0,
-        'placeholder' => __('site.order_limit'),
-        'number_value' => $product->order_limit ?? old("order_limit"),
-        'label_req' => true,
-        ])
-
-    </div>
+   
 
 
 </div>
-<div class="row">
-    @include('admin.layouts.forms.fields.select', [
-    'select_name' => 'size_id',
-    'select_function' => ['' => __('site.select_option')] + $sizes ?? null,
-    'select_value' => $product->size_id ?? null,
-    'select_class' => 'select2',
-    'select2' => true,
-    'not_req' => true,
 
-    ])
-</div>
 
 @include('admin.products.includes.booliens_fields')
 
@@ -85,7 +79,7 @@
 
 // 1. تجهيز مصفوفة PHP من روابط الصور، وليس نص JSON.
 $imageUrls = [];
-if ($product && $product->images && $product->images->count()) {
+if (isset($product) && $product->images && $product->images->count()) {
 $imageUrls = $product->images->pluck('image')->map(function ($imagePath) {
 return asset($imagePath);
 })->toArray();

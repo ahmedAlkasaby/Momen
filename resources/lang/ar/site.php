@@ -290,7 +290,6 @@ return [
     "title" => "العنوان",
     "date" => "التاريخ",
     "seen" => "مراجعة",
-    "active" => "مفعل",
     "actions" => "الإجراءات",
     "no_data" => "لا يوجد بيانات",
     "contacts" => "المراسلات",
@@ -679,5 +678,14 @@ return [
     'logo'=>'اللوجو',
     'return_period_days'=>'ايام فترة الاسترجاع',
     'is_special'=>'مميز',
+    'is_stock'=>'في المخزن',
+    'is_new'=>'جديد',
+    'is_filter'=>'قابل للتصفية',
+    'is_offer'=>'عرض',
+    'is_sale'=>'يتم بيعه',
+    'is_shipping_free'=>'مجان الشحن',
+    'is_returned'=>'مرتجع',
+    'color' => 'اللون',
+  
 ];
 

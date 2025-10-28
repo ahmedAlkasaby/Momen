@@ -19,26 +19,7 @@
         ])
     </div>
 </div>
-<div class="row">
-    <div class="col-md-6">
-        @include('admin.layouts.forms.fields.select', [
-        'select_name' => 'feature',
-        'select_function' => booleantype(),
-        'select_value' => $product->feature ?? null,
-        'select_class' => 'select2',
-        'select2' => true,
-        ])
-    </div>
-    <div class="col-md-6">
-        @include('admin.layouts.forms.fields.select', [
-        'select_name' => 'is_returned',
-        'select_function' => booleantype(),
-        'select_value' => $product->is_returned ?? null,
-        'select_class' => 'select2',
-        'select2' => true,
-        ])
-    </div>
-</div>
+
 <div class="row">
     <div class="col-md-6">
         @include('admin.layouts.forms.fields.select', [
@@ -85,6 +66,16 @@
     </div>
 </div>
 <div class="row">
+
+     <div class="col-md-6">
+        @include('admin.layouts.forms.fields.select', [
+        'select_name' => 'is_returned',
+        'select_function' => booleantype(),
+        'select_value' => $product->is_returned ?? null,
+        'select_class' => 'select2',
+        'select2' => true,
+        ])
+    </div>
     <div class="col-md-6">
         @include('admin.layouts.forms.fields.select', [
         'select_name' => 'is_sale',
@@ -95,16 +86,7 @@
         'select2' => true,
         ])
     </div>
-    <div class="col-md-6">
-        @include('admin.layouts.forms.fields.select', [
-        'select_name' => 'is_late',
-        'select_function' => booleantype(),
-
-        'select_value' => $product->is_late ?? null,
-        'select_class' => 'select2',
-        'select2' => true,
-        ])
-    </div>
+  
 </div>
 <div class="row">
     <div class="col-md-6">
@@ -113,8 +95,8 @@
         'select_function' => booleantype(),
 
         'select_value' => $product->is_offer ?? null,
-        'select_class' => 'select2',
-        'select2' => true,
+        // 'select_class' => 'select2',
+        // 'select2' => true,
         ])
     </div>
 

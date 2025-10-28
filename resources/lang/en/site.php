@@ -656,5 +656,13 @@ return [
 
     'logo'=>'Logo',
     'is_special'=>'Is Special',
+    'is_stock'=>'Is Stock',
+    'is_new'=>'Is New',
+    'is_filter'=>'Is Filter',
+    'is_offer'=>'Is Offer',
+    'is_sale'=>'Is Sale',
+    'is_shipping_free'=>'Is Shipping Free',
+    'is_returned'=>'Is Returned',
+    'color' => 'Color',
 
 ];

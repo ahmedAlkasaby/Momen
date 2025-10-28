@@ -29,8 +29,13 @@ if (isset($placeholder)) {
 if (isset($range)) {
     $array_control['data-parsley-range'] = $range;
 }
+$label_default = __("site." . $field_name);
+if(isset($label)){
+    $label_default = $label;
+}
+
 @endphp
 @include('admin.layouts.forms.fields.form-group-head', ['field_name' => $field_name])
-@include('admin.layouts.forms.fields.label',['label_default'=>__("site." . $field_name)])
+@include('admin.layouts.forms.fields.label',['label_default'=>$label_default])
 {{html()->number($field_name, $number_value ?? null)->attributes($array_control)}}
 @include('admin.layouts.forms.fields.form-group-foot', ['field_name' => $field_name])
