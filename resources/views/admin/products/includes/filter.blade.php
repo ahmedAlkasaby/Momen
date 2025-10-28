@@ -98,6 +98,28 @@
         'not_req' => true,
     ])
 </div>
+{{-- color --}}
+<div class="col-md-6">
+    @include('admin.layouts.forms.fields.select', [
+        'select_name' => 'color_id',
+        'select_function' =>  $colors,
+        'select_value' =>  request('color_id') ?? null,
+        'select_class' => 'select2',
+        'select2' => true,
+        'not_req' => true,
+    ])
+</div>
+{{-- size --}}
+<div class="col-md-6">
+    @include('admin.layouts.forms.fields.select', [
+        'select_name' => 'size_id',
+        'select_function' =>  $sizes,
+        'select_value' =>  request('size_id') ?? null,
+        'select_class' => 'select2',
+        'select2' => true,
+        'not_req' => true,
+    ])
+</div>
 {{-- new --}}
 <div class="col-md-6">
     @include('admin.layouts.forms.fields.select', [

@@ -45,6 +45,19 @@ class ProductSeeder extends Seeder
                     Size::inRandomOrder()->first()->id,
                     Color::inRandomOrder()->first()->id,rand(3,5)) as $childData) {
                     $clidermProduct=Product::create(array_merge($dataProductParent,$childData));
+                    $sizeIds=[1,2,3];
+                    $images=[
+                        'products\productDefoult.png',
+                        'products\productDefoult1.png',
+                        'products\productDefoult2.png',
+                    ];
+                    foreach ($images as $image) {
+                        $clidermProduct->images()->create(['image'=>$image]);
+                    }
+                    foreach ($sizeIds as $sizeId) {
+                        $clidermProduct->sizes()->create(['size_id'=>$sizeId]);
+                    }
+
                 }
             }
         }

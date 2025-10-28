@@ -678,5 +678,6 @@ return [
     'snapchat'=>'سناب شات',
     'logo'=>'اللوجو',
     'return_period_days'=>'ايام فترة الاسترجاع',
+    'is_special'=>'مميز',
 ];
 

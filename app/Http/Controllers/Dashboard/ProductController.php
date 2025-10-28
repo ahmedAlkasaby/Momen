@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\ProductRequest;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Color;
 use App\Models\Product;
 use App\Models\Service;
 use App\Models\Size;
@@ -39,12 +40,15 @@ class ProductController extends MainController
         $units = Unit::listForSelect('filter');
         $brands = Brand::listForSelect('filter');
         $categories = Category::listForSelect('filter');
+        $colors= Color::listForSelect('filter');
+        $sizes = Size::listForSelect('filter');
+
+
         return view('admin.products.index', get_defined_vars());
     }
 
     public function create()
     {
-        $services = Service::active()->get();
         $brands = Brand::active()->get();
         $units = Unit::active()->get();
         $sizes = Size::active()->get();

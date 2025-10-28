@@ -166,4 +166,18 @@ class MainModel extends Model
     {
         return $query->where('active', 1)->orderNo();
     }
+
+    public function scopeTrash($query, $request = null)
+    {
+        if ($request->filled('trash')) {
+            if ($request->input('trash') == 'all') {
+                $query->withTrashed();
+            } else if ($request->input('trash') == '0') {
+                $query->onlyTrashed();
+            } else {
+                $query->withoutTrashed();
+            }
+        }
+        return $query;
+    }
 }

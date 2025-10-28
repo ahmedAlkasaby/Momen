@@ -655,5 +655,6 @@ return [
 
 
     'logo'=>'Logo',
+    'is_special'=>'Is Special',
 
 ];
