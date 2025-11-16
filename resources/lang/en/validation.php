@@ -419,6 +419,7 @@ return [
     'order_not_found'=>'Order not found',
     'review_order_exists'=>'Review order exists',
     'review_product_exists'=>'Review product exists',
+    'offer_price_must_be_bigger_than' => 'The offer price must be bigger than ',
 
 
 

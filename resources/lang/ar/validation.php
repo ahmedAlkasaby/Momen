@@ -445,5 +445,6 @@ return [
     'order_not_found' => 'الطلب غير موجود',
     'review_order_exists'=>'تم تقييم هذا الطلب من قبل',
     'review_product_exists'=>'تم تقييم هذا المنتج من قبل',  
+    'offer_price_must_be_bigger_than' => 'سعر العرض يجب أن يكون أكبر من '
 
 ];
