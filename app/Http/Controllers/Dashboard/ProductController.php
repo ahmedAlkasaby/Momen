@@ -61,9 +61,9 @@ class ProductController extends MainController
 
 
 
-    public function store(ProductRequest $request)
+    public function store(ProductRequest  $request)
     {
-        $image = $this->imageService->uploadImage('products', $request);
+        $image = $this->imageService->uploadImage($request->image,'products');
         try {
             DB::transaction(function () use ($request, $image) {
                 $data = $request->except('image');
@@ -71,12 +71,13 @@ class ProductController extends MainController
 
                 $product = Product::create($data);
                 $product->categories()->sync($request->categories);
+            
 
                 $this->productService->handleProductChildren($request, $product);
             });
         } catch (\Throwable $e) {
             if (isset($data['image'])) {
-                $this->imageService->deleteImage('products', $data['image']);
+                $this->imageService->deleteImage($data['image']);
             }
 
             return redirect()->back()

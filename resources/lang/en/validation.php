@@ -420,8 +420,9 @@ return [
     'review_order_exists'=>'Review order exists',
     'review_product_exists'=>'Review product exists',
     'offer_price_must_be_bigger_than' => 'The offer price must be bigger than ',
-
-
-
+    'offer_price_required_when_is_offer_true' => 'The offer price is required when the offer is enabled',
+    'offer_price_required_when_is_offer_true' => 'The offer price is required when the offer is enabled',
+    'offer_amount_required_when_is_offer_true' => 'The offer amount is required when the offer is enabled',
+    'unique_color_in_children' => 'The color must be unique in the sub-products.',
 
 ];

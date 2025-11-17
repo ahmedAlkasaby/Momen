@@ -26,6 +26,8 @@
             })
         })
 </script>
+    @include('admin.layouts.forms.dropzone')
+
 @endsection
 
 

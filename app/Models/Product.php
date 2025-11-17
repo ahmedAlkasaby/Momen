@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Product extends MainModel
 {
-    use ProductScope;   
+    use ProductScope;
     protected $fillable = [
         'code',
         'link',
@@ -160,7 +160,8 @@ class Product extends MainModel
 
     public function sizes()
     {
-        return $this->hasMany(ProductSize::class);
+
+        return $this->belongsToMany(Size::class, 'product_sizes', 'product_id', 'size_id');
     }
 
 
@@ -198,7 +199,7 @@ class Product extends MainModel
     {
         $UserId = Auth::guard('api')->id();
         if (!$UserId) return 'no';
-        return $this->favorites()->where('user_id', $UserId)->first()->favorite ?? 'no' ;
+        return $this->favorites()->where('user_id', $UserId)->first()->favorite ?? 'no';
     }
 
 
