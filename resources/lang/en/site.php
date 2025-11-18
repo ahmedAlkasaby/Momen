@@ -664,5 +664,7 @@ return [
     'is_shipping_free'=>'Is Shipping Free',
     'is_returned'=>'Is Returned',
     'color' => 'Color',
+    'images' => 'Images',
+    'for_child'=>'For Child',
 
 ];

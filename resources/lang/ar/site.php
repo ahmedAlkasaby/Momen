@@ -686,6 +686,8 @@ return [
     'is_shipping_free'=>'مجان الشحن',
     'is_returned'=>'مرتجع',
     'color' => 'اللون',
+    'images' => 'الصور',
+    'for_child'=>'للطفل',
   
 ];
 

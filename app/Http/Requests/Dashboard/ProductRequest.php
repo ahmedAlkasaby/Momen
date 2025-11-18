@@ -26,10 +26,10 @@ class ProductRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        if ($this->has('categories') && is_array($this->input('categories'))) {
-            $cleanCategories = array_map(fn($id) => (int) $id, $this->input('categories'));
-            $this->merge(['categories' => $cleanCategories]);
-        }
+        // if ($this->has('categories') && is_array($this->input('categories'))) {
+        //     $cleanCategories = array_map(fn($id) => (int) $id, $this->input('categories'));
+        //     $this->merge(['categories' => $cleanCategories]);
+        // }
         $isShippingFree = $this->input('is_shipping_free');
         
         if ($isShippingFree === 1 || $isShippingFree === '1' || $isShippingFree === true) {
@@ -132,7 +132,7 @@ class ProductRequest extends FormRequest
             'size_id' => 'nullable|exists:sizes,id',
 
             'categories' => ['required', 'array'],
-            'categories.*' => ['required', 'integer', 'exists:categories,id'],
+            'categories.*' => ['required',  'exists:categories,id'],
 
             'order_id' => 'nullable|integer|min:1',
             'children' => ['required', 'array', 'min:1'],
@@ -141,9 +141,7 @@ class ProductRequest extends FormRequest
     }
 
 
-    /**
-     * تخصيص رسائل الخطأ.
-     */
+  
     public function messages()
     {
         $messages = parent::messages();
@@ -156,25 +154,13 @@ class ProductRequest extends FormRequest
 
         $messages['unique_color_in_children'] = __('validation.unique_color_in_children');
 
-        $messages['children.*.offer_price.gt'] = __("validation.gt.numeric", ["attribute" => __("site.offer_price"), "value" => __("site.parent_price")]);
+        $messages['children.*.offer_price.gt'] = __("validation.gt.numeric", ["attribute" => __("site.offer_price"), "value" => __("site.price")]);
 
 
         return $messages;
     }
 
 
-    // لا يوجد تغيير كبير في withValidator سوى إزالة المنطق المتعلق بالـ offer_percent/offer_amount 
-    // حيث تم تطبيق قواعد مخصصة في دالة rules
-    public function withValidator($validator)
-    {
-        $validator->after(function ($validator) {
-            if ($this->has('children') && is_array($this->children)) {
-
-                // ... (منطق التحقق بعدي كما هو) ...
-
-                // تم إلغاء هذا التحقق الإضافي (After Validation) والاعتماد على قاعدة gt:price 
-                // التي تم وضعها مباشرة في دالة rules() لتبسيط الكود.
-            }
-        });
-    }
+   
+   
 }

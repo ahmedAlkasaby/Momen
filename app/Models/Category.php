@@ -15,6 +15,14 @@ class Category extends MainModel
         'order_id'
     ];
 
+    public function nameWithParent()
+    {
+        if ($this->parent) {
+            return $this->parent->nameLang() . ' > ' . $this->nameLang();
+        }
+        return $this->nameLang();
+    }
+
 
     public function parent()
     {

@@ -33,7 +33,7 @@ return asset($imagePath);
 
     {{-- Colors Select Multiple --}}
     <div class="col-xl-3 col-lg-4 col-md-6 col-12">
-        @include('admin.layouts.forms.fields.select', [
+        @include('admin.layouts.forms.fields.multi_select', [
         'select_name' => 'children[][sizes][]',
         'select_function' => $sizes,
         'select_value' => old('sizes', isset($child) ? $child->sizes->pluck('id')->toArray() : []),
@@ -82,10 +82,22 @@ return asset($imagePath);
     </div>
 
     {{-- File Upload --}}
-    @include('admin.layouts.forms.fields.multi_dropzone', [
+    {{-- @include('admin.layouts.forms.fields.multi_dropzone', [
     "name" => "children[][images]",
     "existing_images" => $imageUrls //
-    ])
+    ]) --}}
+    <div class="col-xl-6 col-lg-8 col-md-12 col-12">
+    <label for="images" class="form-label">{{ __('site.images') }}</label>
+    <input 
+        type="file" 
+        name="children[][images]" 
+        class="form-control"
+        multiple
+        accept="image/*"
+        required
+    >
+    </div>
+
     {{-- Delete Button --}}
     <div class="col-auto d-flex align-items-end">
         <button class="btn btn-danger mt-2" data-repeater-delete type="button">

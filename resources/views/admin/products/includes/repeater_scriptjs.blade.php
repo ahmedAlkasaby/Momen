@@ -81,74 +81,74 @@
         /* ============================================================
            Dropzone
         ============================================================ */
-        function initializeDropzone(element) {
-            const $dropzoneElement = $(element);
-            const $hiddenInput = $dropzoneElement.closest('.form-group').find('.dropzone-hidden-input');
+        // function initializeDropzone(element) {
+        //     const $dropzoneElement = $(element);
+        //     const $hiddenInput = $dropzoneElement.closest('.form-group').find('.dropzone-hidden-input');
 
-            if ($dropzoneElement.hasClass('dz-main-container')) return;
+        //     if ($dropzoneElement.hasClass('dz-main-container')) return;
 
-            const existingImages = $dropzoneElement.data('existing-images') || [];
+        //     const existingImages = $dropzoneElement.data('existing-images') || [];
 
-            let previewTemplate = `
-        <div class="dz-preview dz-file-preview">
-            <div class="dz-photo">
-                <img class="dz-thumbnail" data-dz-thumbnail />
-            </div>
-            <button class="dz-delete border-0 p-0" type="button" data-dz-remove>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path fill="#FFFFFF"
-                        d="M13.41,12l4.3-4.29a1,1,0,1,0-1.42-1.42L12,10.59,7.71,6.29A1,1,0,0,0,6.29,7.71L10.59,12l-4.3,4.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l4.29,4.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z">
-                    </path>
-                </svg>
-            </button>
-        </div>`;
+        //     let previewTemplate = `
+        // <div class="dz-preview dz-file-preview">
+        //     <div class="dz-photo">
+        //         <img class="dz-thumbnail" data-dz-thumbnail />
+        //     </div>
+        //     <button class="dz-delete border-0 p-0" type="button" data-dz-remove>
+        //         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        //             <path fill="#FFFFFF"
+        //                 d="M13.41,12l4.3-4.29a1,1,0,1,0-1.42-1.42L12,10.59,7.71,6.29A1,1,0,0,0,6.29,7.71L10.59,12l-4.3,4.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l4.29,4.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z">
+        //             </path>
+        //         </svg>
+        //     </button>
+        // </div>`;
 
-            new Dropzone($dropzoneElement[0], {
-                url: "/",
-                autoProcessQueue: false,
-                uploadMultiple: true,
-                parallelUploads: 10,
-                maxFiles: 10,
-                acceptedFiles: ".jpeg,.jpg,.png,.gif",
-                addRemoveLinks: true,
-                previewTemplate: previewTemplate,
+        //     new Dropzone($dropzoneElement[0], {
+        //         url: "/",
+        //         autoProcessQueue: false,
+        //         uploadMultiple: true,
+        //         parallelUploads: 10,
+        //         maxFiles: 10,
+        //         acceptedFiles: ".jpeg,.jpg,.png,.gif",
+        //         addRemoveLinks: true,
+        //         previewTemplate: previewTemplate,
 
-                init: function() {
-                    const myDropzoneInstance = this;
+        //         init: function() {
+        //             const myDropzoneInstance = this;
 
-                    if (existingImages.length > 0) {
-                        existingImages.forEach(imageUrl => {
-                            const mockFile = {
-                                name: "Existing Image",
-                                size: 1
-                            };
-                            this.emit("addedfile", mockFile);
-                            this.emit("thumbnail", mockFile, imageUrl);
-                            this.emit("complete", mockFile);
-                            this.files.push(mockFile);
-                        });
-                    }
+        //             if (existingImages.length > 0) {
+        //                 existingImages.forEach(imageUrl => {
+        //                     const mockFile = {
+        //                         name: "Existing Image",
+        //                         size: 1
+        //                     };
+        //                     this.emit("addedfile", mockFile);
+        //                     this.emit("thumbnail", mockFile, imageUrl);
+        //                     this.emit("complete", mockFile);
+        //                     this.files.push(mockFile);
+        //                 });
+        //             }
 
-                    $dropzoneElement.addClass('dz-main-container');
+        //             $dropzoneElement.addClass('dz-main-container');
 
-                    this.on("addedfile", function(file) {
-                        let dataTransfer = new DataTransfer();
-                        myDropzoneInstance.files.forEach(f => dataTransfer.items.add(f));
-                        $hiddenInput[0].files = dataTransfer.files;
-                    });
+        //             this.on("addedfile", function(file) {
+        //                 let dataTransfer = new DataTransfer();
+        //                 myDropzoneInstance.files.forEach(f => dataTransfer.items.add(f));
+        //                 $hiddenInput[0].files = dataTransfer.files;
+        //             });
 
-                    this.on("removedfile", function(file) {
-                        let dataTransfer = new DataTransfer();
-                        myDropzoneInstance.files.forEach(f => {
-                            if (f.upload.uuid !== file.upload.uuid) {
-                                dataTransfer.items.add(f);
-                            }
-                        });
-                        $hiddenInput[0].files = dataTransfer.files;
-                    });
-                }
-            });
-        }
+        //             this.on("removedfile", function(file) {
+        //                 let dataTransfer = new DataTransfer();
+        //                 myDropzoneInstance.files.forEach(f => {
+        //                     if (f.upload.uuid !== file.upload.uuid) {
+        //                         dataTransfer.items.add(f);
+        //                     }
+        //                 });
+        //                 $hiddenInput[0].files = dataTransfer.files;
+        //             });
+        //         }
+        //     });
+        // }
 
 
 

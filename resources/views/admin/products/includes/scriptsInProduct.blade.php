@@ -26,7 +26,14 @@
             })
         })
 </script>
+@if (Route::is('dashboard.products.edit'))
+    @include('admin.layouts.forms.dropzone', [
+        'inputName' => 'image',
+        'existingImageUrl' => isset($product) && $product->image ? asset($product->image) : null,
+    ])
+@else
     @include('admin.layouts.forms.dropzone')
+@endif
 
 @endsection
 

@@ -19,8 +19,8 @@
         ])
     </div>
     <div class="col-md-6">
-        @include('admin.layouts.forms.fields.select', [
-            'select_name' => 'categories[]',
+        @include('admin.layouts.forms.fields.multi_select', [
+            'select_name' => 'categories',
             'select_function' => $categories,
             'select_value' => old(
                 'categories',
@@ -74,10 +74,14 @@
 
 
 
-@include('admin.layouts.forms.fields.dropzone', [
-    'name' => 'image',
-    'existingImageUrl' => isset($product) && $product->image ? asset($product->image) : null,
-])
+ {{-- @include('admin.layouts.forms.fields.dropzone', [
+        "name" => "image",
+    ]) --}}
+
+<div class="row">
+    <label for="image" class="form-label">{{ __('site.image') }}</label>
+    <input type="file" name="image" class="form-control"  accept="image/*" required >
+</div>
 
 
 

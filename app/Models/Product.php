@@ -88,15 +88,15 @@ class Product extends MainModel
 
 
 
-    public function setDateStartAttribute($value)
-    {
-        $this->attributes['date_start'] = date('Y-m-d H:i:00', strtotime($value));
-    }
+    // public function setDateStartAttribute($value)
+    // {
+    //     $this->attributes['date_start'] = date('Y-m-d H:i:00', strtotime($value));
+    // }
 
-    public function setDateEndAttribute($value)
-    {
-        $this->attributes['date_end'] = date('Y-m-d H:i:00', strtotime($value));
-    }
+    // public function setDateEndAttribute($value)
+    // {
+    //     $this->attributes['date_end'] = date('Y-m-d H:i:00', strtotime($value));
+    // }
 
 
     public function categories()

@@ -40,6 +40,7 @@ class ProductController extends MainController
         $units = Unit::listForSelect('filter');
         $brands = Brand::listForSelect('filter');
         $categories = Category::listForSelect('filter');
+
         $colors= Color::listForSelect('filter');
         $sizes = Size::listForSelect('filter');
 
@@ -93,26 +94,21 @@ class ProductController extends MainController
     public function show(string $id)
     {
         $product = Product::with('children')->findOrFail($id);
-
-        $services = Service::active()->get();
-        $brands = Brand::active()->get();
-        $units = Unit::active()->get();
-        $sizes = Size::active()->get();
-
-        $categories = Category::active()
-            ->with('parent')
-            ->get()
-            ->mapWithKeys(function ($category) {
-                $label = $category->parent ? $category->parent->nameLang() . ' > ' . $category->nameLang() : $category->nameLang();
-                return [$category->id => $label];
-            });
+        $brands = Brand::listForSelect('default');
+        $units = Unit::listForSelect('default');
+        $sizes = Size::listForSelect('default');
+        $colors = Color::listForSelect('default');
+        $categories = Category::listForSelect('default');
+        
 
         return view('admin.products.edit', get_defined_vars());
     }
 
     public function edit(string $id)
     {
-        $product = Product::with('children')->findOrFail($id);
+        $data = ProductHelper::getProductRelationsInShowDashboard();
+        $product = Product::with($data)->find($id);
+
         $brands = Brand::listForSelect('default');
         $units = Unit::listForSelect('default');
         $sizes = Size::listForSelect('default');
@@ -129,22 +125,21 @@ class ProductController extends MainController
 
 
         if ($request->hasFile('image')) {
-            $data['image'] = $this->imageService->uploadImage('products', $request);
+            $data['image'] = $this->imageService->uploadImage($request->image,'products');
         }
 
         try {
             DB::transaction(function () use ($product, $data, $request) {
-
                 $product->update($data);
                 $product->categories()->sync($request->categories);
-                $product->deleteChildrenOldWhenNotSendInUpdate();
                 $this->productService->handleProductChildren($request, $product);
             });
         } catch (\Throwable $th) {
             if (isset($data['image'])) {
-                $this->imageService->deleteImage('products', $data['image']);
+                $this->imageService->deleteImage($data['image']);
             }
 
+        
             return redirect()->back()
                 ->with('error', __('site.something_went_wrong'))
                 ->withInput();
@@ -158,24 +153,11 @@ class ProductController extends MainController
 
     public function destroy(string $id)
     {
-        //
+        
     }
     
     
 
 
-    public function getCategoryByService($id)
-    {
-        $categories = Category::where('service_id', $id)->active()
-            ->with('parent')
-            ->get()
-            ->mapWithKeys(function ($category) {
-                $label = $category->parent ? $category->parent->nameLang() . ' > ' . $category->nameLang() : $category->nameLang();
-                return [$category->id => $label];
-            })->toArray();
-        return response()->json([
-            'success' => true,
-            'categories' => $categories,
-        ]);
-    }
+   
 }
