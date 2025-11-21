@@ -664,5 +664,15 @@ return [
     'is_shipping_free'=>'Is Shipping Free',
     'is_returned'=>'Is Returned',
     'color' => 'Color',
+    'images' => 'Images',
+    'for_child'=>'For Child',
+    'latest'=>'Latest',
+    'oldest'=>'Oldest',
+    'highest_price'=>'Highest Price',
+    'lowest_price'=>'Lowest Price',
+    'sort_by'=>'Sort By',
+    'is_free_shipping'=>'Is Free Shipping',
+    'color_id'=>'Color',
+
 
 ];

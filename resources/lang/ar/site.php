@@ -686,6 +686,15 @@ return [
     'is_shipping_free'=>'مجان الشحن',
     'is_returned'=>'مرتجع',
     'color' => 'اللون',
+    'images' => 'الصور',
+    'for_child'=>'للطفل',
+    'latest'=>'احدث',
+    'oldest'=>'اقدم',
+    'highest_price'=>'السعر الاعلى',
+    'lowest_price'=>'السعر الادنى',
+    'sort_by'=>'ترتيب حسب',
+    'is_free_shipping'=>'مجان الشحن',
+    'color_id'=>' اللون'
   
 ];
 

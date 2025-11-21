@@ -1,15 +1,30 @@
-@include('admin.layouts.modals.filter.header',
-['model' => 'products',
-'search'=>true,
-'active'=>true,
-'sort_by'=>true,
-"trash" => true
+@include('admin.layouts.modals.filter.header', [
+    'model' => 'products',
+    'search' => true,
+    'active' => true,
+    // 'sort_by'=>true,
+    'trash' => true,
 ])
 
 
 
 
-
+<div class="col-md-6">
+    @include('admin.layouts.forms.fields.select', [
+        'select_name' => 'sort_by',
+        'select_function' => [
+            'null' => __('site.null'),
+            'latest' => __('site.latest'),
+            'oldest' => __('site.oldest'),
+            'highest_price' => __('site.highest_price'),
+            'lowest_price' => __('site.lowest_price'),
+        ],
+        'select_value' => old('sort_by') ?? request('sort_by'),
+        'select_class' => 'select2',
+        'select2' => true,
+        'not_req' => true,
+    ])
+</div>
 
 {{-- feature --}}
 <div class="col-md-6">
@@ -49,7 +64,7 @@
     @include('admin.layouts.forms.fields.select', [
         'select_name' => 'is_returned',
         'select_function' => filterBoolien(),
-        'select_value' =>  request('is_returned') ?? null,
+        'select_value' => request('is_returned') ?? null,
         'select_class' => 'select2',
         'select2' => true,
         'not_req' => true,
@@ -80,7 +95,7 @@
 <div class="col-md-6">
     @include('admin.layouts.forms.fields.select', [
         'select_name' => 'category_id',
-        'select_function' =>  $categories,
+        'select_function' => $categories,
         'select_value' => request('category_id') ?? null,
         'select_class' => 'select2',
         'select2' => true,
@@ -91,8 +106,8 @@
 <div class="col-md-6">
     @include('admin.layouts.forms.fields.select', [
         'select_name' => 'brand_id',
-        'select_function' =>  $brands,
-        'select_value' =>  request('brand_id') ?? null,
+        'select_function' => $brands,
+        'select_value' => request('brand_id') ?? null,
         'select_class' => 'select2',
         'select2' => true,
         'not_req' => true,
@@ -102,8 +117,8 @@
 <div class="col-md-6">
     @include('admin.layouts.forms.fields.select', [
         'select_name' => 'color_id',
-        'select_function' =>  $colors,
-        'select_value' =>  request('color_id') ?? null,
+        'select_function' => $colors,
+        'select_value' => request('color_id') ?? null,
         'select_class' => 'select2',
         'select2' => true,
         'not_req' => true,
@@ -113,8 +128,8 @@
 <div class="col-md-6">
     @include('admin.layouts.forms.fields.select', [
         'select_name' => 'size_id',
-        'select_function' =>  $sizes,
-        'select_value' =>  request('size_id') ?? null,
+        'select_function' => $sizes,
+        'select_value' => request('size_id') ?? null,
         'select_class' => 'select2',
         'select2' => true,
         'not_req' => true,
@@ -125,7 +140,7 @@
     @include('admin.layouts.forms.fields.select', [
         'select_name' => 'is_new',
         'select_function' => filterboolien(),
-        'select_value' =>  request('is_new') ?? null,
+        'select_value' => request('is_new') ?? null,
         'select_class' => 'select2',
         'select2' => true,
         'not_req' => true,
@@ -136,7 +151,7 @@
     @include('admin.layouts.forms.fields.select', [
         'select_name' => 'is_special',
         'select_function' => filterboolien(),
-        'select_value' =>  request('is_special')?? null,
+        'select_value' => request('is_special') ?? null,
         'select_class' => 'select2',
         'select2' => true,
         'not_req' => true,
@@ -158,7 +173,7 @@
     @include('admin.layouts.forms.fields.select', [
         'select_name' => 'is_sale',
         'select_function' => filterboolien(),
-        'select_value' =>  request('is_sale') ?? null,
+        'select_value' => request('is_sale') ?? null,
         'select_class' => 'select2',
         'select2' => true,
         'not_req' => true,

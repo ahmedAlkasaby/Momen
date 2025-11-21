@@ -3,8 +3,10 @@
     <td class="text-lg-center">{{ $product->code }}</td>
     <td class="text-lg-center">{{ $product->price }}</td>
     <td class="text-lg-center">
+        
         @foreach ($product->categories as $category)
-            <div class="badge bg-label-success me-1 mb-3">{{ $category->nameLang() }}</div>
+
+            <div class="badge bg-label-success me-1 mb-3">{{ $category->nameWithParent() }}</div>
         @endforeach
     </td>
 

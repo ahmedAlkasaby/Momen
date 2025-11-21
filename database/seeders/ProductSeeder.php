@@ -39,7 +39,7 @@ class ProductSeeder extends Seeder
                 'parent_id',
             ]);
 
-            if (rand(0,1)==1){
+            // if (rand(0,1)==1){
 
                 foreach ($this->getChlidrenData($dataProduct['is_offer'],$product->id,
                     Size::inRandomOrder()->first()->id,
@@ -47,19 +47,18 @@ class ProductSeeder extends Seeder
                     $clidermProduct=Product::create(array_merge($dataProductParent,$childData));
                     $sizeIds=[1,2,3];
                     $images=[
-                        'products\productDefoult.png',
-                        'products\productDefoult1.png',
-                        'products\productDefoult2.png',
+                        'storage/products/productDefoult.png',   
+                        'storage/products/productDefoult.png',   
+                        'storage/products/productDefoult.png',   
                     ];
                     foreach ($images as $image) {
                         $clidermProduct->images()->create(['image'=>$image]);
                     }
-                    foreach ($sizeIds as $sizeId) {
-                        $clidermProduct->sizes()->create(['size_id'=>$sizeId]);
-                    }
+                    $clidermProduct->sizes()->sync($sizeIds);
+                    
 
                 }
-            }
+            // }
         }
 
 

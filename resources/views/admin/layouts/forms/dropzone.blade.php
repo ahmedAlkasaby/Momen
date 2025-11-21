@@ -14,6 +14,15 @@
                 </svg>
             </button>
         </div>`;
+    
+    // تحديد العناصر الأساسية
+    const dropzoneElement = document.getElementById('myDropzoneArea');
+    const $existingPathInput = $('#existingImageHiddenInput'); // الحقل المخفي لمسار الصورة القديمة
+    const $hiddenFileInput = $('#hiddenImageInput');             // حقل input type="file"
+    const existingImageUrl = dropzoneElement ? dropzoneElement.dataset.existingImageUrl : null;
+    
+    // تأكد من تعريف رسالة الخطأ المطلوبة
+    const requiredErrorMessage = '{{ __("site.image_is_required") }}';
 
     let myDropzone = new Dropzone("#myDropzoneArea", {
         url: "/",
@@ -24,42 +33,87 @@
         previewTemplate: previewTemplate,
         addRemoveLinks: true,
         dictDefaultMessage: "Drop files here or click to upload",
+        
+        // حفظ الحالة الأصلية لـ required
+        originalRequired: $hiddenFileInput.prop('required'), 
+
         init: function() {
             const dz = this;
 
-            // ✅ هنا نضيف الصورة القديمة لو فيه
-            @if (!empty($existingImageUrl))
+            // 1. إضافة الصورة القديمة كـ Mock File
+            if (existingImageUrl) {
                 const mockFile = {
                     name: "Current Image",
                     size: 123456,
-                    type: "image/jpeg"
+                    type: "image/jpeg",
+                    isExisting: true // لتمييزه كملف قديم
                 };
                 dz.emit("addedfile", mockFile);
-                dz.emit("thumbnail", mockFile, "{{ $existingImageUrl }}");
+                dz.emit("thumbnail", mockFile, existingImageUrl);
                 dz.emit("complete", mockFile);
                 dz.files.push(mockFile);
-            @endif
+            }
 
+            // 2. عند إضافة ملف جديد
             this.on("addedfile", function(file) {
-                if (this.files.length > 1) {
-                    this.removeFile(this.files[0]);
+                // إذا كان الملف المضاف جديداً (وليس mockFile)
+                if (!file.isExisting) { 
+                    
+                    // 🔥🔥 FIX 1: حذف الملف الوهمي القديم إذا وجد قبل إضافة الجديد
+                    const existingMockFile = this.files.find(f => f.isExisting);
+                    if (existingMockFile) {
+                        // استخدام removeFile سيطلق حدث removedfile تلقائياً، والذي سيهتم
+                        // بمسح الـ $existingPathInput وتفعيل الـ required إذا لزم الأمر.
+                        this.removeFile(existingMockFile); 
+                    }
+                    
+                    // إزالة المسار القديم وإلغاء required (للتأكيد فقط، يتم هذا في removedfile أيضاً)
+                    $existingPathInput.val(''); 
+                    $hiddenFileInput.prop('required', false);
+                    
+                    // إزالة حالة الخطأ وجعل الحقل صالحاً
+                    $hiddenFileInput[0].setCustomValidity(''); 
+                    $(dropzoneElement).removeClass('is-invalid'); 
+
+                    // ربط الملف الجديد بـ input type="file"
+                    let dataTransfer = new DataTransfer();
+                    this.files.filter(f => !f.isExisting).forEach(f => dataTransfer.items.add(f));
+                    $hiddenFileInput[0].files = dataTransfer.files;
                 }
-
-                let fileInput = document.getElementById('hiddenImageInput');
-                let dataTransfer = new DataTransfer();
-                dataTransfer.items.add(file);
-                fileInput.files = dataTransfer.files;
             });
 
 
-            this.on("removedfile", function() {
-                document.getElementById('hiddenImageInput').value = "";
+            // 3. 🔥 عند حذف ملف 🔥
+            this.on("removedfile", function(file) {
+                // مسح محتويات حقل input type="file"
+                $hiddenFileInput.val("");
+                $hiddenFileInput[0].files = new DataTransfer().files; 
+                
+                // إذا كان الملف المحذوف هو الصورة القديمة (Mock File)
+                if (file.isExisting) {
+                    // مسح قيمة الحقل المخفي للمسار القديم 
+                    $existingPathInput.val(''); 
+                    
+                    // جعل الـ Field مطلوباً مرة أخرى
+                    if (dz.options.originalRequired) {
+                         $hiddenFileInput.prop('required', true); 
+                         
+                         // إجبار المتصفح على تفعيل التحقق (لإيقاف الإرسال)
+                         $hiddenFileInput[0].setCustomValidity(requiredErrorMessage);
+                         $(dropzoneElement).addClass('is-invalid');
+                    }
+                } 
             });
+            
+            // 4. 🔥🔥 FIX 2: معالجة تجاوز الحد الأقصى بشكل بسيط وآمن 🔥🔥
             this.on("maxfilesexceeded", function(file) {
-                this.removeAllFiles();
-                this.addFile(file);
-
+                // بما أننا نعالج حذف الملف القديم في addedfile، هنا سنضمن
+                // فقط أن الملف الجديد سيحل محل أي ملف حالي (قد يكون ملفاً جديداً أضيف سابقاً).
+                //Dropzone سيحاول الآن إضافة الملف الجديد، وسيتم معالجته بواسطة addedfile
+                 this.removeAllFiles();
+                 this.addFile(file);
             });
+
         }
     });
 
@@ -69,19 +123,34 @@
     $('#formSubmit').on('click', function(event) {
         event.preventDefault();
         var $this = $(this);
-
+        const $form = $('#formDropzone');
+        
         $this.children('.spinner-border').removeClass('d-none');
 
-        if ($('#formDropzone')[0].checkValidity() === false) {
-            event.stopPropagation();
-            $('#formDropzone').addClass('was-validated');
-            $this.children('.spinner-border').addClass('d-none');
+        // التحقق من Custom Validity قبل checkValidity
+        if ($hiddenFileInput.prop('required') && $hiddenFileInput[0].checkValidity() === false) {
+             // إذا كان مطلوباً وغير صالح، نوقف الإرسال
+             event.stopPropagation();
+             $form.addClass('was-validated');
+             $this.children('.spinner-border').addClass('d-none');
+             return;
+        }
 
-            if (!myDropzone.getQueuedFiles().length > 0) {
-                $('.dropzone-drag-area').addClass('is-invalid').next('.invalid-feedback').show();
-            }
+        // التحقق من الـ validation العادي للنموذج
+        if ($form[0].checkValidity() === false) {
+            event.stopPropagation();
+            $form.addClass('was-validated');
+            $this.children('.spinner-border').addClass('d-none');
         } else {
-            myDropzone.processQueue();
+            
+            const hasNewFile = myDropzone.files.filter(f => !f.isExisting).length > 0;
+            
+            if (hasNewFile) {
+                 myDropzone.processQueue();
+            } else {
+                 // لا ملفات جديدة، أرسل النموذج فوراً
+                 $form.submit(); 
+            }
         }
     });
 </script>

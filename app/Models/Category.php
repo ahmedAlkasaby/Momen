@@ -15,6 +15,14 @@ class Category extends MainModel
         'order_id'
     ];
 
+    public function nameWithParent()
+    {
+        if ($this->parent) {
+            return $this->parent->nameLang() . ' > ' . $this->nameLang();
+        }
+        return $this->nameLang();
+    }
+
 
     public function parent()
     {
@@ -98,14 +106,23 @@ class Category extends MainModel
             $query = (new static)->$queryScope($query);
         }
 
-        $query->select($columns)->with('parent');
+        $query->select($columns)->with(['parent' => function ($q) use ($valueMethod) {
+            $q->select('id', 'name');
+        }]);
+
+
         $items = $query->get()->mapWithKeys(function ($item) use ($key, $valueMethod) {
-            $parentName = $item->parent ? $item->parent->nameLang() . ' > ' : '';
+
+            $parentName = '';
+            if ($item->relationLoaded('parent') && $item->parent) {
+                $parentName = $item->parent->$valueMethod() . ' > ';
+            }
+
             return [$item->$key => $parentName . $item->$valueMethod()];
         })->toArray();
 
         if ($type === 'default') {
-            $items =defaultOption()+ $items;
+            $items = defaultOption() + $items;
         } elseif ($type === 'filter') {
             $items = filterOption() + $items;
         }

@@ -65,7 +65,7 @@ class CartItemsService
             return false;
         }
 
-        $cart = Cart::with('cartItems.product')
+        $cart = Cart::with('cartItems')
             ->where('user_id', $userId)
             ->first();
 
