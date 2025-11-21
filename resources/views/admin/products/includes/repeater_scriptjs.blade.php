@@ -79,76 +79,140 @@
 
 
         /* ============================================================
-           Dropzone
-        ============================================================ */
-        // function initializeDropzone(element) {
-        //     const $dropzoneElement = $(element);
-        //     const $hiddenInput = $dropzoneElement.closest('.form-group').find('.dropzone-hidden-input');
+    Dropzone (الكود المعدل)
+============================================================ */
+        function initializeDropzone(element) {
+            const $dropzoneElement = $(element);
 
-        //     if ($dropzoneElement.hasClass('dz-main-container')) return;
+            // تأكد من أن هذا الحقل هو الذي يجمع الملفات الجديدة
+            const $hiddenInput = $dropzoneElement.closest('.form-group').find('.dropzone-hidden-input');
 
-        //     const existingImages = $dropzoneElement.data('existing-images') || [];
+            if ($dropzoneElement.hasClass('dz-main-container')) return;
 
-        //     let previewTemplate = `
-        // <div class="dz-preview dz-file-preview">
-        //     <div class="dz-photo">
-        //         <img class="dz-thumbnail" data-dz-thumbnail />
-        //     </div>
-        //     <button class="dz-delete border-0 p-0" type="button" data-dz-remove>
-        //         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        //             <path fill="#FFFFFF"
-        //                 d="M13.41,12l4.3-4.29a1,1,0,1,0-1.42-1.42L12,10.59,7.71,6.29A1,1,0,0,0,6.29,7.71L10.59,12l-4.3,4.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l4.29,4.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z">
-        //             </path>
-        //         </svg>
-        //     </button>
-        // </div>`;
+            // existingImages تحتوي على URL المسار الكامل للصورة القديمة
+            const existingImages = $dropzoneElement.data('existing-images') || [];
 
-        //     new Dropzone($dropzoneElement[0], {
-        //         url: "/",
-        //         autoProcessQueue: false,
-        //         uploadMultiple: true,
-        //         parallelUploads: 10,
-        //         maxFiles: 10,
-        //         acceptedFiles: ".jpeg,.jpg,.png,.gif",
-        //         addRemoveLinks: true,
-        //         previewTemplate: previewTemplate,
+            // **NEW:** متغير لتخزين مسارات الصور القديمة التي يجب الاحتفاظ بها
+            let existingPathsToKeep = existingImages.slice();
 
-        //         init: function() {
-        //             const myDropzoneInstance = this;
+            // 🔥🔥🔥 المنطقة المعدلة: تصحيح بناء اسم الحقل المتكرر 🔥🔥🔥
+            const updateExistingImagesHiddenFields = () => {
+                // 1. الحصول على الاسم الأساسي لحقل الملفات الجديدة (مثلاً: children[0][images][])
+                const dropzoneName = $hiddenInput.attr('name');
 
-        //             if (existingImages.length > 0) {
-        //                 existingImages.forEach(imageUrl => {
-        //                     const mockFile = {
-        //                         name: "Existing Image",
-        //                         size: 1
-        //                     };
-        //                     this.emit("addedfile", mockFile);
-        //                     this.emit("thumbnail", mockFile, imageUrl);
-        //                     this.emit("complete", mockFile);
-        //                     this.files.push(mockFile);
-        //                 });
-        //             }
+                // 2. استخدام Regex لاستبدال [images][] بالاسم الجديد [existing_images_to_keep][]
+                // الاسم المستهدف سيكون: children[0][existing_images_to_keep][]
 
-        //             $dropzoneElement.addClass('dz-main-container');
+                // نستخدم [images]\[\]$ للبحث عن [images][] في نهاية السلسلة بشكل دقيق
+                const targetInputName = dropzoneName.replace(/\[images\]\[\]$/,
+                    '[existing_images_to_keep][]');
 
-        //             this.on("addedfile", function(file) {
-        //                 let dataTransfer = new DataTransfer();
-        //                 myDropzoneInstance.files.forEach(f => dataTransfer.items.add(f));
-        //                 $hiddenInput[0].files = dataTransfer.files;
-        //             });
+                // 3. إزالة الحقول المخفية القديمة بنفس الاسم المستهدف
+                // هذا يضمن عدم تكرار الحقول في كل مرة يتم فيها إضافة/حذف صورة
+                $dropzoneElement.closest('.form-group').find(`input[name='${targetInputName}']`).remove();
 
-        //             this.on("removedfile", function(file) {
-        //                 let dataTransfer = new DataTransfer();
-        //                 myDropzoneInstance.files.forEach(f => {
-        //                     if (f.upload.uuid !== file.upload.uuid) {
-        //                         dataTransfer.items.add(f);
-        //                     }
-        //                 });
-        //                 $hiddenInput[0].files = dataTransfer.files;
-        //             });
-        //         }
-        //     });
-        // }
+                // 4. إضافة حقول مخفية جديدة لمسارات الصور التي يجب الاحتفاظ بها
+                existingPathsToKeep.forEach(path => {
+                    // (منطق استخراج المسار النسبي - يُفترض أنه صحيح)
+                    const relativePath = new URL(path).pathname.replace('/storage/', 'storage/')
+                        .replace(/\/public\//, '/');
+                    const valueToSend = relativePath.startsWith('storage/') ? relativePath :
+                        relativePath.substring(1);
+
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: targetInputName, // 🔥 الاسم الجديد والصحيح (مثلاً: children[0][existing_images_to_keep][])
+                        value: valueToSend
+                    }).appendTo($dropzoneElement.closest('.form-group'));
+                });
+            };
+            // 🔥🔥🔥 نهاية المنطقة المعدلة 🔥🔥🔥
+
+
+            let previewTemplate = `
+    <div class="dz-preview dz-file-preview">
+        <div class="dz-photo">
+            <img class="dz-thumbnail" data-dz-thumbnail />
+        </div>
+        <button class="dz-delete border-0 p-0" type="button" data-dz-remove>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path fill="#FFFFFF"
+                    d="M13.41,12l4.3-4.29a1,1,0,1,0-1.42-1.42L12,10.59,7.71,6.29A1,1,0,0,0,6.29,7.71L10.59,12l-4.3,4.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l4.29,4.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z">
+                    </path>
+            </svg>
+        </button>
+    </div>`;
+
+            new Dropzone($dropzoneElement[0], {
+                url: "/",
+                autoProcessQueue: false,
+                uploadMultiple: true,
+                parallelUploads: 10,
+                maxFiles: 10,
+                acceptedFiles: ".jpeg,.jpg,.png,.gif",
+                addRemoveLinks: true,
+                previewTemplate: previewTemplate,
+
+                init: function() {
+                    const myDropzoneInstance = this;
+
+                    // 1. عرض الصور الموجودة مسبقاً (Mock Files)
+                    if (existingImages.length > 0) {
+                        existingImages.forEach(imageUrl => {
+                            const mockFile = {
+                                name: "Existing Image",
+                                size: 1,
+                                isExisting: true, // **NEW** لتحديد نوع الملف
+                                pathUrl: imageUrl, // **NEW** لتخزين مسار الصورة
+                                uuid: Math.floor(Math.random() *
+                                    10000000) // لإعطاءه معرف وهمي
+                            };
+                            this.emit("addedfile", mockFile);
+                            this.emit("thumbnail", mockFile, imageUrl);
+                            this.emit("complete", mockFile);
+                            this.files.push(mockFile);
+                        });
+                        updateExistingImagesHiddenFields(); // **NEW** تحديث الحقول بعد الإضافة
+                    }
+
+                    $dropzoneElement.addClass('dz-main-container');
+
+                    // 2. عند إضافة ملف جديد
+                    this.on("addedfile", function(file) {
+                        if (!file.isExisting) { // فقط الملفات الجديدة
+                            let dataTransfer = new DataTransfer();
+                            // اجمع الملفات الجديدة فقط لإرسالها
+                            myDropzoneInstance.files.filter(f => !f.isExisting).forEach(f =>
+                                dataTransfer.items.add(f));
+                            $hiddenInput[0].files = dataTransfer.files;
+                        }
+                    });
+
+                    // 3. عند إزالة ملف
+                    this.on("removedfile", function(file) {
+                        // إذا كان ملف وهمي (صورة قديمة)
+                        if (file.isExisting) {
+                            // أزل المسار من قائمة existingPathsToKeep
+                            existingPathsToKeep = existingPathsToKeep.filter(url => url !==
+                                file.pathUrl);
+                            // **NEW** تحديث حقول الإخفاء
+                            updateExistingImagesHiddenFields();
+                        } else {
+                            // إذا كان ملف جديد
+                            let dataTransfer = new DataTransfer();
+                            // اجمع الملفات الجديدة المتبقية
+                            myDropzoneInstance.files.filter(f => !f.isExisting).forEach(
+                                f => {
+                                    if (f.upload.uuid !== file.upload.uuid) {
+                                        dataTransfer.items.add(f);
+                                    }
+                                });
+                            $hiddenInput[0].files = dataTransfer.files;
+                        }
+                    });
+                }
+            });
+        }
 
 
 

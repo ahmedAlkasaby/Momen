@@ -121,29 +121,32 @@ class ProductController extends MainController
 
     public function update(ProductRequest $request, Product $product)
     {
+        // dd($request->all());
+        
         $data = $request->except('image');
 
 
         if ($request->hasFile('image')) {
+            $this->imageService->deleteImage($product->image);
             $data['image'] = $this->imageService->uploadImage($request->image,'products');
         }
 
-        try {
+        // try {
             DB::transaction(function () use ($product, $data, $request) {
                 $product->update($data);
                 $product->categories()->sync($request->categories);
                 $this->productService->handleProductChildren($request, $product);
             });
-        } catch (\Throwable $th) {
-            if (isset($data['image'])) {
-                $this->imageService->deleteImage($data['image']);
-            }
+        // } catch (\Throwable $th) {
+        //     if (isset($data['image'])) {
+        //         $this->imageService->deleteImage($data['image']);
+        //     }
 
         
-            return redirect()->back()
-                ->with('error', __('site.something_went_wrong'))
-                ->withInput();
-        }
+        //     return redirect()->back()
+        //         ->with('error', __('site.something_went_wrong'))
+        //         ->withInput();
+        // }
 
         return redirect()->route('dashboard.products.index')->with('success', __('site.updated_successfully'));
     }

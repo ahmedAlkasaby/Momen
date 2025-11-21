@@ -20,7 +20,7 @@ class ProductService
         if (!$request->has('children') || !is_array($request->children)) {
             return;
         }
-        
+
         if (empty($parentAttributes)) {
             $parentAttributes = Arr::except($product->toArray(), [
                 'price',
@@ -33,14 +33,14 @@ class ProductService
                 'updated_at',
             ]);
         }
-        
+
         Model::withoutEvents(function () use ($request, $product, $parentAttributes) {
             $receivedIds = [];
 
             foreach ($request->children as $childData) {
                 $data = array_merge($parentAttributes, Arr::except($childData, ['id']));
                 $data['parent_id'] = $product->id;
-                
+
                 $child = null;
 
                 if (isset($childData['id'])) {
@@ -57,11 +57,17 @@ class ProductService
                 }
 
                 if ($child) {
-                    if (isset($childData['images']) && is_array($childData['images'])) {
-                        $this->handleChildImages($child, $childData['images']);
-                    }
+                    $existingImages = $childData['existing_images_to_keep'] ?? [];
 
-                    if (isset($childData['sizes']) && is_array($childData['sizes'])) {
+                    if (is_string($existingImages) && !empty($existingImages)) {
+                        $existingImages = [$existingImages];
+                    } else if (!is_array($existingImages)) {
+                        $existingImages = [];
+                    }
+                    $newImages = $childData['images'] ?? [];
+                    $newImages = is_array($newImages) ? $newImages : [];
+                    $this->handleChildImages($child, $childData['images'] ?? [], $childData['existing_images_to_keep'] ?? []);
+                    if (isset($childData['sizes'])) {
                         $child->sizes()->sync($childData['sizes']);
                     }
 
@@ -74,24 +80,27 @@ class ProductService
     }
 
 
-    protected function handleChildImages(Product $child, array $imageData): void
+    protected function handleChildImages(Product $child, array $newImages = [], array $existingImages = []): void
     {
-        if ($child -> images()->count() > 0) {
-            $childImages= $child->images()->get();
-            foreach ($childImages as $image) {
-                $this->imageService->deleteImage($image->image);
-            }
-            $child->images()->delete();
-        } 
-        
-        
-        
-        foreach ($imageData as $file) {
-            $image = $this->imageService->uploadImage($file,'products');
-            
-            $child->images()->create(['image' => $image ]);
-        }
 
-       
+        if (empty($newImages) && empty($existingImages)) {
+            return;
+        }
+        if (!empty($existingImages)) {
+
+            $imagesExistingNames = $child->images()->pluck('image')->toArray();
+
+            $imagesToDelete = array_diff($imagesExistingNames, $existingImages);
+            foreach ($imagesToDelete as $image) {
+                $this->imageService->deleteImage($image);
+                $child->images()->where('image', $image)->delete();
+            }
+        }
+        if (!empty($newImages)) {
+            foreach ($newImages as $image) {
+                $imageNew = $this->imageService->uploadImage($image, 'products');
+                $child->images()->create(['image' => $imageNew]);
+            }
+        }
     }
 }

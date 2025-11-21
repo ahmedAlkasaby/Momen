@@ -73,15 +73,13 @@
 @include('admin.products.includes.price_fields')
 
 
-
- {{-- @include('admin.layouts.forms.fields.dropzone', [
+ @include('admin.layouts.forms.fields.dropzone', [
         "name" => "image",
-    ]) --}}
+        'existingImageUrl' => isset($product) && $product->image ? asset($product->image) : null,
+    ])
 
-<div class="row">
-    <label for="image" class="form-label">{{ __('site.image') }}</label>
-    <input type="file" name="image" class="form-control"  accept="image/*" required >
-</div>
+
+
 
 
 

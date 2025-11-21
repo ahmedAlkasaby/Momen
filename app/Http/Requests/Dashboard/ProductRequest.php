@@ -26,18 +26,15 @@ class ProductRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        // if ($this->has('categories') && is_array($this->input('categories'))) {
-        //     $cleanCategories = array_map(fn($id) => (int) $id, $this->input('categories'));
-        //     $this->merge(['categories' => $cleanCategories]);
-        // }
+
         $isShippingFree = $this->input('is_shipping_free');
-        
+
         if ($isShippingFree === 1 || $isShippingFree === '1' || $isShippingFree === true) {
             $this->merge([
                 'shipping' => 0,
             ]);
         }
-        
+
         if ($this->has('children') && is_array($this->input('children'))) {
             $children = $this->input('children');
             foreach ($children as $index => $child) {
@@ -74,11 +71,11 @@ class ProductRequest extends FormRequest
                     'exists:sizes,id'
                 ];
 
+
                 $childrenRules["children.{$index}.images"] = [
-                    'required',
+                    'required_without_all:children.' . $index . '.existing_images_to_keep',
                     'array',
                     'min:1',
-                    
                 ];
 
                 $childrenRules["children.{$index}.is_offer"] = ['required', 'boolean'];
@@ -108,7 +105,7 @@ class ProductRequest extends FormRequest
                         return $query->whereNull('parent_id');
                     }),
             ],
-            'image' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:5000'],
+            'image' => ['required_if:existing_image,null', 'image', 'mimes:jpg,jpeg,png', 'max:5000'],
             'children.*.images.*' => ['image', 'mimes:jpg,jpeg,png', 'max:5000'],
             "name.ar" => "required|string|max:255",
             "name.en" => "required|string|max:255",
@@ -124,7 +121,7 @@ class ProductRequest extends FormRequest
 
 
             'is_shipping_free' => ['required', 'boolean'],
-            'shipping' => ['nullable', 'numeric', 'min:0','required_if:is_shipping_free,0'],
+            'shipping' => ['nullable', 'numeric', 'min:0', 'required_if:is_shipping_free,0'],
             'max_order' => ['required', 'numeric', 'min:1'],
 
             'unit_id' => 'required|exists:units,id',
@@ -141,15 +138,17 @@ class ProductRequest extends FormRequest
     }
 
 
-  
+
     public function messages()
     {
         $messages = parent::messages();
 
+        $messages['image.required_if'] = __("validation.required", ["attribute" => __("site.image")]);
+
         $messages['children.*.color_id.required'] = __("validation.required", ["attribute" => __("site.color") . ' ' . __('site.for_child')]);
         $messages['children.*.sizes.required'] = __("validation.required", ["attribute" => __("site.sizes") . ' ' . __('site.for_child')]);
         $messages['children.*.sizes.min'] = __("validation.min.array", ["attribute" => __("site.sizes") . ' ' . __('site.for_child'), 'min' => 1]);
-        $messages['children.*.images.required'] = __("validation.required", ["attribute" => __("site.images") . ' ' . __('site.for_child')]);
+        $messages['children.*.images.required_without_all'] = __("validation.required", ["attribute" => __("site.images") . ' ' . __('site.for_child')]);
         $messages['children.*.images.min'] = __("validation.min.array", ["attribute" => __("site.images") . ' ' . __('site.for_child'), 'min' => 1]);
 
         $messages['unique_color_in_children'] = __('validation.unique_color_in_children');
@@ -159,8 +158,4 @@ class ProductRequest extends FormRequest
 
         return $messages;
     }
-
-
-   
-   
 }
