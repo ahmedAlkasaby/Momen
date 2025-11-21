@@ -34,7 +34,7 @@ class ProductService
             ]);
         }
 
-        Model::withoutEvents(function () use ($request, $product, $parentAttributes) {
+        // Model::withoutEvents(function () use ($request, $product, $parentAttributes) {
             $receivedIds = [];
 
             foreach ($request->children as $childData) {
@@ -76,7 +76,7 @@ class ProductService
             }
 
             $product->children()->whereNotIn('id', $receivedIds)->delete();
-        });
+        // });
     }
 
 

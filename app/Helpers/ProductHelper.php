@@ -6,11 +6,11 @@ class ProductHelper
     
     public static function getProductRelationsInIndexDashboard()
     {
-        return ['categories'];
+        return ['categories.parent'];
     }
 
     public  static function getProductRelationsInShowDashboard()
     {
-        return ['children.sizes', 'children.color', 'children.images', 'categories'];
+        return ['children.sizes', 'children.color', 'children.images', 'categories.parent'];
     }
 }

@@ -36,15 +36,11 @@ class ProductController extends MainController
     {
         $data = ProductHelper::getProductRelationsInIndexDashboard();
         $products = Product::with($data)->filter($request, 'admin')->paginate($this->perPage);
-
         $units = Unit::listForSelect('filter');
         $brands = Brand::listForSelect('filter');
         $categories = Category::listForSelect('filter');
-
         $colors= Color::listForSelect('filter');
         $sizes = Size::listForSelect('filter');
-
-
         return view('admin.products.index', get_defined_vars());
     }
 
@@ -55,8 +51,6 @@ class ProductController extends MainController
         $sizes = Size::listForSelect('default');
         $categories = Category::listForSelect('default');
         $colors = Color::listForSelect('default');
-
-
         return view('admin.products.create', get_defined_vars());
     }
 
@@ -121,7 +115,6 @@ class ProductController extends MainController
 
     public function update(ProductRequest $request, Product $product)
     {
-        // dd($request->all());
         
         $data = $request->except('image');
 
@@ -131,22 +124,22 @@ class ProductController extends MainController
             $data['image'] = $this->imageService->uploadImage($request->image,'products');
         }
 
-        // try {
+        try {
             DB::transaction(function () use ($product, $data, $request) {
                 $product->update($data);
                 $product->categories()->sync($request->categories);
                 $this->productService->handleProductChildren($request, $product);
             });
-        // } catch (\Throwable $th) {
-        //     if (isset($data['image'])) {
-        //         $this->imageService->deleteImage($data['image']);
-        //     }
+        } catch (\Throwable $th) {
+            if (isset($data['image'])) {
+                $this->imageService->deleteImage($data['image']);
+            }
 
         
-        //     return redirect()->back()
-        //         ->with('error', __('site.something_went_wrong'))
-        //         ->withInput();
-        // }
+            return redirect()->back()
+                ->with('error', __('site.something_went_wrong'))
+                ->withInput();
+        }
 
         return redirect()->route('dashboard.products.index')->with('success', __('site.updated_successfully'));
     }

@@ -19,8 +19,10 @@ trait ProductScope
 
     public function scopeApplyBasicFilters($query, $request, $type_app)
     {
-        $query->orderNo();
         $query->whereNull('parent_id');
+        if(! $request->filled('sort_by')){
+            $query->orderNo();
+        }
         if ($type_app == 'app') {
             $query->activeProducts();
         } else {
@@ -174,6 +176,7 @@ trait ProductScope
             ->applySizeFilter($request)
             ->applyPriceFilters($request)
             ->applySorting($request)
+            
             ->applyDateFilters($request)
             ->trash($request)
         ;
