@@ -16,12 +16,9 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
 {
     use  HasFactory, Notifiable, SoftDeletes, HasRolesAndPermissions;
 
+      
 
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Hash::make($value);
-    }
-    protected $fillable = [
+      protected $fillable = [
         'name_first',
         'name_last',
         'email',
@@ -38,6 +35,21 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
         'gender',
     ];
 
+    protected $seachable=[
+        'name_first',
+        'name_last',
+        'email',
+        'phone',
+    ];
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
+    }
+
+  
+  
+
 
     protected $hidden = [
         'password',
@@ -49,12 +61,7 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
         'password' => 'hashed',
     ];
 
-    protected $seachable = [
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
-    ];
+   
 
     public function devices()
     {
@@ -137,6 +144,40 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
     {
         return $this->hasMany(Review::class);
     }
+
+        public function scopeFilter($query, $request = null, $type_app = 'app')
+    {
+
+        $request = $request ?? request();
+        $filters = $request->only(['type', 'active']);
+        $type_app == 'app' ?  $query->where('active', 1) :  $query->where('active', $request->input('active'));
+        if(! $request->filled('sort_by')){
+            $query->orderNo();
+        }
+
+        $query->mainSearch($request->input('search'));
+
+
+        $query->mainApplyDynamicFilters($filters);
+
+        if ($request->has('is_parents') == 1) {
+            $query->whereNull('parent_id');
+        }
+
+        if ($request->filled('sort_by')) {
+            switch ($request->sort_by) {
+                case 'latest':
+                    $query->orderByDesc('id');
+                    break;
+                case 'oldest':
+                    $query->orderBy('id', 'asc');
+                    break;
+            }
+        }
+
+        return $query;
+    }
+
    
     
 

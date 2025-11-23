@@ -13,8 +13,5 @@ class DeliveryTime extends MainModel
         'active',
     ];
 
-    public function scopeActive($query)
-    {
-        return $query->where('active', true);
-    }
+   
 }
