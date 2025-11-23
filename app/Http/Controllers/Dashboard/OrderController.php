@@ -33,15 +33,10 @@ class OrderController extends MainController
     {
         $deliveryTimes = DeliveryTime::listForSelect('filter');
         $payments = Payment::listForSelect('filter');
-        $deliverys = User::where('type', 'delivery')->get()->mapWithKeys(function ($delivery) {
-            return [$delivery->id => $delivery->name];
-        })->toArray();
-        $cities = City::get()->mapWithKeys(function ($city) {
-            return [$city->id => $city->nameLang()];
-        })->toArray();
-        $regions = Region::get()->mapWithKeys(function ($region) {
-            return [$region->id => $region->nameLang()];
-        })->toArray();
+        $query = User::typeFilter('delivery');
+        $deliverys = User::listForSelect('filter', queryBuilder: $query);
+        $cities = City::ListForSelect('filter');
+        $regions = Region::ListForSelect('filter');
         $orders = Order::with("user", "orderItems", "address")->paginate($this->perPage);
         $transactionsStatuses = collect(StatusOrderEnum::cases())
             ->mapWithKeys(fn($status) => [$status->value => $status->label()])
@@ -56,6 +51,9 @@ class OrderController extends MainController
     {
         $data = ['user', 'address', 'delivery', 'payment', 'deliveryTime', 'orderItems.product', 'orderStatuses'];
         $order = Order::with($data)->findOrFail($id);
+        if ($order->is_read==0) {
+            $order->update(['is_read' => 1, 'read_at' => now()]);
+        }
         return view('admin.orders.show', compact('order'));
     }
 }

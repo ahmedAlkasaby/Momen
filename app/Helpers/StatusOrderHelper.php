@@ -9,14 +9,21 @@ class StatusOrderHelper
     public static function transitions(): array
     {
         return [
-            StatusOrderEnum::Request->value => StatusOrderEnum::cases(),
+            StatusOrderEnum::Request->value => StatusOrderEnum::except([
+                StatusOrderEnum::ReturnedPartial,
+                StatusOrderEnum::Returned,
+            ]),
 
             StatusOrderEnum::Pending->value => StatusOrderEnum::except([
-                StatusOrderEnum::Request
+                StatusOrderEnum::Request,
+                StatusOrderEnum::ReturnedPartial,
+                StatusOrderEnum::Returned,
             ]),
 
             StatusOrderEnum::Approved->value => StatusOrderEnum::except([
-                StatusOrderEnum::Request
+                StatusOrderEnum::Request,
+                StatusOrderEnum::ReturnedPartial,
+                StatusOrderEnum::Returned,
             ]),
 
             StatusOrderEnum::Preparing->value => StatusOrderEnum::except([
@@ -29,15 +36,16 @@ class StatusOrderHelper
                 StatusOrderEnum::Request,
                 StatusOrderEnum::Pending,
                 StatusOrderEnum::Approved,
-                StatusOrderEnum::Preparing
+                StatusOrderEnum::Preparing,
+                StatusOrderEnum::ReturnedPartial,
+                StatusOrderEnum::Returned,
             ]),
 
-            StatusOrderEnum::DeliveryGo->value => StatusOrderEnum::except([
-                StatusOrderEnum::Request,
-                StatusOrderEnum::Pending,
-                StatusOrderEnum::Approved,
-                StatusOrderEnum::Preparing,
-                StatusOrderEnum::PreparingFinished
+            StatusOrderEnum::DeliveryGo->value => StatusOrderEnum::only([
+                StatusOrderEnum::DeliveryGo,
+                StatusOrderEnum::Delivered,
+                StatusOrderEnum::Canceled,
+                StatusOrderEnum::Rejected
             ]),
 
             StatusOrderEnum::Delivered->value => [StatusOrderEnum::Delivered],
@@ -60,8 +68,11 @@ class StatusOrderHelper
     }
 
 
-    public static function getAvailableTransitions(StatusOrderEnum $status): array
+    public static function getAvailableTransitions(StatusOrderEnum|string $status) : array  
     {
+        if (is_string($status)) {
+            $status = StatusOrderEnum::from($status);
+        }
         return self::transitions()[$status->value] ?? [];
     }
 

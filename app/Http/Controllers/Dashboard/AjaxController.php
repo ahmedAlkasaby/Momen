@@ -152,10 +152,7 @@ class AjaxController extends Controller
 
         $order->status = $newStatus;
         $order->save();
-        OrderStatus::create([
-            'order_id' => $order->id,
-            'status_id' => $newStatus->value
-        ]);
+       
 
         $availableTransitions = collect(StatusOrderHelper::getAvailableTransitions($newStatus))
             ->mapWithKeys(fn($status) => [$status->value => $status->label()])

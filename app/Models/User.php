@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Scopes\MainScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,11 +12,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject, LaratrustUser
 {
-    use  HasFactory, Notifiable, SoftDeletes, HasRolesAndPermissions;
+    use  HasFactory, Notifiable, SoftDeletes, HasRolesAndPermissions,MainScope;
 
       
 
@@ -42,6 +46,7 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
         'phone',
     ];
 
+
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
@@ -60,6 +65,12 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public  function name()
+    {
+        return $this->name_first . ' ' . $this->name_last;
+       
+    }
 
    
 
@@ -145,24 +156,53 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
         return $this->hasMany(Review::class);
     }
 
-        public function scopeFilter($query, $request = null, $type_app = 'app')
+      public static function listForSelect(
+        $type = null,
+        $key = 'id',
+        $methodValue= 'name',
+        $columns = ['id', 'name'],
+        $queryBuilder = null,
+    ) {
+        $query = $queryBuilder ?? static::query();
+
+       
+
+        $query->select($columns);
+
+        $items = $query->get()->mapWithKeys(function ($item) use ($key, $methodValue) {
+            return [$item->$key => $item->$methodValue()];
+        })->toArray();
+
+        if ($type === 'default') {
+            $items = defaultOption() + $items;
+        } elseif ($type === 'filter') {
+            $items = filterOption() + $items;
+        }
+
+        return $items;
+    }
+
+    public function scopeTypeFilter($query, $type)
+    {
+        if ($type) {
+            $query->where('type', $type);
+        }
+        return $query;
+    }
+
+    public function scopeFilter($query, $request = null)
     {
 
         $request = $request ?? request();
         $filters = $request->only(['type', 'active']);
-        $type_app == 'app' ?  $query->where('active', 1) :  $query->where('active', $request->input('active'));
         if(! $request->filled('sort_by')){
             $query->orderNo();
         }
 
         $query->mainSearch($request->input('search'));
-
-
         $query->mainApplyDynamicFilters($filters);
 
-        if ($request->has('is_parents') == 1) {
-            $query->whereNull('parent_id');
-        }
+        
 
         if ($request->filled('sort_by')) {
             switch ($request->sort_by) {

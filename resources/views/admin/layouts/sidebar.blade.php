@@ -148,14 +148,14 @@
                 </a>
             </li>
         @endif
-        @if (auth()->user()->hasPermission('favorites.index'))
+        {{-- @if (auth()->user()->hasPermission('favorites.index'))
             <li class="menu-item @if ($class == 'favorites') active @endif">
                 <a href="{{ route('dashboard.favorites.index') }}" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-smart-home"></i>
                     <div>{{ __('site.favorites') }}</div>
                 </a>
             </li>
-        @endif
+        @endif --}}
         @if (auth()->user()->hasPermission('coupons.index'))
             <li class="menu-item @if ($class == 'coupons') active @endif">
                 <a href="{{ route('dashboard.coupons.index') }}" class="menu-link">
@@ -172,6 +172,22 @@
                 </a>
             </li>
         @endif
+        @if (auth()->user()->hasPermission('orders.index'))
+        <li class="menu-item @if ($class == 'orders') active @endif">
+            <a href="{{ route('dashboard.orders.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <div>{{ __('site.orders') }}</div>
+            </a>
+        </li>
+        @endif
+        {{-- @if (auth()->user()->hasPermission('orderItemReturns.index'))
+        <li class="menu-item @if ($class == 'orderItemReturns') active @endif">
+            <a href="{{ route('dashboard.orderItemReturns.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-smart-home"></i>
+                <div>{{ __('site.orderItemReturns') }}</div>
+            </a>
+        </li>
+        @endif --}}
         @if (auth()->user()->hasPermission('addresses.index'))
             <li class="menu-item @if ($class == 'addresses') active @endif">
                 <a href="{{ route('dashboard.addresses.index') }}" class="menu-link">
@@ -180,22 +196,15 @@
                 </a>
             </li>
         @endif
-        @if (auth()->user()->hasPermission('orders.index'))
-            <li class="menu-item @if ($class == 'orders') active @endif">
-                <a href="{{ route('dashboard.orders.index') }}" class="menu-link">
-                    <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                    <div>{{ __('site.orders') }}</div>
-                </a>
-            </li>
-        @endif
-        @if (auth()->user()->hasPermission('orderItemReturns.index'))
+      
+        {{-- @if (auth()->user()->hasPermission('orderItemReturns.index'))
             <li class="menu-item @if ($class == 'orderItemReturns') active @endif">
                 <a href="{{ route('dashboard.orderItemReturns.index') }}" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-smart-home"></i>
                     <div>{{ __('site.orderItemReturns') }}</div>
                 </a>
             </li>
-        @endif
+        @endif --}}
         @if (auth()->user()->hasPermission('notifications.index'))
             <li class="menu-item @if ($class == 'notifications') active @endif">
                 <a href="{{ route('dashboard.notifications.index') }}" class="menu-link">
@@ -204,14 +213,21 @@
                 </a>
             </li>
         @endif
-        @if (auth()->user()->hasPermission('colors.index'))
+        {{-- @if (auth()->user()->hasPermission('colors.index'))
             <li class="menu-item @if ($class == 'colors') active @endif">
                 <a href="{{ route('dashboard.colors.index') }}" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-smart-home"></i>
                     <div>{{ __('site.colors') }}</div>
                 </a>
             </li>
-        @endif
+        @endif --}}
+
+         {{-- <li class="menu-item ">
+            <a href="{{ route('dashboard.translations.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-translate"></i>
+                <div>{{ __('site.translations') }}</div>
+            </a>
+        </li> --}}
 
 
         {{-- <li class="menu-item ">

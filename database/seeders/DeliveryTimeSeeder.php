@@ -33,6 +33,8 @@ class DeliveryTimeSeeder extends Seeder
                     'en' => $faker->word(),
                     'ar' => $faker->word(),
                 ],
+                'link' => uniqid('delivery-time-'),
+                'order_id'  => $i + 1,
                 'start_hour' => $start,
                 'end_hour'   => $end,
                 'active'     => rand(0, 1),

@@ -12,7 +12,7 @@
 
     @include('admin.layouts.forms.fields.select', [
         'select_name' => 'delivery_time',
-        'select_function' => ['all' => __('site.all')] + $deliveryTimes,
+        'select_function' =>  $deliveryTimes,
         'select_value' => old('delivery_time') ?? request('delivery_time'),
         'select_class' => 'select2',
         'select2' => true,
@@ -24,7 +24,7 @@
 <div class="col-md-6">
     @include('admin.layouts.forms.fields.select', [
         'select_name' => 'payment',
-        'select_function' => ['all' => __('site.all')] + $payments,
+        'select_function' =>  $payments,
         'select_value' => old('payment') ?? request('payment'),
         'select_class' => 'select2',
         'select2' => true,
@@ -36,7 +36,7 @@
 <div class="col-md-6">
     @include('admin.layouts.forms.fields.select', [
         'select_name' => 'delivery',
-        'select_function' => ['all' => __('site.all')] + $deliverys,
+        'select_function' => $deliverys,
         'select_value' => old('delivery') ?? request('delivery'),
         'select_class' => 'select2',
         'select2' => true,

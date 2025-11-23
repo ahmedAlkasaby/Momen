@@ -52,8 +52,9 @@ class MainModel extends Model
         $valueMethod = 'nameLang',
         $queryScope = 'active',
         $columns = ['id', 'name'],
+        $queryBuilder = null,
     ) {
-        $query = static::query();
+        $query = $queryBuilder ?? static::query();
 
         if (method_exists(static::class, 'scope' . ucfirst($queryScope))) {
             $query = (new static)->$queryScope($query);
