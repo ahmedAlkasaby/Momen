@@ -18,7 +18,7 @@
     <td class="text-lg-center">{{ $order->shipping }}</td>
     <td class="text-lg-center">{{ $order->total }}</td>
     @php
-        $availableStatuses = collect(App\Helpers\StatusOrderHelper::getAvailableTransitions($order->status))
+        $availableStatuses = collect(App\Helpers\StatusOrderHelper::getAvailableTransitions($order->status->value))
             ->mapWithKeys(fn($status) => [$status->value => $status->label()])
             ->toArray();
     @endphp
@@ -28,7 +28,7 @@
         @include('admin.layouts.forms.fields.select', [
             'select_name' => 'status',
             'select_function' => $availableStatuses,
-            'select_value' => $order->status,
+            'select_value' => $order->status->value ,
             'select_class' => 'select2 change-status',
             'select2' => true,
             'select_id' => 'status' . $order->id,

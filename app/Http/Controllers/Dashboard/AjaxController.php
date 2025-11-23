@@ -148,9 +148,9 @@ class AjaxController extends Controller
 
     public function changeStatus(Request $request, Order $order)
     {
-        $newStatus = StatusOrderEnum::from($request->status);
+        $newStatus = $request->status;
 
-        $order->status = $newStatus;
+        $order->status = $request->status;
         $order->save();
        
 
@@ -163,7 +163,7 @@ class AjaxController extends Controller
             'success' => true,
             'message' => 'Status updated.',
             'transitions' => $availableTransitions,
-            'current' => $newStatus->value
+            'current' => $newStatus
         ]);
     }
     public function changeItemStatus(Request $request, OrderItemReturn $item)

@@ -9,12 +9,9 @@
                 <tr>
                     <th></th>
                     <th class="text-lg-center">{{ __('site.product') }}</th>
-                    <th class="text-lg-center">{{ __('site.product_child') }}</th>
                     <th class="text-lg-center">{{ __('site.offer_price') }}</th>
                     <th class="text-lg-center">{{ __('site.price') }}</th>
                     <th class="text-lg-center">{{ __('site.amount') }}</th>
-                    <th class="text-lg-center">{{ __('site.price_addition') }}</th>
-                    <th class="text-lg-center">{{ __('site.amount_addition') }}</th>
                     <th class="text-lg-center">{{ __('site.offer_amount') }}</th>
                     <th class="text-lg-center">{{ __('site.offer_amount_add') }}</th>
                     <th class="text-lg-center">{{ __('site.free_amount') }}</th>
@@ -27,37 +24,34 @@
 
             <tbody>
                 @foreach ($order->orderItems as $orderItem)
-                <tr>
-                    {{-- صورة المنتج --}}
-                    <td class="text-center">
-                        <div class="avatar-wrapper">
-                            <div class="avatar me-2">
-                                <img src="{{ asset($orderItem->product->image) }}" class="rounded-2" width="40"
-                                    height="40" alt="">
+                    <tr>
+                        {{-- صورة المنتج --}}
+                        <td class="text-center">
+                            <div class="avatar-wrapper">
+                                <div class="avatar me-2">
+                                    <img src="{{ asset($orderItem->product->image) }}" class="rounded-2" width="40"
+                                        height="40" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </td>
+                        </td>
 
-                    <td class="text-lg-center">
-                        <strong>{{ $orderItem->product->nameLang() }}</strong>
-                    </td>
+                        <td class="text-lg-center">
+                            <strong>{{ $orderItem->product->nameLang() }}</strong>
+                        </td>
 
-                    <td class="text-lg-center">{{ $orderItem->product_child_id ?? '-' }}</td>
-                    <td class="text-lg-center">{{ number_format($orderItem->offer_price, 2) }}</td>
-                    <td class="text-lg-center">{{ number_format($orderItem->price, 2) }}</td>
-                    <td class="text-lg-center">{{ $orderItem->amount }}</td>
-                    <td class="text-lg-center">{{ number_format($orderItem->price_addition, 2) }}</td>
-                    <td class="text-lg-center">{{ $orderItem->amount_addition }}</td>
-                    <td class="text-lg-center">{{ $orderItem->offer_amount }}</td>
-                    <td class="text-lg-center">{{ $orderItem->offer_amount_add }}</td>
-                    <td class="text-lg-center">{{ $orderItem->free_amount }}</td>
-                    <td class="text-lg-center">{{ $orderItem->total_amount }}</td>
-                    <td class="text-lg-center">{{ number_format($orderItem->shipping, 2) }}</td>
-                    <td class="text-lg-center">{{ number_format($orderItem->total, 2) }}</td>
-                    <td class="text-lg-center">{{ number_format($orderItem->total_price, 2) }}</td>
-                   
-                    
-                </tr>
+                        <td class="text-lg-center">{{ number_format($orderItem->offer_price, 2) }}</td>
+                        <td class="text-lg-center">{{ number_format($orderItem->price, 2) }}</td>
+                        <td class="text-lg-center">{{ $orderItem->amount }}</td>
+                        <td class="text-lg-center">{{ $orderItem->offer_amount }}</td>
+                        <td class="text-lg-center">{{ $orderItem->offer_amount_add }}</td>
+                        <td class="text-lg-center">{{ $orderItem->free_amount }}</td>
+                        <td class="text-lg-center">{{ $orderItem->total_amount }}</td>
+                        <td class="text-lg-center">{{ number_format($orderItem->shipping, 2) }}</td>
+                        <td class="text-lg-center">{{ number_format($orderItem->total, 2) }}</td>
+                        <td class="text-lg-center">{{ number_format($orderItem->total_price, 2) }}</td>
+
+
+                    </tr>
                 @endforeach
             </tbody>
         </table>

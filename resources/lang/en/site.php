@@ -673,6 +673,11 @@ return [
     'sort_by'=>'Sort By',
     'is_free_shipping'=>'Is Free Shipping',
     'color_id'=>'Color',
+    'offer_amount_add'=>'Offer Amount Add',
+    'offer_percent_add'=>'Offer Percent Add',
+    'free_amount'=>'Free Amount',
+    'total_amount'=>'Total Amount',
+    'total_price'=>'Total Price',
 
 
 ];

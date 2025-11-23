@@ -48,10 +48,17 @@ class Order extends MainModel
         'reject_note',
 
         'is_read',
+        'read_at',
     ];
     protected $cast=[
         'status'=>StatusOrderEnum::class
     ];
+
+    public function getStatusAttribute($value)
+    {
+        return StatusOrderEnum::from($value);
+    }
+
    
 
     public function user()
@@ -109,5 +116,10 @@ class Order extends MainModel
     public function orderReject()
     {
         return $this->belongsTo(OrderReject::class);
+    }
+
+    public function orderStatuses()
+    {
+        return $this->hasMany(OrderStatus::class);
     }
 }
