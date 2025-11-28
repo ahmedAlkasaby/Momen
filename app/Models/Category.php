@@ -66,7 +66,10 @@ class Category extends MainModel
         $request = $request ?? request();
         $filters = $request->only(['parent_id']);
         $type_app == 'app' ?  $query->where('active', 1) :  $query->where('active', $request->input('active'));
-        $query->orderNo();
+        if(! $request->filled('sort_by')){
+
+            $query->orderNo();
+        }
 
         $query->mainSearch($request->input('search'));
 

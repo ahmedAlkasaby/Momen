@@ -19,38 +19,38 @@ class HomeController extends MainController
     }
     public function index()
     {
-        $orders = Order::with('orderItems')->get();
-        $users = User::get();
-        $products = Product::all();
-        $doneOrders = Order::where('status', 'delivered')->with('orderItems')->get();
-        $newProducts = Product::where('is_new', 1)->take(10)->get();
-        $totalProfit = 0;
-        foreach ($doneOrders as $order) {
-            $totalProfit += $order->orderTotal();
-        };
-        $monthlyProfits = $this->getMonthlyOrders();
-        $colors = [
-            'primary',
-            'info',
-            'success',
-            'secondary',
-            'danger',
-            'warning',
-        ];
-        $months=[
-            __("site.january"),
-            __("site.february"),
-            __("site.march"),
-            __("site.april"),
-            __("site.may"), 
-            __("site.june"),
-            __("site.july"),            
-            __("site.august"),
-            __("site.september"),
-            __("site.october"),
-            __("site.november"),
-            __("site.december"),
-        ];
+        // $orders = Order::with('orderItems')->get();
+        // $users = User::get();
+        // $products = Product::all();
+        // $doneOrders = Order::where('status', 'delivered')->with('orderItems')->get();
+        // $newProducts = Product::where('is_new', 1)->take(10)->get();
+        // $totalProfit = 0;
+        // foreach ($doneOrders as $order) {
+        //     $totalProfit += $order->orderTotal();
+        // };
+        // $monthlyProfits = $this->getMonthlyOrders();
+        // $colors = [
+        //     'primary',
+        //     'info',
+        //     'success',
+        //     'secondary',
+        //     'danger',
+        //     'warning',
+        // ];
+        // $months=[
+        //     __("site.january"),
+        //     __("site.february"),
+        //     __("site.march"),
+        //     __("site.april"),
+        //     __("site.may"), 
+        //     __("site.june"),
+        //     __("site.july"),            
+        //     __("site.august"),
+        //     __("site.september"),
+        //     __("site.october"),
+        //     __("site.november"),
+        //     __("site.december"),
+        // ];
         return view('admin.home.index', get_defined_vars());
     }
     

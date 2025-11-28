@@ -57,6 +57,7 @@ return new class extends Migration
             $table->text('reject_note')->nullable();
 
             $table->tinyInteger('is_read')->default(0);
+            $table->timestamp('read_at')->nullable();
             $table->tinyInteger('active')->default(1);
 
             $table->timestamps();

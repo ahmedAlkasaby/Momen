@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Scopes\MainScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,18 +12,17 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject, LaratrustUser
 {
-    use  HasFactory, Notifiable, SoftDeletes, HasRolesAndPermissions;
+    use  HasFactory, Notifiable, SoftDeletes, HasRolesAndPermissions,MainScope;
 
+      
 
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Hash::make($value);
-    }
-    protected $fillable = [
+      protected $fillable = [
         'name_first',
         'name_last',
         'email',
@@ -38,6 +39,22 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
         'gender',
     ];
 
+    protected $seachable=[
+        'name_first',
+        'name_last',
+        'email',
+        'phone',
+    ];
+
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
+    }
+
+  
+  
+
 
     protected $hidden = [
         'password',
@@ -49,12 +66,13 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
         'password' => 'hashed',
     ];
 
-    protected $seachable = [
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
-    ];
+    public  function name()
+    {
+        return $this->name_first . ' ' . $this->name_last;
+       
+    }
+
+   
 
     public function devices()
     {
@@ -137,6 +155,69 @@ class User extends Authenticatable implements JWTSubject, LaratrustUser
     {
         return $this->hasMany(Review::class);
     }
+
+      public static function listForSelect(
+        $type = null,
+        $key = 'id',
+        $methodValue= 'name',
+        $columns = ['id', 'name'],
+        $queryBuilder = null,
+    ) {
+        $query = $queryBuilder ?? static::query();
+
+       
+
+        $query->select($columns);
+
+        $items = $query->get()->mapWithKeys(function ($item) use ($key, $methodValue) {
+            return [$item->$key => $item->$methodValue()];
+        })->toArray();
+
+        if ($type === 'default') {
+            $items = defaultOption() + $items;
+        } elseif ($type === 'filter') {
+            $items = filterOption() + $items;
+        }
+
+        return $items;
+    }
+
+    public function scopeTypeFilter($query, $type)
+    {
+        if ($type) {
+            $query->where('type', $type);
+        }
+        return $query;
+    }
+
+    public function scopeFilter($query, $request = null)
+    {
+
+        $request = $request ?? request();
+        $filters = $request->only(['type', 'active']);
+        if(! $request->filled('sort_by')){
+            $query->orderNo();
+        }
+
+        $query->mainSearch($request->input('search'));
+        $query->mainApplyDynamicFilters($filters);
+
+        
+
+        if ($request->filled('sort_by')) {
+            switch ($request->sort_by) {
+                case 'latest':
+                    $query->orderByDesc('id');
+                    break;
+                case 'oldest':
+                    $query->orderBy('id', 'asc');
+                    break;
+            }
+        }
+
+        return $query;
+    }
+
    
     
 

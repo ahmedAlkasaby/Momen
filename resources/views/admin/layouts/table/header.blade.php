@@ -5,8 +5,8 @@ $classTable='table ';
 $isCreate = true;
 
 
+$routeToCreate = isset($routeToCreate) ?? null;
 $isCreateAllowed = (isset($isCreate) && $isCreate == true && !is_null($routeToCreate)); 
-$routeToCreate = $routeToCreate ?? null;
 @endphp
 @if (!isset($create))
     <div class="px-3 py-3 d-flex justify-content-between align-items-center">

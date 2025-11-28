@@ -115,7 +115,10 @@ Route::group(['middleware' => ['auth', 'admin', 'check.permission']], function (
 
 
     //Resource route for Orders
-    Route::resource('orders', OrderController::class);
+    Route::resource("orders", OrderController::class)->only('index', 'show');
+
+    //Resource route for Order Item Returns
+//    Route::resource('orderItemReturns', OrderItemReturnController::class)->only('index', 'show');
 
     //Resource route for Coupons
     Route::resource('coupons', CouponController::class);

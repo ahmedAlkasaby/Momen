@@ -694,7 +694,11 @@ return [
     'lowest_price'=>'السعر الادنى',
     'sort_by'=>'ترتيب حسب',
     'is_free_shipping'=>'مجان الشحن',
-    'color_id'=>' اللون'
+    'color_id'=>' اللون',
+    'offer_amount_add'=>'اضافة نسبة خصم',
+    'free_amount'=>'كمية مجانية',
+    'total_amount'=>'الكمية الاجمالية',
+    'total_price'=>'السعر الاجمالي',
   
 ];
 

@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('delivery_times', function (Blueprint $table) {
             $table->id();
             $table->text('name');
+            $table->string('link')->unique();
             $table->time('start_hour');
             $table->time('end_hour');
             $table->string('type')->nullable();
             $table->tinyInteger('active')->default(1);
+            $table->integer('order_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

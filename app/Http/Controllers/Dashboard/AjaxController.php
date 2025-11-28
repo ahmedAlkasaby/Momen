@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Enums\StatusOrderEnum;
 use App\Enums\StatusOrderItemReturnEnum;
 use App\Helpers\StatusOrderHelper;
-use App\Helpers\StatusOrderItemsReturnHelper;
+use App\Helpers\StatusOrderItemReturnHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\UpdateSettingRequest;
 use App\Models\Brand;
@@ -25,12 +25,21 @@ use App\Models\Review;
 use App\Models\Setting;
 use App\Models\Size;
 use App\Models\User;
+use App\Services\ImageHandlerService;
 use App\Traits\ToggleTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class AjaxController extends Controller
 {
+
+     protected $imageService;
+
+    public function __construct(ImageHandlerService $imageService)
+    {
+       
+        $this->imageService = $imageService;
+    }
     use ToggleTrait;
 
     public function categoryActive($id)
@@ -148,14 +157,11 @@ class AjaxController extends Controller
 
     public function changeStatus(Request $request, Order $order)
     {
-        $newStatus = StatusOrderEnum::from($request->status);
+        $newStatus = $request->status;
 
-        $order->status = $newStatus;
+        $order->status = $request->status;
         $order->save();
-        OrderStatus::create([
-            'order_id' => $order->id,
-            'status_id' => $newStatus->value
-        ]);
+       
 
         $availableTransitions = collect(StatusOrderHelper::getAvailableTransitions($newStatus))
             ->mapWithKeys(fn($status) => [$status->value => $status->label()])
@@ -166,7 +172,7 @@ class AjaxController extends Controller
             'success' => true,
             'message' => 'Status updated.',
             'transitions' => $availableTransitions,
-            'current' => $newStatus->value
+            'current' => $newStatus
         ]);
     }
     public function changeItemStatus(Request $request, OrderItemReturn $item)
@@ -178,7 +184,7 @@ class AjaxController extends Controller
         $item->save();
         
         
-        $availableTransitions = collect(StatusOrderItemsReturnHelper::getAvailableTransitions($newStatus))
+        $availableTransitions = collect(StatusOrderItemReturnHelper::getAvailableTransitions($newStatus))
             ->mapWithKeys(fn($status) => [$status->value => $status->label()])
             ->toArray();
 
