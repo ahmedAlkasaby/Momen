@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Enums\StatusOrderEnum;
 use App\Enums\StatusOrderItemReturnEnum;
 use App\Helpers\StatusOrderHelper;
-use App\Helpers\StatusOrderItemsReturnHelper;
+use App\Helpers\StatusOrderItemReturnHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Dashboard\UpdateSettingRequest;
 use App\Models\Brand;
@@ -184,7 +184,7 @@ class AjaxController extends Controller
         $item->save();
         
         
-        $availableTransitions = collect(StatusOrderItemsReturnHelper::getAvailableTransitions($newStatus))
+        $availableTransitions = collect(StatusOrderItemReturnHelper::getAvailableTransitions($newStatus))
             ->mapWithKeys(fn($status) => [$status->value => $status->label()])
             ->toArray();
 
