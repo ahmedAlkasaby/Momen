@@ -25,12 +25,21 @@ use App\Models\Review;
 use App\Models\Setting;
 use App\Models\Size;
 use App\Models\User;
+use App\Services\ImageHandlerService;
 use App\Traits\ToggleTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class AjaxController extends Controller
 {
+
+     protected $imageService;
+
+    public function __construct(ImageHandlerService $imageService)
+    {
+       
+        $this->imageService = $imageService;
+    }
     use ToggleTrait;
 
     public function categoryActive($id)
