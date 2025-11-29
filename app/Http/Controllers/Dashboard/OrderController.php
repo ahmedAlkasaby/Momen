@@ -27,9 +27,7 @@ class OrderController extends MainController
         $this->setClass('orders');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    
     public function index(Request $request)
     {
         $data=OrderHelper::getOrderRelations();
@@ -39,10 +37,11 @@ class OrderController extends MainController
         $deliverys = User::listForSelect('filter', queryBuilder: $query);
         $cities = City::ListForSelect('filter');
         $regions = Region::ListForSelect('filter');
-        $orders = Order::with($data)->paginate($this->perPage);
+        $orders = Order::with($data)->latest()->paginate($this->perPage);
         $transactionsStatuses = collect(StatusOrderEnum::cases())
             ->mapWithKeys(fn($status) => [$status->value => $status->label()])
             ->toArray();
+       
         return view('admin.orders.index', get_defined_vars());
     }
 

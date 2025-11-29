@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Order;
+use App\Models\OrderItemReturn;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\Setting;
+use App\Observers\OrderItemReturnObserver;
 use App\Observers\OrderObserver;
 use App\Observers\ProductObserver;
 use App\Observers\ReviewObserver;
@@ -38,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
         Product::observe(ProductObserver::class);
         Setting::observe(SettingObserver::class);
         Order::observe(OrderObserver::class);
+        OrderItemReturn::observe(OrderItemReturnObserver::class);
         Review::observe(ReviewObserver::class);
     }
 }

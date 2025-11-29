@@ -699,6 +699,8 @@ return [
     'free_amount'=>'كمية مجانية',
     'total_amount'=>'الكمية الاجمالية',
     'total_price'=>'السعر الاجمالي',
-  
+    'orderItemReturns'=> 'عناصر طلب الاسترجاع',
+    'price_return'=>'سعر الاسترجاع',
+    'reason'=>'السبب',
 ];
 

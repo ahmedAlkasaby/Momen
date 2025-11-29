@@ -122,4 +122,9 @@ class Order extends MainModel
     {
         return $this->hasMany(OrderStatus::class);
     }
+
+    public function scopeFilter($query ,$request=null)
+    {
+
+    }
 }
