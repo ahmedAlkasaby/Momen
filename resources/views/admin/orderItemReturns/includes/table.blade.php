@@ -6,17 +6,17 @@
 ])
 
 @include('admin.layouts.table.thead_info', [
-    'columns' => [
-        'site.client',
-        'site.phone',
-        'site.order_id',
-        'site.product',
-        'site.reason',
-        'site.price_return',
-        'site.status',
-        'site.date',
-        'site.action',
-    ],
+'columns' => [
+'site.client',
+'site.phone',
+'site.order_id',
+'site.product',
+'site.reason',
+'site.price_return',
+'site.status',
+'site.date',
+'site.action',
+],
 ])
 
 <tbody class="table-border-bottom-0">
