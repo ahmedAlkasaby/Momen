@@ -3,20 +3,20 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Enums\StatusOrderItemReturnEnum;
-use App\Helpers\OrderItemReturnHelper;
-use App\Models\OrderItemReturn;
 use Illuminate\Http\Request;
+use App\Models\OrderItemReturn;
+use App\Http\Controllers\Controller;
 
 class OrderItemReturnController extends MainController
 {
     public function __construct()
     {
         parent::__construct();
-        $this->setClass('orderItemReturns');
+        $this->setClass('order_items_return');
     }
     public function index()
     {
-        $relations = OrderItemReturnHelper::getRelationsInIndex();
+        $relations = ['user', 'order', 'orderItem', 'reason', 'coupon', 'product'];
         $orderItemReturns = OrderItemReturn::with($relations)->paginate($this->perPage);
         $transactionsStatuses = collect(StatusOrderItemReturnEnum::cases())
             ->mapWithKeys(fn($status) => [$status->value => $status->label()])
@@ -24,12 +24,53 @@ class OrderItemReturnController extends MainController
         return view('admin.orderItemReturns.index', compact('orderItemReturns', 'transactionsStatuses'));
     }
 
-   
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     */
     public function show(string $id)
     {
-        $data = OrderItemReturnHelper::getRelationsInSinglePage();
+        $data = ['user', 'order', 'orderItem', 'reason', 'coupon', 'product'];
         $orderItemReturn = OrderItemReturn::with($data)->findOrFail($id);
         return view('admin.orderItemReturns.show', compact('orderItemReturn'));
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
 }

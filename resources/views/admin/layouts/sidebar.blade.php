@@ -180,14 +180,14 @@
             </a>
         </li>
         @endif
-        @if (auth()->user()->hasPermission('orderItemReturns.index'))
+        {{-- @if (auth()->user()->hasPermission('orderItemReturns.index'))
         <li class="menu-item @if ($class == 'orderItemReturns') active @endif">
             <a href="{{ route('dashboard.orderItemReturns.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div>{{ __('site.orderItemReturns') }}</div>
             </a>
         </li>
-        @endif
+        @endif --}}
         @if (auth()->user()->hasPermission('addresses.index'))
             <li class="menu-item @if ($class == 'addresses') active @endif">
                 <a href="{{ route('dashboard.addresses.index') }}" class="menu-link">

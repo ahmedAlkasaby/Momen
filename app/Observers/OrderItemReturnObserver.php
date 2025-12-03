@@ -5,12 +5,14 @@ namespace App\Observers;
 use App\Enums\StatusOrderEnum;
 use App\Enums\StatusOrderItemReturnEnum;
 use App\Models\Order;
+use App\Models\OrderItem;
 use App\Models\OrderItemReturn;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class OrderItemReturnObserver
 {
+    
+
     public function updated(OrderItemReturn $orderItemReturn)
     {
         if ($orderItemReturn->isDirty('status')) {
@@ -27,9 +29,9 @@ class OrderItemReturnObserver
                 $order = Order::find($orderItemReturn->order_id);
 
                 $order->update([
-                    'price_returned' => $order->price_returned + $orderItemReturn->total_price_return,
-                    'total' => $order->total - $orderItemReturn->total_price_return,
-                    'status' => $this->getStatusOfOrder($orderItemReturn->order_id),
+                    'price_returned'=>$order->price_returned+$orderItemReturn->total_price_return,
+                    'total'=>$order->total-$orderItemReturn->total_price_return,
+                    'status'=>$this->getStatusOfOrder($orderItemReturn->order_id),
                 ]);
             }
 
@@ -71,5 +73,7 @@ class OrderItemReturnObserver
         if ($countOrderItems > $countOrderItemReturned) {
             return StatusOrderEnum::ReturnedPartial->value;
         }
+
     }
+
 }

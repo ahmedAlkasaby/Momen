@@ -22,12 +22,12 @@ class OrderItemReturnService
     {
         $user = User::find($userId);
         $orderItem = OrderItem::find($orderItemId);
-       
-        $order = Order::where('id', $orderItem->order_id)->where('user_id', $user->id)->first();
+        $order = $orderItem->order->where('user_id', $user->id)->first();
+
         if (!$order) {
             return __('api.order_item_not_found_in_your_order');
         }
-        if ($order->status->value != StatusOrderEnum::Delivered->value) {
+        if ($order->status != StatusOrderEnum::Delivered->value) {
             return __('api.order_not_deliveried');
         }
         if ($orderItem->is_return != 1) {

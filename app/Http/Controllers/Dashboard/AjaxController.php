@@ -177,12 +177,11 @@ class AjaxController extends Controller
     }
     public function changeItemStatus(Request $request, OrderItemReturn $item)
     {
-        Log::info('request_status='.$request->status);
+        
         $newStatus = StatusOrderItemReturnEnum::from($request->status);
 
-        $item->update([
-           'status'=>$newStatus->value
-        ]);
+        $item->status = $newStatus;
+        $item->save();
         
         
         $availableTransitions = collect(StatusOrderItemReturnHelper::getAvailableTransitions($newStatus))
@@ -192,9 +191,9 @@ class AjaxController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' =>__('site.updated_successfully'),
+            'message' => 'Status updated.',
             'transitions' => $availableTransitions,
-            'current' => $newStatus
+            'current' => $newStatus->value
         ]);
     }
 

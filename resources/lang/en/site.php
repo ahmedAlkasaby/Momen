@@ -678,9 +678,6 @@ return [
     'free_amount'=>'Free Amount',
     'total_amount'=>'Total Amount',
     'total_price'=>'Total Price',
-    'orderItemReturns'=>'Order Item Returns',
-    'price_return'=>'Price Return',
-    'reason' => 'Reason',
 
 
 ];

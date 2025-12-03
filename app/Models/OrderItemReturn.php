@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\StatusOrderItemReturnEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class OrderItemReturn extends MainModel
@@ -36,21 +35,6 @@ class OrderItemReturn extends MainModel
         'rejected_at',
     ];
 
-    protected $casts = [
-        'status' => StatusOrderItemReturnEnum::class,
-    ];
-
-
-
-    protected $dates = [
-        'created_at',
-        'updated_at',
-        'approved_at',
-        'rejected_at',
-        'returned_at',
-    ];
-
-    
 
     public function user()
     {

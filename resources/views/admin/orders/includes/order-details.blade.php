@@ -45,12 +45,12 @@
             </div>
 
             <div class="row mb-3">
-                <div class="col-md-4"><strong>{{ __('site.city') }}:</strong> {{ $order->city?->nameLang() ?? '-' }}
+                <div class="col-md-4"><strong>{{ __('site.city') }}:</strong> {{ $order->city->nameLang() ?? '-' }}
                 </div>
-                <div class="col-md-4"><strong>{{ __('site.region') }}:</strong> {{ $order->region?->nameLang() ??
-                    '-' }}</div>
+                {{-- <div class="col-md-4"><strong>{{ __('site.region') }}:</strong> {{ $order->region->nameLang() ??
+                    '-' }}</div> --}}
                 <div class="col-md-4"><strong>{{ __('site.delivery_time') }}:</strong> {{
-                    $order->deliveryTime?->nameLang() ?? '-' }}</div>
+                    $order->deliveryTime->nameLang() ?? '-' }}</div>
             </div>
 
             {{-- PRICES --}}

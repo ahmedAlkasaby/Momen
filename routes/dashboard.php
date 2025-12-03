@@ -15,7 +15,6 @@ use App\Http\Controllers\dashboard\DeliveryTimeController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\NotificationController;
 use App\Http\Controllers\dashboard\OrderController;
-use App\Http\Controllers\Dashboard\OrderItemReturnController;
 use App\Http\Controllers\dashboard\PageController;
 use App\Http\Controllers\Dashboard\PaymentController;
 use App\Http\Controllers\Dashboard\ProductController;
@@ -32,7 +31,6 @@ use App\Http\Controllers\Dashboard\UnitController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Dashboard\WishlistController;
 use Illuminate\Support\Facades\Route;
-
 
 
 
@@ -120,7 +118,7 @@ Route::group(['middleware' => ['auth', 'admin', 'check.permission']], function (
     Route::resource("orders", OrderController::class)->only('index', 'show');
 
     //Resource route for Order Item Returns
-    Route::resource('orderItemReturns', OrderItemReturnController::class)->only('index', 'show');
+//    Route::resource('orderItemReturns', OrderItemReturnController::class)->only('index', 'show');
 
     //Resource route for Coupons
     Route::resource('coupons', CouponController::class);
@@ -176,17 +174,7 @@ Route::group(['middleware' => ['auth', 'admin', 'check.permission']], function (
     Route::get('orders/cancel/{order}', [AjaxController::class, 'cancel'])->name('orders.cancel');
     Route::post('orders/change_status/{order}', [AjaxController::class, 'changeStatus'])->name('orders.change_status');
     Route::get('coupons/finish/{coupon}', [AjaxController::class, 'finish'])->name('coupons.finish');
-    Route::post('orderItemReturns/change_status/{item}', [AjaxController::class, 'changeItemStatus'])->name('order_item_returns.change_status');
-
+    
     Route::delete('sessions/{id}', [AjaxController::class, 'destroySession']);
     Route::post('settings/update-single', [AjaxController::class, 'updateSetting'])->name('settings.update-single');
-});
-
-Route::group([ 'middleware' => ['web','admin',"dashboard"]], function () {
-    Route::get('translations', [Barryvdh\TranslationManager\Controller::class, 'getIndex'])->name('translations.index');
-    Route::post('translations/import', [Barryvdh\TranslationManager\Controller::class, 'postImport'])->name('translations.import');
-    Route::post('translations/find', [Barryvdh\TranslationManager\Controller::class, 'postFind'])->name('translations.find');
-    Route::post('translations/add', [Barryvdh\TranslationManager\Controller::class, 'postAdd'])->name('translations.add');
-    Route::post('translations/delete', [Barryvdh\TranslationManager\Controller::class, 'postDelete'])->name('translations.delete');
-    Route::post('translations/translate-missing', [Barryvdh\TranslationManager\Controller::class, 'postTranslateMissing'])->name('translations.translateMissing');
 });
