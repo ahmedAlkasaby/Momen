@@ -51,6 +51,7 @@ class Category extends MainModel
     }
 
 
+    // can be used in listForSelect when creating  product 
     public function scopeActiveCategories($query)
     {
         return $query->where('active', 1)
@@ -76,7 +77,7 @@ class Category extends MainModel
 
         $query->mainApplyDynamicFilters($filters);
 
-        if ($request->has('is_parents') == 1) {
+        if ($request->has('is_parents') == 1 || $type_app == 'web') {
             $query->whereNull('parent_id');
         }
 

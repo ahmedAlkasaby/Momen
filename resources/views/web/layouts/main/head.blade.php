@@ -4,7 +4,7 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
   <title>
-    My Static Site
+   Momen -  @yield('title')  
   </title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.rtl.min.css"
@@ -19,5 +19,6 @@
   <!-- Add Slick Slider dependencies -->
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
-
+  @include('web.layouts.editSizeImageInCategoryNavBar')
+  @yield('styles')
 </head>
