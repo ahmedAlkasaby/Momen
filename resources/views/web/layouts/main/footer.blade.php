@@ -2,7 +2,7 @@
         <div class="container">
             <div class="row mb-2">
                 <div class="footer__logo d-flex col-12 mb-4 justify-content-md-start justify-content-center col-md-7">
-                    <img src="{{ asset("website/assets/Mo'men Logo.svg") }}" alt="logo" />
+                    <img src="{{ asset("$settings["logo"]") }}" alt="logo" />
                 </div>
                 <div
                     class="footer__icon d-flex justify-content-md-end justify-content-center  align-items-center m-md-0 col-12 col-md-5">

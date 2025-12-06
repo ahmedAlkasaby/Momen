@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Models\Category;
 use Illuminate\Support\ServiceProvider;
+use App\Facades\SettingFacade as AppSettings;
+use App\Models\Setting;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -22,5 +24,6 @@ class ViewServiceProvider extends ServiceProvider
             $categories = Category::activeParents()->with('activeChildren')->get();
             $view->with('categories', $categories);
         });
+       
     }
 }
