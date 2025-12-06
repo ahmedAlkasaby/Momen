@@ -57,10 +57,10 @@
         <div class="container">
             <div class="d-flex justify-content-between">
                 <div class=" landing__content">
-                    <h1>Top Picks</h1>
-                    <h3 class="mt-1">Always stay connected</h3>
-                    <h2 class="mt-3">Upto 20% Save</h2>
-                    <button type="button" class="landing__button button__primary__medium">Buy Now</button>
+                    <h1>{{__('web.landing_home.top_picks')}}</h1>
+                    <h3 class="mt-1">{{__('web.landing_home.always_stay_connected')}}</h3>
+                    <h2 class="mt-3">{{__('web.landing_home.upto_20%_save')}}</h2>
+                    <button type="button" class="landing__button button__primary__medium">{{__('web.landing_home.buy_now')}}</button>
                 </div>
                 <div class=" landing__img">
                     <img src={{asset("website/assets/landing.svg")}} alt="Land">
@@ -68,19 +68,7 @@
             </div>
         </div>
     </div>
-    <div class="explore container">
-
-        <div class="explore__kids">
-            <img src = "assets/kidsExplore.svg" alt="kidsExplore" />
-            <h2 class="explore__Title">For Kids</h2>
-            <button type="button" class="explore__button"><i class="fa-solid fa-arrow-up me-3"></i>Explore Now</button>
-        </div>
-        <div class="explore__Mens">
-            <img srcassets/menExplore.svg" alt="MensExplore" />
-            <h2 class="explore__Title">For Mens</h2>
-            <button type="button" class="explore__button"><i class="fa-solid fa-arrow-up me-3"></i>Explore Now</button>
-        </div>
-    </div>
+    
     <div class="Categories">
         <div class="container">
             <h1 class="my-5 Categories__title">
@@ -230,7 +218,7 @@
             <div class="flashSale__title">
                 <h2>Flash sale</h2>
             </div>
-            <div class="d-flex justify-content-between">
+            {{-- <div class="d-flex justify-content-between">
                 <h3 class="flashSale__timer me-1">Closing in :</h3>
                 <div class="flashSale__countdown d-flex gap-2">
                     <div class="flashSale__countdown-number d-flex align-items-center justify-content-center"
@@ -243,32 +231,34 @@
                     <div class="flashSale__countdown-number d-flex align-items-center justify-content-center"
                         id="seconds">00</div>
                 </div>
-            </div>
+            </div> --}}
         </div>
         <div class="flashSale__products">
             <!-- Slider Container -->
             <div class="container">
                 <div class="products-slider">
                     <!-- Your existing card repeated 4 times (or dynamic content) -->
+                    @for ($i=0;$i<5;$i++)
+                        
                     <div class="card product-card">
                         <div class="product">
                             <div class="card product-card">
                                 <div class="product-card__image m-auto mt-3">
-                                    <img src=assets/product-card.svg" alt="Run Tight Trouser" class="product-card__img" />
+                                    <img src={{asset("website/assets/product-card.svg")}} alt="Run Tight Trouser" class="product-card__img" />
 
-                                    <img src="assets/heart.svg" alt="Heart" class="product-card__addToFavIcon"
+                                    <img src={{asset("website/assets/heart.svg")}} alt="Heart" class="product-card__addToFavIcon"
                                         onclick="toggleFav(this)" />
-                                    <img src="assets/red-heart.svg" alt="Heart" class="product-card__addToFavIconDone"
+                                    <img src={{asset("website/assets/red-heart.svg")}} alt="Heart" class="product-card__addToFavIconDone"
                                         onclick="toggleFav(this)" />
 
                                     <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="assets/add.svg"
                                         alt="Add to Cart" class="product-card__addToCartIcon" />
 
-                                    <!-- <div class="product-card__counter">
-                  <button onclick="updateCount(this, 1)"><img src="assets/add-count.svg" alt="Add"></button>
-                  <span>1</span>
-                  <button onclick="updateCount(this, -1)"><img src="assets/negative.svg" alt="Minus"></button>
-              </div> -->
+                                    <div class="product-card__counter">
+                                        <button onclick="updateCount(this, 1)"><img src={{asset("website/assets/add-count.svg")}} alt="Add"></button>
+                                        <span>1</span>
+                                        <button onclick="updateCount(this, -1)"><img src={{asset("website/assets/negative.svg")}} alt="Minus"></button>
+                                    </div> 
                                 </div>
 
                                 <div class="card-body product-card__body">
@@ -280,7 +270,7 @@
                                     <div class="d-flex justify-content-between">
                                         <p class="product-card__category">Men/ T-Shirt</p>
                                         <div class="product-card__rate">
-                                            <img class="product-card__rateImg" src=assets/star.svg" alt="starIcon" />
+                                            <img class="product-card__rateImg" src={{asset("website/assets/star.svg")}} alt="starIcon" />
                                             <span class="product-card__rateNo">(4.2)</span>
                                         </div>
                                     </div>
@@ -291,300 +281,7 @@
 
                         <!-- your card content -->
                     </div>
-                    <div class="card product-card">
-                        <div class="product">
-                            <div class="card product-card">
-                                <div class="product-card__image m-auto mt-3">
-                                    <img src="assets/product-card.svg" alt="Run Tight Trouser"
-                                        class="product-card__img" />
-
-                                    <img src="assets/heart.svg" alt="Heart" class="product-card__addToFavIcon"
-                                        onclick="toggleFav(this)" />
-                                    <img src="assets/red-heart.svg" alt="Heart" class="product-card__addToFavIconDone"
-                                        onclick="toggleFav(this)" />
-
-                                    <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="assets/add.svg"
-                                        alt="Add to Cart" class="product-card__addToCartIcon" />
-
-                                    <!-- <div class="product-card__counter">
-                  <button onclick="updateCount(this, 1)"><img src="assets/add-count.svg" alt="Add"></button>
-                  <span>1</span>
-                  <button onclick="updateCount(this, -1)"><img src="assets/negative.svg" alt="Minus"></button>
-              </div> -->
-                                </div>
-
-                                <div class="card-body product-card__body">
-                                    <h5 class="product-card__name">Run Tight Trouser</h5>
-                                    <div class="product-card__priceOffer d-flex justify-content-between">
-                                        <p class="product-card__price">132.00 EGP</p>
-                                        <p class="product-card__offer"><span>560</span> EGP</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="product-card__category">Men/ T-Shirt</p>
-                                        <div class="product-card__rate">
-                                            <img class="product-card__rateImg" src=assets/star.svg" alt="starIcon" />
-                                            <span class="product-card__rateNo">(4.2)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- your card content -->
-                    </div>
-                    <div class="card product-card">
-                        <div class="product">
-                            <div class="card product-card">
-                                <div class="product-card__image m-auto mt-3">
-                                    <img src="assets/product-card.svg" alt="Run Tight Trouser"
-                                        class="product-card__img" />
-
-                                    <img src="assets/heart.svg" alt="Heart" class="product-card__addToFavIcon"
-                                        onclick="toggleFav(this)" />
-                                    <img src="assets/red-heart.svg" alt="Heart" class="product-card__addToFavIconDone"
-                                        onclick="toggleFav(this)" />
-
-                                    <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="assets/add.svg"
-                                        alt="Add to Cart" class="product-card__addToCartIcon" />
-
-                                    <!-- <div class="product-card__counter">
-                  <button onclick="updateCount(this, 1)"><img src="assets/add-count.svg" alt="Add"></button>
-                  <span>1</span>
-                  <button onclick="updateCount(this, -1)"><img src="assets/negative.svg" alt="Minus"></button>
-              </div> -->
-                                </div>
-
-                                <div class="card-body product-card__body">
-                                    <h5 class="product-card__name">Run Tight Trouser</h5>
-                                    <div class="product-card__priceOffer d-flex justify-content-between">
-                                        <p class="product-card__price">132.00 EGP</p>
-                                        <p class="product-card__offer"><span>560</span> EGP</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="product-card__category">Men/ T-Shirt</p>
-                                        <div class="product-card__rate">
-                                            <img class="product-card__rateImg" src=assets/star.svg" alt="starIcon" />
-                                            <span class="product-card__rateNo">(4.2)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- your card content -->
-                    </div>
-                    <div class="card product-card">
-                        <div class="product">
-                            <div class="card product-card">
-                                <div class="product-card__image m-auto mt-3">
-                                    <img src="assets/product-card.svg" alt="Run Tight Trouser"
-                                        class="product-card__img" />
-
-                                    <img src="assets/heart.svg" alt="Heart" class="product-card__addToFavIcon"
-                                        onclick="toggleFav(this)" />
-                                    <img src="assets/red-heart.svg" alt="Heart" class="product-card__addToFavIconDone"
-                                        onclick="toggleFav(this)" />
-
-                                    <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="assets/add.svg"
-                                        alt="Add to Cart" class="product-card__addToCartIcon" />
-
-                                    <!-- <div class="product-card__counter">
-                  <button onclick="updateCount(this, 1)"><img src="assets/add-count.svg" alt="Add"></button>
-                  <span>1</span>
-                  <button onclick="updateCount(this, -1)"><img src="assets/negative.svg" alt="Minus"></button>
-              </div> -->
-                                </div>
-
-                                <div class="card-body product-card__body">
-                                    <h5 class="product-card__name">Run Tight Trouser</h5>
-                                    <div class="product-card__priceOffer d-flex justify-content-between">
-                                        <p class="product-card__price">132.00 EGP</p>
-                                        <p class="product-card__offer"><span>560</span> EGP</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="product-card__category">Men/ T-Shirt</p>
-                                        <div class="product-card__rate">
-                                            <img class="product-card__rateImg" src=assets/star.svg" alt="starIcon" />
-                                            <span class="product-card__rateNo">(4.2)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- your card content -->
-                    </div>
-                    <div class="card product-card">
-                        <div class="product">
-                            <div class="card product-card">
-                                <div class="product-card__image m-auto mt-3">
-                                    <img src="assets/product-card.svg" alt="Run Tight Trouser"
-                                        class="product-card__img" />
-
-                                    <img src="assets/heart.svg" alt="Heart" class="product-card__addToFavIcon"
-                                        onclick="toggleFav(this)" />
-                                    <img src="assets/red-heart.svg" alt="Heart" class="product-card__addToFavIconDone"
-                                        onclick="toggleFav(this)" />
-
-                                    <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="assets/add.svg"
-                                        alt="Add to Cart" class="product-card__addToCartIcon" />
-
-                                    <!-- <div class="product-card__counter">
-                  <button onclick="updateCount(this, 1)"><img src="assets/add-count.svg" alt="Add"></button>
-                  <span>1</span>
-                  <button onclick="updateCount(this, -1)"><img src="assets/negative.svg" alt="Minus"></button>
-              </div> -->
-                                </div>
-
-                                <div class="card-body product-card__body">
-                                    <h5 class="product-card__name">Run Tight Trouser</h5>
-                                    <div class="product-card__priceOffer d-flex justify-content-between">
-                                        <p class="product-card__price">132.00 EGP</p>
-                                        <p class="product-card__offer"><span>560</span> EGP</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="product-card__category">Men/ T-Shirt</p>
-                                        <div class="product-card__rate">
-                                            <img class="product-card__rateImg" src="assets/star.svg" alt="starIcon" />
-                                            <span class="product-card__rateNo">(4.2)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- your card content -->
-                    </div>
-                    <div class="card product-card">
-                        <div class="product">
-                            <div class="card product-card">
-                                <div class="product-card__image m-auto mt-3">
-                                    <img src="assets/product-card.svg" alt="Run Tight Trouser"
-                                        class="product-card__img" />
-
-                                    <img src="assets/heart.svg" alt="Heart" class="product-card__addToFavIcon"
-                                        onclick="toggleFav(this)" />
-                                    <img src="assets/red-heart.svg" alt="Heart" class="product-card__addToFavIconDone"
-                                        onclick="toggleFav(this)" />
-
-                                    <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="assets/add.svg"
-                                        alt="Add to Cart" class="product-card__addToCartIcon" />
-
-                                    <!-- <div class="product-card__counter">
-                  <button onclick="updateCount(this, 1)"><img src="assets/add-count.svg" alt="Add"></button>
-                  <span>1</span>
-                  <button onclick="updateCount(this, -1)"><img src="assets/negative.svg" alt="Minus"></button>
-              </div> -->
-                                </div>
-
-                                <div class="card-body product-card__body">
-                                    <h5 class="product-card__name">Run Tight Trouser</h5>
-                                    <div class="product-card__priceOffer d-flex justify-content-between">
-                                        <p class="product-card__price">132.00 EGP</p>
-                                        <p class="product-card__offer"><span>560</span> EGP</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="product-card__category">Men/ T-Shirt</p>
-                                        <div class="product-card__rate">
-                                            <img class="product-card__rateImg" src="assets/star.svg" alt="starIcon" />
-                                            <span class="product-card__rateNo">(4.2)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- your card content -->
-                    </div>
-                    <div class="card product-card">
-                        <div class="product">
-                            <div class="card product-card">
-                                <div class="product-card__image m-auto mt-3">
-                                    <img src="assets/product-card.svg" alt="Run Tight Trouser"
-                                        class="product-card__img" />
-
-                                    <img src="assets/heart.svg" alt="Heart" class="product-card__addToFavIcon"
-                                        onclick="toggleFav(this)" />
-                                    <img src="assets/red-heart.svg" alt="Heart" class="product-card__addToFavIconDone"
-                                        onclick="toggleFav(this)" />
-
-                                    <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="assets/add.svg"
-                                        alt="Add to Cart" class="product-card__addToCartIcon" />
-
-                                    <!-- <div class="product-card__counter">
-                  <button onclick="updateCount(this, 1)"><img src="assets/add-count.svg" alt="Add"></button>
-                  <span>1</span>
-                  <button onclick="updateCount(this, -1)"><img src="assets/negative.svg" alt="Minus"></button>
-              </div> -->
-                                </div>
-
-                                <div class="card-body product-card__body">
-                                    <h5 class="product-card__name">Run Tight Trouser</h5>
-                                    <div class="product-card__priceOffer d-flex justify-content-between">
-                                        <p class="product-card__price">132.00 EGP</p>
-                                        <p class="product-card__offer"><span>560</span> EGP</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="product-card__category">Men/ T-Shirt</p>
-                                        <div class="product-card__rate">
-                                            <img class="product-card__rateImg" src="assets/star.svg" alt="starIcon" />
-                                            <span class="product-card__rateNo">(4.2)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- your card content -->
-                    </div>
-                    <div class="card product-card">
-                        <div class="product">
-                            <div class="card product-card">
-                                <div class="product-card__image m-auto mt-3">
-                                    <img src="assets/product-card.svg" alt="Run Tight Trouser"
-                                        class="product-card__img" />
-
-                                    <img src="assets/heart.svg" alt="Heart" class="product-card__addToFavIcon"
-                                        onclick="toggleFav(this)" />
-                                    <img src="assets/red-heart.svg" alt="Heart" class="product-card__addToFavIconDone"
-                                        onclick="toggleFav(this)" />
-
-                                    <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="assets/add.svg"
-                                        alt="Add to Cart" class="product-card__addToCartIcon" />
-
-                                    <!-- <div class="product-card__counter">
-                  <button onclick="updateCount(this, 1)"><img src="assets/add-count.svg" alt="Add"></button>
-                  <span>1</span>
-                  <button onclick="updateCount(this, -1)"><img src="assets/negative.svg" alt="Minus"></button>
-              </div> -->
-                                </div>
-
-                                <div class="card-body product-card__body">
-                                    <h5 class="product-card__name">Run Tight Trouser</h5>
-                                    <div class="product-card__priceOffer d-flex justify-content-between">
-                                        <p class="product-card__price">132.00 EGP</p>
-                                        <p class="product-card__offer"><span>560</span> EGP</p>
-                                    </div>
-                                    <div class="d-flex justify-content-between">
-                                        <p class="product-card__category">Men/ T-Shirt</p>
-                                        <div class="product-card__rate">
-                                            <img class="product-card__rateImg" src="assets/star.svg" alt="starIcon" />
-                                            <span class="product-card__rateNo">(4.2)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- your card content -->
-                    </div>
+                    @endfor
                 </div>
                 <div class="modal fade py-0" id="sizemodal" data-bs-backdrop="static" data-bs-keyboard="false"
                     tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -753,7 +450,7 @@
             </div>
         </div>
     </div>
-    <div class="Trending mt-5">
+    {{-- <div class="Trending mt-5">
         <div class="container d-flex justify-content-between">
             <div class="Trending__title">
                 <h3>Trending</h3>
@@ -1051,5 +748,5 @@
 
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
