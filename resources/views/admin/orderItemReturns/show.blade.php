@@ -8,12 +8,15 @@
 
 @include('admin.orderItemReturns.includes.header', ['orderItemReturn' => $orderItemReturn])
 
+<!-- orderItemReturn Details Table -->
 
 <div class="row">
     @include('admin.orderItemReturns.includes.order-details', ['orderItemReturn' => $orderItemReturn])
     @include('admin.orderItemReturns.includes.shipping-activity', ['orderItemReturn' => $orderItemReturn])
     <div class="col-12 col-lg-4">
         @include('admin.orderItemReturns.includes.customer-details', ['orderItemReturn' => $orderItemReturn])
+
+
     </div>
 </div>
 @endsection

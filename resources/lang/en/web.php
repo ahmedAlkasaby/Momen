@@ -1,0 +1,33 @@
+<?php
+return [
+    'home' => 'Home',
+    'about' => 'About',
+    'contact' => 'Contact Us',
+    'privacy' => 'Privacy Policy',
+    'terms' => 'Terms and Conditions',
+    'faq' => 'Frequently Asked Questions',
+    'login' => 'Login',
+    'register' => 'Register',
+    'logout' => 'Logout',
+    'email'=>'Email',
+    'password'=>'Password',
+    'confirm_password'=>'Confirm Password',
+    'landing_home' => [
+        'top_picks'                => 'Top Picks',
+        'always_stay_connected'    => 'Always Stay Connected',
+        'upto_20%_save'            => 'Up to 20% Save',
+        'buy_now'                  => 'Buy Now',
+    ],
+    'whislist'=>'Wishlist',
+    'category'=>'Category',
+    'new_products'=>'New Products',
+    'special_products'=>'Special Products',
+    'offer_products'=>'Offer Products',
+    'filter_products'=>'Filter Products',
+    'see_all'=>'See All',
+    'choose_wear_title' => 'Choose the best everyday wear',
+    'everyday_wear' => 'everyday wear',
+    'see_all_categories' => 'See All Categories',
+    'category' => 'Category',
+];
+

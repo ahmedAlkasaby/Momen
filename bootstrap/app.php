@@ -19,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth-api' => \App\Http\Middleware\ApiAuthMiddleware::class,
             'userLangApi' => \App\Http\Middleware\SetUserApiLangMiddleware::class,
             'checkSettingOpen' => \App\Http\Middleware\CheckSettingOpenMiddleware::class,
+            'setUserLang' => \App\Http\Middleware\SetUserLangMiddleware::class
         ]);
     })
 

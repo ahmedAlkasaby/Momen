@@ -15,9 +15,9 @@ class StatusOrderItemReturnHelper
                 StatusOrderItemReturnEnum::REQUEST
             ]),
 
-            StatusOrderItemReturnEnum::APPROVED->value => StatusOrderItemReturnEnum::only([
-                StatusOrderItemReturnEnum::APPROVED,
-                StatusOrderItemReturnEnum::RETURNED,
+            StatusOrderItemReturnEnum::APPROVED->value => StatusOrderItemReturnEnum::except([
+                StatusOrderItemReturnEnum::REQUEST,
+                StatusOrderItemReturnEnum::PENDING
             ]),
             StatusOrderItemReturnEnum::REJECTED->value => StatusOrderItemReturnEnum::only([
                 StatusOrderItemReturnEnum::REJECTED,
@@ -30,11 +30,8 @@ class StatusOrderItemReturnHelper
     }
 
 
-    public static function getAvailableTransitions(StatusOrderItemReturnEnum|string $status): array
+    public static function getAvailableTransitions(StatusOrderItemReturnEnum $status): array
     {
-         if (is_string($status)) {
-            $status = StatusOrderItemReturnEnum::from($status);
-        }
         return self::transitions()[$status->value] ?? [];
     }
 

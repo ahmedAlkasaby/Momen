@@ -29,13 +29,14 @@ class MainController extends Controller
     protected function setClass($class)
     {
         $this->class = $class;
-        View::share('class', $class); // عشان يكون متاح في كل الـ views
+        View::share('class', $class); 
     }
 
     protected function setSettingsInView()
     {
-        $settings = AppSettings::all();
-        View::share('settings', $settings);
+        $site_title = AppSettings::get('site_title');
+
+        View::share('site_title', $site_title);
     }
 
 }

@@ -223,4 +223,11 @@ class Product extends MainModel
             $this->children()->delete();
         }
     }
+
+    public static function getProductOfFlags($flag,$perPage=10){
+        return Product::with(['unit','brand'])
+            ->where($flag, 1)
+            ->filter()
+            ->paginate($perPage);
+    }
 }

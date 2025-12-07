@@ -51,6 +51,7 @@ class Category extends MainModel
     }
 
 
+    // can be used in listForSelect when creating  product 
     public function scopeActiveCategories($query)
     {
         return $query->where('active', 1)
@@ -66,7 +67,7 @@ class Category extends MainModel
         $request = $request ?? request();
         $filters = $request->only(['parent_id']);
         $type_app == 'app' ?  $query->where('active', 1) :  $query->where('active', $request->input('active'));
-        if(! $request->filled('sort_by')){
+        if (! $request->filled('sort_by')) {
 
             $query->orderNo();
         }
@@ -76,7 +77,7 @@ class Category extends MainModel
 
         $query->mainApplyDynamicFilters($filters);
 
-        if ($request->has('is_parents') == 1) {
+        if ($request->has('is_parents') == 1 || $type_app == 'web') {
             $query->whereNull('parent_id');
         }
 
@@ -97,11 +98,11 @@ class Category extends MainModel
 
     public static function listForSelect(
         $type = null,
-
         $key = 'id',
         $valueMethod = 'nameLang',
         $queryScope = 'activeCategories',
-        $columns = ['id', 'name', 'parent_id']
+        $columns = ['id', 'name', 'parent_id'],
+        $queryBuilder = null
     ) {
         $query = static::query();
 
