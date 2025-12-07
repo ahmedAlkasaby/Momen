@@ -4,70 +4,51 @@
         <div class="container">
             <div class="row mt-5 mb-3">
                 <!-- Breadcrumb -->
-                <nav class="breadcrumb-container col-md-12 justify-content-start" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">My Account</li>
-                    </ol>
-                </nav>
             </div>
             <h1>My Account</h1>
             <div class="row MyAccount__Row mt-4">
-                <div class="MyAcountList col-lg-3  col-12">
-                    <ul class="m-0 p-0">
-                        <li class="MyAcountList__item">
-                            <a href="#" class="active">Personal Information</a>
-                        </li>
-                        <li class="MyAcountList__item">
-                            <a href="#">My Orders</a>
-                        </li>
-                        <li class="MyAcountList__item">
-                            <a href="#">Addresses</a>
-                        </li>
-                        <li class="MyAcountList__item">
-                            <a href="#">Returns</a>
-                        </li>
-                        <li class="MyAcountList__item">
-                            <a href="#">Change Password</a>
-                        </li>
-                        <li class="MyAcountList__item">
-                            <a href="/" class="logout-link">Log Out</a>
-                        </li>
-
-                    </ul>
-                </div>
+                @include('web.profile.layouts.sidebar')
                 <div class="offset-lg-1 col-lg-8  col-12">
                     <div id="PersonalInfo">
                         <div class="PersonalInfo">
                             <div class="position-relative">
-                                <img src="/assets/personal photo.svg" alt="personalInfo" class="PersonalInfo__img"
-                                    id="profileImage">
-                                <img src="/assets/edit-icon.svg" alt="edit" class="PersonalInfo__editIcon"
-                                    id="editIcon">
+                                @if (Auth::user()->image)
+                                    <img src="{{ asset(Auth::user()->image) }}" alt="personalInfo" class="PersonalInfo__img"
+                                        id="profileImage">
+                                @else
+                                    <img src="{{ asset('website/assets/personal photo.svg') }}" alt="personalInfo"
+                                        class="PersonalInfo__img" id="profileImage">
+                                @endif
+                                <img src="{{ asset('website/assets/edit-icon.svg') }}" alt="edit"
+                                    class="PersonalInfo__editIcon" id="editIcon">
                                 <input type="file" id="imageUpload" accept="image/*" class="d-none">
                             </div>
 
                             <div class="PersonalInfo__form mt-4">
-                                <form>
+                                <form action="{{ route('profile.update', Auth::user()->id) }}" method="POST">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <label for="firstName" class="form-label">First Name</label>
-                                            <input type="text" class="form-control" id="firstName">
+                                            <input type="text" class="form-control" id="firstName" name='name_first'
+                                                value="{{ Auth::user()->name_first }}">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="lastName" class="form-label">Last Name </label>
-                                            <input type="text" class="form-control" id="lastName">
+                                            <input type="text" class="form-control" id="lastName" name='name_last'
+                                                value="{{ Auth::user()->name_last }}">
                                         </div>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email">
+                                        <input type="email" class="form-control" id="email"
+                                            value="{{ Auth::user()->email }}" name='email'>
                                     </div>
 
                                     <div class="mb-3">
                                         <label for="phone" class="form-label">Phone Number</label>
-                                        <input type="tel" class="form-control" id="phone">
+                                        <input type="tel" class="form-control" id="phone" name='phone'
+                                            value="{{ Auth::user()->phone }}">
                                     </div>
 
                                     <button type="submit" class="PersonalInfo__button mt-4" id="save">Save</button>
@@ -75,7 +56,8 @@
                             </div>
                             <div class="PersonalInfo__delete d-flex justify-content-end mt-5">
                                 <button class="PersonalInfo__deleteButton ms-2 mt-1" id="deleteButton"><img
-                                        src="/assets/trash-icon.svg" alt="trash-icon" class="me-2 mb-1">Delete
+                                        src="{{ asset('website/assets/trash-icon.svg') }}" alt="trash-icon"
+                                        class="me-2 mb-1">Delete
                                     Account</button>
                             </div>
                         </div>
@@ -96,450 +78,450 @@
                     <div id="MyOrders" class="d-none">
                         <!-- Uncomment the following includes as needed -->
                         <!-- <div class="myOrders">
-            <table class="myOrders__table">
-                <thead>
-                  <tr class="myOrders__header">
-                    <th scope="col">ID</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Total</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr class="myOrders__row">
-                    <td>#235810</td>
-                    <td>20 jan 2025</td>
-                    <td>
-                        <div class="d-flex justify-content-center gap-2 ">
-                            <img src="/assets/in-progress.svg" alt="in-progress">
-                           <p class="mt-3">In Progress</p>
-                        </div>
-                    </td>
-                    <td class="myOrders__total">2000.00 EGP</td>
-                  </tr>
-                  <tr  class="myOrders__row">
-                    <td>#235810</td>
-                    <td>19 jan 2025</td>
-                    <td>
-                        <div class="d-flex justify-content-center gap-2">
-                            <img src="/assets/cancelled.svg" alt="Cancelled">
-                           <p class="mt-3">Cancelled</p>
-                        </div>
-                    </td>
-                    <td class="myOrders__total">300.59 EGP</td>
-                  </tr >
-                  <tr class="myOrders__row">
-                    <td>#235810</td>
-                    <td>10 jan 2025</td>
-                    <td>
-                        <div class="d-flex justify-content-center gap-2">
-                            <img src="/assets/delivered-order.svg" alt="Delivered">
-                           <p class="mt-3">Delivered</p>
-                        </div>
-                    </td>
-                    <td class="myOrders__total">20.00 EGP</td>
-                  </tr >
-                  <tr class="myOrders__row">
-                    <td>#235810</td>
-                    <td>6 jan 2025</td>
-                    <td>
-                        <div class="d-flex justify-content-center gap-2">
-                            <img src="/assets/delivered-order.svg" alt="Delivered">
-                           <p class="mt-3">Delivered</p>
-                        </div>
-                    </td>
-                    <td class="myOrders__total">90.00 EGP</td>
-                  </tr>
-                  <tr class="myOrders__row">
-                    <td>#235810</td>
-                    <td>3 jan 2025</td>
-                    <td>
-                        <div class="d-flex justify-content-center gap-2">
-                            <img src="/assets/cancelled.svg" alt="Cancelled">
-                           <p class="mt-3">Cancelled</p>
-                        </div>
-                    </td>
-                    <td class="myOrders__total">4360.53 EGP</td>
-                  </tr>
-                </tbody>
-              </table>
+                                            <table class="myOrders__table">
+                                                <thead>
+                                                  <tr class="myOrders__header">
+                                                    <th scope="col">ID</th>
+                                                    <th scope="col">Date</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Total</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  <tr class="myOrders__row">
+                                                    <td>#235810</td>
+                                                    <td>20 jan 2025</td>
+                                                    <td>
+                                                        <div class="d-flex justify-content-center gap-2 ">
+                                                            <img src="/assets/in-progress.svg" alt="in-progress">
+                                                           <p class="mt-3">In Progress</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="myOrders__total">2000.00 EGP</td>
+                                                  </tr>
+                                                  <tr  class="myOrders__row">
+                                                    <td>#235810</td>
+                                                    <td>19 jan 2025</td>
+                                                    <td>
+                                                        <div class="d-flex justify-content-center gap-2">
+                                                            <img src="/assets/cancelled.svg" alt="Cancelled">
+                                                           <p class="mt-3">Cancelled</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="myOrders__total">300.59 EGP</td>
+                                                  </tr >
+                                                  <tr class="myOrders__row">
+                                                    <td>#235810</td>
+                                                    <td>10 jan 2025</td>
+                                                    <td>
+                                                        <div class="d-flex justify-content-center gap-2">
+                                                            <img src="/assets/delivered-order.svg" alt="Delivered">
+                                                           <p class="mt-3">Delivered</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="myOrders__total">20.00 EGP</td>
+                                                  </tr >
+                                                  <tr class="myOrders__row">
+                                                    <td>#235810</td>
+                                                    <td>6 jan 2025</td>
+                                                    <td>
+                                                        <div class="d-flex justify-content-center gap-2">
+                                                            <img src="/assets/delivered-order.svg" alt="Delivered">
+                                                           <p class="mt-3">Delivered</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="myOrders__total">90.00 EGP</td>
+                                                  </tr>
+                                                  <tr class="myOrders__row">
+                                                    <td>#235810</td>
+                                                    <td>3 jan 2025</td>
+                                                    <td>
+                                                        <div class="d-flex justify-content-center gap-2">
+                                                            <img src="/assets/cancelled.svg" alt="Cancelled">
+                                                           <p class="mt-3">Cancelled</p>
+                                                        </div>
+                                                    </td>
+                                                    <td class="myOrders__total">4360.53 EGP</td>
+                                                  </tr>
+                                                </tbody>
+                                              </table>
 
-        </div> -->
+                                        </div> -->
                         <!-- <div class="myOrders">
-            <div class="track__header row">
-              <div class="col-md-7">
-                <h4>#235810</h4>
-              </div>
-              <div class="col-md-5 justify-content-end row">
-                <button class="me-2 button__second__medium">Cancel</button>
-              </div>
-            </div>
-            <div class="track__content row">
-              <div class="track-return col-md-4">
-                <div class="track-return__state">
-                  <div class="track-return__timeline">
+                                            <div class="track__header row">
+                                              <div class="col-md-7">
+                                                <h4>#235810</h4>
+                                              </div>
+                                              <div class="col-md-5 justify-content-end row">
+                                                <button class="me-2 button__second__medium">Cancel</button>
+                                              </div>
+                                            </div>
+                                            <div class="track__content row">
+                                              <div class="track-return col-md-4">
+                                                <div class="track-return__state">
+                                                  <div class="track-return__timeline">
 
-                    <div class="track-return__timeline-step active">
-                      <div class="track-return__status-title">
-                        Order Placed
-                        <span>
-                          <img src="/assets/Order-Placed.svg" alt="Order Placed icon" />
-                        </span>
-                      </div>
-                      <div class="track-return__status-date">Fri, 23 Feb 22, 4:23 PM</div>
-                    </div>
-              
-                    <div class="track-return__timeline-step active">
-                      <div class="track-return__status-title">
-                        In Progress
-                        <span>
-                          <img src="/assets/routing.svg" alt="In progress icon" />
-                        </span>
-                      </div>
-                      <div class="track-return__status-date">Sat, 24 Feb 22, 8:23 PM</div>
-                    </div>
-              
-                    <div class="track-return__timeline-step ">
-                      <div class="track-return__status-title">
-                        Shipped
-                        <span>
-                          <img src="/assets/Delivered-car.svg" alt="Shipped icon" />
-                        </span>
-                      </div>
-                      <div class="track-return__status-date">Expected 25 Feb</div>
-                    </div>
-              
-                    <div class="track-return__timeline-step  mb-0">
-                      <div class="track-return__status-title">
-                        Delivered
-                        <span>
-                          <img src="/assets/Delivered.svg" alt="Delivered icon" />
-                        </span>
-                      </div>
-                      <div class="track-return__status-date">Expected 26-28 Feb</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-8">
-                <div class="row pt-2">
-                  <div class="col-12">
-                    <h5 class="mb-3">Order Summery</h5>
-                  </div>
-                </div>
-                <div class="track__summery">
-                  <div class="col-12 row">
-                    <div class="col-md-6">
-                      <p>Count Items</p>
-                    </div>
-                    <div class="col-md-6 text-end">
-                      <h6>5 Items</h6>
-                    </div>
-                    <div class="col-md-6">
-                      <p>Discount</p>
-                    </div>
-                    <div class="col-md-6 discount text-end">
-                      <h6>60.00 EGP</h6>
-                    </div>
-                    <div class="col-md-6">
-                      <p>Delivery Charge</p>
-                    </div>
-                    <div class="col-md-6 text-end">
-                      <h6>19.99 EGP</h6>
-                    </div>
-                    <div class="col-md-12">
-                      <hr>
-                    </div>
-                    <div class="col-md-6 total">
-                      <p>Total</p>
-                    </div>
-                    <div class="col-md-6 text-end">
-                      <h5>191.56 EGP</h5>
-                    </div>
-                  </div>
-                </div>
-                <div class="row pt-2">
-                  <div class="col-12">
-                    <h5 class="mb-3">Order Summery</h5>
-                  </div>
-                </div>
-                <div class="track__address">
-                  <div class="col-11">
-                    <div class="address__box p-3 mb-4">
-                      <h5 class="mb-2">Deliver To : mo’men</h5>
-                      <div class="button__second__small mb-4 w-25">home</div>
-                      <p class="mb-1">Address : 1901 Thornridge Cir. Shiloh, Hawaii 81063</p>
-                      <p class="mb-1">Type : Home</p>
-                      <p class="mb-0">Area : New Damietta</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row pt-2">
-              <div class="col-12">
-                <h5 class="mb-3">Item summary</h5>
-              </div>
-            </div>
-            <div class="track__item row">
-
-
-              <div class="col-12">
-                <div class="order__item d-flex align-items-center p-3">
-                  <div class="col-md-2">
-                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
-                  </div>
-                  <div class="flex-grow-1 col-md-4">
-                    <h6 class="mb-1">Run Tight Trouser</h6>
-                    <p class="text-muted mb-0">
-                      Men's Shoes <br />
-                      Size: M
-                    </p>
-                  </div>
-                  <div class="text-center col-md-5">
-                    <p class="mb-0">213 EGP</p>
-                  </div>
-                  <div class="col-md-1 text-end fw-bold">
-                    <p>1</p>
-                  </div>
-                </div>
-              </div>
-              <hr />
-
-              
-              <div class="col-12">
-                <div class="order__item d-flex align-items-center p-3">
-                  <div class="col-md-2">
-                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
-                  </div>
-                  <div class="flex-grow-1 col-md-4">
-                    <h6 class="mb-1">Run Tight Trouser</h6>
-                    <p class="text-muted mb-0">
-                      Men's Shoes <br />
-                      Size: M
-                    </p>
-                  </div>
-                  <div class="text-center col-md-5">
-                    <p class="mb-0">213 EGP</p>
-                  </div>
-                  <div class="col-md-1 text-end fw-bold">
-                    <p>1</p>
-                  </div>
-                </div>
-              </div>
-              <hr />
+                                                    <div class="track-return__timeline-step active">
+                                                      <div class="track-return__status-title">
+                                                        Order Placed
+                                                        <span>
+                                                          <img src="/assets/Order-Placed.svg" alt="Order Placed icon" />
+                                                        </span>
+                                                      </div>
+                                                      <div class="track-return__status-date">Fri, 23 Feb 22, 4:23 PM</div>
+                                                    </div>
+                                              
+                                                    <div class="track-return__timeline-step active">
+                                                      <div class="track-return__status-title">
+                                                        In Progress
+                                                        <span>
+                                                          <img src="/assets/routing.svg" alt="In progress icon" />
+                                                        </span>
+                                                      </div>
+                                                      <div class="track-return__status-date">Sat, 24 Feb 22, 8:23 PM</div>
+                                                    </div>
+                                              
+                                                    <div class="track-return__timeline-step ">
+                                                      <div class="track-return__status-title">
+                                                        Shipped
+                                                        <span>
+                                                          <img src="/assets/Delivered-car.svg" alt="Shipped icon" />
+                                                        </span>
+                                                      </div>
+                                                      <div class="track-return__status-date">Expected 25 Feb</div>
+                                                    </div>
+                                              
+                                                    <div class="track-return__timeline-step  mb-0">
+                                                      <div class="track-return__status-title">
+                                                        Delivered
+                                                        <span>
+                                                          <img src="/assets/Delivered.svg" alt="Delivered icon" />
+                                                        </span>
+                                                      </div>
+                                                      <div class="track-return__status-date">Expected 26-28 Feb</div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="col-md-8">
+                                                <div class="row pt-2">
+                                                  <div class="col-12">
+                                                    <h5 class="mb-3">Order Summery</h5>
+                                                  </div>
+                                                </div>
+                                                <div class="track__summery">
+                                                  <div class="col-12 row">
+                                                    <div class="col-md-6">
+                                                      <p>Count Items</p>
+                                                    </div>
+                                                    <div class="col-md-6 text-end">
+                                                      <h6>5 Items</h6>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                      <p>Discount</p>
+                                                    </div>
+                                                    <div class="col-md-6 discount text-end">
+                                                      <h6>60.00 EGP</h6>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                      <p>Delivery Charge</p>
+                                                    </div>
+                                                    <div class="col-md-6 text-end">
+                                                      <h6>19.99 EGP</h6>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                      <hr>
+                                                    </div>
+                                                    <div class="col-md-6 total">
+                                                      <p>Total</p>
+                                                    </div>
+                                                    <div class="col-md-6 text-end">
+                                                      <h5>191.56 EGP</h5>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row pt-2">
+                                                  <div class="col-12">
+                                                    <h5 class="mb-3">Order Summery</h5>
+                                                  </div>
+                                                </div>
+                                                <div class="track__address">
+                                                  <div class="col-11">
+                                                    <div class="address__box p-3 mb-4">
+                                                      <h5 class="mb-2">Deliver To : mo’men</h5>
+                                                      <div class="button__second__small mb-4 w-25">home</div>
+                                                      <p class="mb-1">Address : 1901 Thornridge Cir. Shiloh, Hawaii 81063</p>
+                                                      <p class="mb-1">Type : Home</p>
+                                                      <p class="mb-0">Area : New Damietta</p>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="row pt-2">
+                                              <div class="col-12">
+                                                <h5 class="mb-3">Item summary</h5>
+                                              </div>
+                                            </div>
+                                            <div class="track__item row">
 
 
-              <div class="col-12">
-                <div class="order__item d-flex align-items-center p-3">
-                  <div class="col-md-2">
-                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
-                  </div>
-                  <div class="flex-grow-1 col-md-4">
-                    <h6 class="mb-1">Run Tight Trouser</h6>
-                    <p class="text-muted mb-0">
-                      Men's Shoes <br />
-                      Size: M
-                    </p>
-                  </div>
-                  <div class="text-center col-md-5">
-                    <p class="mb-0">213 EGP</p>
-                  </div>
-                  <div class="col-md-1 text-end fw-bold">
-                    <p>1</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
+                                              <div class="col-12">
+                                                <div class="order__item d-flex align-items-center p-3">
+                                                  <div class="col-md-2">
+                                                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
+                                                  </div>
+                                                  <div class="flex-grow-1 col-md-4">
+                                                    <h6 class="mb-1">Run Tight Trouser</h6>
+                                                    <p class="text-muted mb-0">
+                                                      Men's Shoes <br />
+                                                      Size: M
+                                                    </p>
+                                                  </div>
+                                                  <div class="text-center col-md-5">
+                                                    <p class="mb-0">213 EGP</p>
+                                                  </div>
+                                                  <div class="col-md-1 text-end fw-bold">
+                                                    <p>1</p>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <hr />
+
+                                              
+                                              <div class="col-12">
+                                                <div class="order__item d-flex align-items-center p-3">
+                                                  <div class="col-md-2">
+                                                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
+                                                  </div>
+                                                  <div class="flex-grow-1 col-md-4">
+                                                    <h6 class="mb-1">Run Tight Trouser</h6>
+                                                    <p class="text-muted mb-0">
+                                                      Men's Shoes <br />
+                                                      Size: M
+                                                    </p>
+                                                  </div>
+                                                  <div class="text-center col-md-5">
+                                                    <p class="mb-0">213 EGP</p>
+                                                  </div>
+                                                  <div class="col-md-1 text-end fw-bold">
+                                                    <p>1</p>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <hr />
+
+
+                                              <div class="col-12">
+                                                <div class="order__item d-flex align-items-center p-3">
+                                                  <div class="col-md-2">
+                                                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
+                                                  </div>
+                                                  <div class="flex-grow-1 col-md-4">
+                                                    <h6 class="mb-1">Run Tight Trouser</h6>
+                                                    <p class="text-muted mb-0">
+                                                      Men's Shoes <br />
+                                                      Size: M
+                                                    </p>
+                                                  </div>
+                                                  <div class="text-center col-md-5">
+                                                    <p class="mb-0">213 EGP</p>
+                                                  </div>
+                                                  <div class="col-md-1 text-end fw-bold">
+                                                    <p>1</p>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div> -->
                         <!-- <div class="myOrders">
-            <div class="track__header row">
-              <div class="col-md-7">
-                <h4>#235810</h4>
-              </div>
-              <div class="col-md-5 justify-content-end row">
-                <button class="button__primary__medium">Reorder</button>
-              </div>
-            </div>
-            <div class="track__content row">
-              <div class="track-return col-md-4">
-                <div class="track-return__state">
-                  <div class="track-return__timeline">
+                                            <div class="track__header row">
+                                              <div class="col-md-7">
+                                                <h4>#235810</h4>
+                                              </div>
+                                              <div class="col-md-5 justify-content-end row">
+                                                <button class="button__primary__medium">Reorder</button>
+                                              </div>
+                                            </div>
+                                            <div class="track__content row">
+                                              <div class="track-return col-md-4">
+                                                <div class="track-return__state">
+                                                  <div class="track-return__timeline">
 
 
-                    <div class="track-return__timeline-step active">
-                      <div class="track-return__status-title">
-                        Order Placed
-                        <span>
-                          <img src="/assets/Order-Placed.svg" alt="Order Placed icon" />
-                        </span>
-                      </div>
-                      <div class="track-return__status-date">Fri, 23 Feb 22, 4:23 PM</div>
-                    </div>
-              
-                    <div class="track-return__timeline-step active">
-                      <div class="track-return__status-title">
-                        In Progress
-                        <span>
-                          <img src="/assets/routing.svg" alt="In progress icon" />
-                        </span>
-                      </div>
-                      <div class="track-return__status-date">Sat, 24 Feb 22, 8:23 PM</div>
-                    </div>
-              
-                    <div class="track-return__timeline-step ">
-                      <div class="track-return__status-title">
-                        Shipped
-                        <span>
-                          <img src="/assets/Delivered-car.svg" alt="Shipped icon" />
-                        </span>
-                      </div>
-                      <div class="track-return__status-date">Expected 25 Feb</div>
-                    </div>
-              
-                    <div class="track-return__timeline-step active mb-0">
-                      <div class="track-return__status-title">
-                        Canceled
-                        <span>
-                          <img src="/assets/cancel.svg" alt="cancel icon" />
-                        </span>
-                      </div>
-                      <div class="track-return__status-date">Canceled on 26 Feb</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-8">
-                <div class="row pt-2">
-                  <div class="col-12">
-                    <h5 class="mb-3">Order Summery</h5>
-                  </div>
-                </div>
-                <div class="track__summery">
-                  <div class="col-12 row">
-                    <div class="col-md-6">
-                      <p>Count Items</p>
-                    </div>
-                    <div class="col-md-6 text-end">
-                      <h6>5 Items</h6>
-                    </div>
-                    <div class="col-md-6">
-                      <p>Discount</p>
-                    </div>
-                    <div class="col-md-6 discount text-end">
-                      <h6>60.00 EGP</h6>
-                    </div>
-                    <div class="col-md-6">
-                      <p>Delivery Charge</p>
-                    </div>
-                    <div class="col-md-6 text-end">
-                      <h6>19.99 EGP</h6>
-                    </div>
-                    <div class="col-md-12">
-                      <hr>
-                    </div>
-                    <div class="col-md-6 total">
-                      <p>Total</p>
-                    </div>
-                    <div class="col-md-6 text-end">
-                      <h5>191.56 EGP</h5>
-                    </div>
-                  </div>
-                </div>
-                <div class="row pt-2">
-                  <div class="col-12">
-                    <h5 class="mb-3">Order Summery</h5>
-                  </div>
-                </div>
-                <div class="track__address">
-                  <div class="col-11">
-                    <div class="address__box p-3 mb-4">
-                      <h5 class="mb-2">Deliver To : mo’men</h5>
-                      <div class="button__second__small mb-4 w-25">home</div>
-                      <p class="mb-1">Address : 1901 Thornridge Cir. Shiloh, Hawaii 81063</p>
-                      <p class="mb-1">Type : Home</p>
-                      <p class="mb-0">Area : New Damietta</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row pt-2">
-              <div class="col-12">
-                <h5 class="mb-3">Item summary</h5>
-              </div>
-            </div>
-            <div class="track__item row">
+                                                    <div class="track-return__timeline-step active">
+                                                      <div class="track-return__status-title">
+                                                        Order Placed
+                                                        <span>
+                                                          <img src="/assets/Order-Placed.svg" alt="Order Placed icon" />
+                                                        </span>
+                                                      </div>
+                                                      <div class="track-return__status-date">Fri, 23 Feb 22, 4:23 PM</div>
+                                                    </div>
+                                              
+                                                    <div class="track-return__timeline-step active">
+                                                      <div class="track-return__status-title">
+                                                        In Progress
+                                                        <span>
+                                                          <img src="/assets/routing.svg" alt="In progress icon" />
+                                                        </span>
+                                                      </div>
+                                                      <div class="track-return__status-date">Sat, 24 Feb 22, 8:23 PM</div>
+                                                    </div>
+                                              
+                                                    <div class="track-return__timeline-step ">
+                                                      <div class="track-return__status-title">
+                                                        Shipped
+                                                        <span>
+                                                          <img src="/assets/Delivered-car.svg" alt="Shipped icon" />
+                                                        </span>
+                                                      </div>
+                                                      <div class="track-return__status-date">Expected 25 Feb</div>
+                                                    </div>
+                                              
+                                                    <div class="track-return__timeline-step active mb-0">
+                                                      <div class="track-return__status-title">
+                                                        Canceled
+                                                        <span>
+                                                          <img src="/assets/cancel.svg" alt="cancel icon" />
+                                                        </span>
+                                                      </div>
+                                                      <div class="track-return__status-date">Canceled on 26 Feb</div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="col-md-8">
+                                                <div class="row pt-2">
+                                                  <div class="col-12">
+                                                    <h5 class="mb-3">Order Summery</h5>
+                                                  </div>
+                                                </div>
+                                                <div class="track__summery">
+                                                  <div class="col-12 row">
+                                                    <div class="col-md-6">
+                                                      <p>Count Items</p>
+                                                    </div>
+                                                    <div class="col-md-6 text-end">
+                                                      <h6>5 Items</h6>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                      <p>Discount</p>
+                                                    </div>
+                                                    <div class="col-md-6 discount text-end">
+                                                      <h6>60.00 EGP</h6>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                      <p>Delivery Charge</p>
+                                                    </div>
+                                                    <div class="col-md-6 text-end">
+                                                      <h6>19.99 EGP</h6>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                      <hr>
+                                                    </div>
+                                                    <div class="col-md-6 total">
+                                                      <p>Total</p>
+                                                    </div>
+                                                    <div class="col-md-6 text-end">
+                                                      <h5>191.56 EGP</h5>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row pt-2">
+                                                  <div class="col-12">
+                                                    <h5 class="mb-3">Order Summery</h5>
+                                                  </div>
+                                                </div>
+                                                <div class="track__address">
+                                                  <div class="col-11">
+                                                    <div class="address__box p-3 mb-4">
+                                                      <h5 class="mb-2">Deliver To : mo’men</h5>
+                                                      <div class="button__second__small mb-4 w-25">home</div>
+                                                      <p class="mb-1">Address : 1901 Thornridge Cir. Shiloh, Hawaii 81063</p>
+                                                      <p class="mb-1">Type : Home</p>
+                                                      <p class="mb-0">Area : New Damietta</p>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="row pt-2">
+                                              <div class="col-12">
+                                                <h5 class="mb-3">Item summary</h5>
+                                              </div>
+                                            </div>
+                                            <div class="track__item row">
 
 
-              <div class="col-12">
-                <div class="order__item d-flex align-items-center p-3">
-                  <div class="col-md-2">
-                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
-                  </div>
-                  <div class="flex-grow-1 col-md-4">
-                    <h6 class="mb-1">Run Tight Trouser</h6>
-                    <p class="text-muted mb-0">
-                      Men's Shoes <br />
-                      Size: M
-                    </p>
-                  </div>
-                  <div class="text-center col-md-5">
-                    <p class="mb-0">213 EGP</p>
-                  </div>
-                  <div class="col-md-1 text-end fw-bold">
-                    <p>1</p>
-                  </div>
-                </div>
-              </div>
-              <hr />
+                                              <div class="col-12">
+                                                <div class="order__item d-flex align-items-center p-3">
+                                                  <div class="col-md-2">
+                                                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
+                                                  </div>
+                                                  <div class="flex-grow-1 col-md-4">
+                                                    <h6 class="mb-1">Run Tight Trouser</h6>
+                                                    <p class="text-muted mb-0">
+                                                      Men's Shoes <br />
+                                                      Size: M
+                                                    </p>
+                                                  </div>
+                                                  <div class="text-center col-md-5">
+                                                    <p class="mb-0">213 EGP</p>
+                                                  </div>
+                                                  <div class="col-md-1 text-end fw-bold">
+                                                    <p>1</p>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <hr />
 
 
-              <div class="col-12">
-                <div class="order__item d-flex align-items-center p-3">
-                  <div class="col-md-2">
-                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
-                  </div>
-                  <div class="flex-grow-1 col-md-4">
-                    <h6 class="mb-1">Run Tight Trouser</h6>
-                    <p class="text-muted mb-0">
-                      Men's Shoes <br />
-                      Size: M
-                    </p>
-                  </div>
-                  <div class="text-center col-md-5">
-                    <p class="mb-0">213 EGP</p>
-                  </div>
-                  <div class="col-md-1 text-end fw-bold">
-                    <p>1</p>
-                  </div>
-                </div>
-              </div>
-              <hr />
+                                              <div class="col-12">
+                                                <div class="order__item d-flex align-items-center p-3">
+                                                  <div class="col-md-2">
+                                                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
+                                                  </div>
+                                                  <div class="flex-grow-1 col-md-4">
+                                                    <h6 class="mb-1">Run Tight Trouser</h6>
+                                                    <p class="text-muted mb-0">
+                                                      Men's Shoes <br />
+                                                      Size: M
+                                                    </p>
+                                                  </div>
+                                                  <div class="text-center col-md-5">
+                                                    <p class="mb-0">213 EGP</p>
+                                                  </div>
+                                                  <div class="col-md-1 text-end fw-bold">
+                                                    <p>1</p>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <hr />
 
 
-              <div class="col-12">
-                <div class="order__item d-flex align-items-center p-3">
-                  <div class="col-md-2">
-                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
-                  </div>
-                  <div class="flex-grow-1 col-md-4">
-                    <h6 class="mb-1">Run Tight Trouser</h6>
-                    <p class="text-muted mb-0">
-                      Men's Shoes <br />
-                      Size: M
-                    </p>
-                  </div>
-                  <div class="text-center col-md-5">
-                    <p class="mb-0">213 EGP</p>
-                  </div>
-                  <div class="col-md-1 text-end fw-bold">
-                    <p>1</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
+                                              <div class="col-12">
+                                                <div class="order__item d-flex align-items-center p-3">
+                                                  <div class="col-md-2">
+                                                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
+                                                  </div>
+                                                  <div class="flex-grow-1 col-md-4">
+                                                    <h6 class="mb-1">Run Tight Trouser</h6>
+                                                    <p class="text-muted mb-0">
+                                                      Men's Shoes <br />
+                                                      Size: M
+                                                    </p>
+                                                  </div>
+                                                  <div class="text-center col-md-5">
+                                                    <p class="mb-0">213 EGP</p>
+                                                  </div>
+                                                  <div class="col-md-1 text-end fw-bold">
+                                                    <p>1</p>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div> -->
                         <div class="myOrders">
                             <div class="track__header row">
                                 <div class="col-md-4">
@@ -876,202 +858,202 @@
                             </div>
                         </div>
                         <!-- <div class="myOrders">
-            <div class="track__header row">
-              <div class="col-md-7">
-                <h4>#235810</h4>
-              </div>
-              <div class="col-md-5 justify-content-end row">
-                <button class="button__primary__medium">Write a Review</button>
-              </div>
-            </div>
-            <div class="track__content row">
-              <div class="track-return col-md-4">
-                <div class="track-return__state">
-                  <div class="track-return__timeline">
+                                            <div class="track__header row">
+                                              <div class="col-md-7">
+                                                <h4>#235810</h4>
+                                              </div>
+                                              <div class="col-md-5 justify-content-end row">
+                                                <button class="button__primary__medium">Write a Review</button>
+                                              </div>
+                                            </div>
+                                            <div class="track__content row">
+                                              <div class="track-return col-md-4">
+                                                <div class="track-return__state">
+                                                  <div class="track-return__timeline">
 
-                    <div class="track-return__timeline-step active">
-                      <div class="track-return__status-title">
-                        Order Placed
-                        <span>
-                          <img src="/assets/Order-Placed.svg" alt="Order Placed icon" />
-                        </span>
-                      </div>
-                      <div class="track-return__status-date">Fri, 23 Feb 22, 4:23 PM</div>
-                    </div>
-              
-                    <div class="track-return__timeline-step active">
-                      <div class="track-return__status-title">
-                        In Progress
-                        <span>
-                          <img src="/assets/routing.svg" alt="In progress icon" />
-                        </span>
-                      </div>
-                      <div class="track-return__status-date">Sat, 24 Feb 22, 8:23 PM</div>
-                    </div>
-              
-                    <div class="track-return__timeline-step active">
-                      <div class="track-return__status-title">
-                        Shipped
-                        <span>
-                          <img src="/assets/Delivered-car.svg" alt="Shipped icon" />
-                        </span>
-                      </div>
-                      <div class="track-return__status-date">Expected 25 Feb</div>
-                    </div>
-              
-                    <div class="track-return__timeline-step active mb-0">
-                      <div class="track-return__status-title">
-                        Delivered
-                        <span>
-                          <img src="/assets/Delivered.svg" alt="Delivered icon" />
-                        </span>
-                      </div>
-                      <div class="track-return__status-date">Expected 26-28 Feb</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-8">
-                <div class="row pt-2">
-                  <div class="col-12">
-                    <h5 class="mb-3">Order Summery</h5>
-                  </div>
-                </div>
-                <div class="track__summery">
-                  <div class="col-12 row">
-                    <div class="col-md-6">
-                      <p>Count Items</p>
-                    </div>
-                    <div class="col-md-6 text-end">
-                      <h6>5 Items</h6>
-                    </div>
-                    <div class="col-md-6">
-                      <p>Discount</p>
-                    </div>
-                    <div class="col-md-6 discount text-end">
-                      <h6>60.00 EGP</h6>
-                    </div>
-                    <div class="col-md-6">
-                      <p>Delivery Charge</p>
-                    </div>
-                    <div class="col-md-6 text-end">
-                      <h6>19.99 EGP</h6>
-                    </div>
-                    <div class="col-md-12">
-                      <hr>
-                    </div>
-                    <div class="col-md-6 total">
-                      <p>Total</p>
-                    </div>
-                    <div class="col-md-6 text-end">
-                      <h5>191.56 EGP</h5>
-                    </div>
-                  </div>
-                </div>
-                <div class="row pt-2">
-                  <div class="col-12">
-                    <h5 class="mb-3">Order Summery</h5>
-                  </div>
-                </div>
-                <div class="track__address">
-                  <div class="col-11">
-                    <div class="address__box p-3 mb-4">
-                      <h5 class="mb-2">Deliver To : mo’men</h5>
-                      <div class="button__second__small mb-4 w-25">home</div>
-                      <p class="mb-1">Address : 1901 Thornridge Cir. Shiloh, Hawaii 81063</p>
-                      <p class="mb-1">Type : Home</p>
-                      <p class="mb-0">Area : New Damietta</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row pt-2">
-              <div class="col-12">
-                <h5 class="mb-3">Item summary</h5>
-              </div>
-            </div>
-            <div class="track__item row">
-
-
-              <div class="col-12">
-                <div class="order__item d-flex align-items-center p-3">
-                  <div class="col-md-2">
-                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
-                  </div>
-                  <div class="flex-grow-1 col-md-4">
-                    <h6 class="mb-1">Run Tight Trouser</h6>
-                    <p class="text-muted mb-0">
-                      Men's Shoes <br />
-                      Size: M
-                    </p>
-                  </div>
-                  <div class="text-center col-md-5">
-                    <p class="mb-0">213 EGP</p>
-                  </div>
-                  <div class="col-md-1 text-end fw-bold">
-                    <p>1</p>
-                  </div>
-                </div>
-              </div>
-              <hr />
+                                                    <div class="track-return__timeline-step active">
+                                                      <div class="track-return__status-title">
+                                                        Order Placed
+                                                        <span>
+                                                          <img src="/assets/Order-Placed.svg" alt="Order Placed icon" />
+                                                        </span>
+                                                      </div>
+                                                      <div class="track-return__status-date">Fri, 23 Feb 22, 4:23 PM</div>
+                                                    </div>
+                                              
+                                                    <div class="track-return__timeline-step active">
+                                                      <div class="track-return__status-title">
+                                                        In Progress
+                                                        <span>
+                                                          <img src="/assets/routing.svg" alt="In progress icon" />
+                                                        </span>
+                                                      </div>
+                                                      <div class="track-return__status-date">Sat, 24 Feb 22, 8:23 PM</div>
+                                                    </div>
+                                              
+                                                    <div class="track-return__timeline-step active">
+                                                      <div class="track-return__status-title">
+                                                        Shipped
+                                                        <span>
+                                                          <img src="/assets/Delivered-car.svg" alt="Shipped icon" />
+                                                        </span>
+                                                      </div>
+                                                      <div class="track-return__status-date">Expected 25 Feb</div>
+                                                    </div>
+                                              
+                                                    <div class="track-return__timeline-step active mb-0">
+                                                      <div class="track-return__status-title">
+                                                        Delivered
+                                                        <span>
+                                                          <img src="/assets/Delivered.svg" alt="Delivered icon" />
+                                                        </span>
+                                                      </div>
+                                                      <div class="track-return__status-date">Expected 26-28 Feb</div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <div class="col-md-8">
+                                                <div class="row pt-2">
+                                                  <div class="col-12">
+                                                    <h5 class="mb-3">Order Summery</h5>
+                                                  </div>
+                                                </div>
+                                                <div class="track__summery">
+                                                  <div class="col-12 row">
+                                                    <div class="col-md-6">
+                                                      <p>Count Items</p>
+                                                    </div>
+                                                    <div class="col-md-6 text-end">
+                                                      <h6>5 Items</h6>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                      <p>Discount</p>
+                                                    </div>
+                                                    <div class="col-md-6 discount text-end">
+                                                      <h6>60.00 EGP</h6>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                      <p>Delivery Charge</p>
+                                                    </div>
+                                                    <div class="col-md-6 text-end">
+                                                      <h6>19.99 EGP</h6>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                      <hr>
+                                                    </div>
+                                                    <div class="col-md-6 total">
+                                                      <p>Total</p>
+                                                    </div>
+                                                    <div class="col-md-6 text-end">
+                                                      <h5>191.56 EGP</h5>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="row pt-2">
+                                                  <div class="col-12">
+                                                    <h5 class="mb-3">Order Summery</h5>
+                                                  </div>
+                                                </div>
+                                                <div class="track__address">
+                                                  <div class="col-11">
+                                                    <div class="address__box p-3 mb-4">
+                                                      <h5 class="mb-2">Deliver To : mo’men</h5>
+                                                      <div class="button__second__small mb-4 w-25">home</div>
+                                                      <p class="mb-1">Address : 1901 Thornridge Cir. Shiloh, Hawaii 81063</p>
+                                                      <p class="mb-1">Type : Home</p>
+                                                      <p class="mb-0">Area : New Damietta</p>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <div class="row pt-2">
+                                              <div class="col-12">
+                                                <h5 class="mb-3">Item summary</h5>
+                                              </div>
+                                            </div>
+                                            <div class="track__item row">
 
 
-              <div class="col-12">
-                <div class="order__item d-flex align-items-center p-3">
-                  <div class="col-md-2">
-                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
-                  </div>
-                  <div class="flex-grow-1 col-md-4">
-                    <h6 class="mb-1">Run Tight Trouser</h6>
-                    <p class="text-muted mb-0">
-                      Men's Shoes <br />
-                      Size: M
-                    </p>
-                  </div>
-                  <div class="text-center col-md-5">
-                    <p class="mb-0">213 EGP</p>
-                  </div>
-                  <div class="col-md-1 text-end fw-bold">
-                    <p>1</p>
-                  </div>
-                </div>
-              </div>
-              <hr />
+                                              <div class="col-12">
+                                                <div class="order__item d-flex align-items-center p-3">
+                                                  <div class="col-md-2">
+                                                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
+                                                  </div>
+                                                  <div class="flex-grow-1 col-md-4">
+                                                    <h6 class="mb-1">Run Tight Trouser</h6>
+                                                    <p class="text-muted mb-0">
+                                                      Men's Shoes <br />
+                                                      Size: M
+                                                    </p>
+                                                  </div>
+                                                  <div class="text-center col-md-5">
+                                                    <p class="mb-0">213 EGP</p>
+                                                  </div>
+                                                  <div class="col-md-1 text-end fw-bold">
+                                                    <p>1</p>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <hr />
 
 
-              <div class="col-12">
-                <div class="order__item d-flex align-items-center p-3">
-                  <div class="col-md-2">
-                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
-                  </div>
-                  <div class="flex-grow-1 col-md-4">
-                    <h6 class="mb-1">Run Tight Trouser</h6>
-                    <p class="text-muted mb-0">
-                      Men's Shoes <br />
-                      Size: M
-                    </p>
-                  </div>
-                  <div class="text-center col-md-5">
-                    <p class="mb-0">213 EGP</p>
-                  </div>
-                  <div class="col-md-1 text-end fw-bold">
-                    <p>1</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
+                                              <div class="col-12">
+                                                <div class="order__item d-flex align-items-center p-3">
+                                                  <div class="col-md-2">
+                                                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
+                                                  </div>
+                                                  <div class="flex-grow-1 col-md-4">
+                                                    <h6 class="mb-1">Run Tight Trouser</h6>
+                                                    <p class="text-muted mb-0">
+                                                      Men's Shoes <br />
+                                                      Size: M
+                                                    </p>
+                                                  </div>
+                                                  <div class="text-center col-md-5">
+                                                    <p class="mb-0">213 EGP</p>
+                                                  </div>
+                                                  <div class="col-md-1 text-end fw-bold">
+                                                    <p>1</p>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                              <hr />
+
+
+                                              <div class="col-12">
+                                                <div class="order__item d-flex align-items-center p-3">
+                                                  <div class="col-md-2">
+                                                    <img src="/assets/cards.svg" alt="Product Image" class="img-fluid" />
+                                                  </div>
+                                                  <div class="flex-grow-1 col-md-4">
+                                                    <h6 class="mb-1">Run Tight Trouser</h6>
+                                                    <p class="text-muted mb-0">
+                                                      Men's Shoes <br />
+                                                      Size: M
+                                                    </p>
+                                                  </div>
+                                                  <div class="text-center col-md-5">
+                                                    <p class="mb-0">213 EGP</p>
+                                                  </div>
+                                                  <div class="col-md-1 text-end fw-bold">
+                                                    <p>1</p>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div> -->
                         <!-- <div class="noOrders d-flex justify-content-center align-items-center flex-column">
-            <img src="/assets/No-orders.svg" alt="no orders">
-            <h5 class="noOrders__header mt-4">
-                No orders yet
-            </h5>
-            <p class="noOrders__message">
-                Start shopping now and discover your new favorite products!
-            </p>
-        </div>
-         -->
+                                            <img src="/assets/No-orders.svg" alt="no orders">
+                                            <h5 class="noOrders__header mt-4">
+                                                No orders yet
+                                            </h5>
+                                            <p class="noOrders__message">
+                                                Start shopping now and discover your new favorite products!
+                                            </p>
+                                        </div>
+                                         -->
                     </div>
                     <div id="Addresses" class="d-none">
                         <div class="addresses">
@@ -1291,203 +1273,203 @@
                         </div>
 
                         <!-- <div class="noAddresses">
-            <div class="addresses_title d-flex justify-content-between align-items-center">
-                <h3>My Addresses</h3>
-                <div>
-                    <button class="addresses__addBtn " type="button">Add Address</button>
-                    <button class="addresses__backBtn  d-none" type="button">Back</button>
-                </div>
-            </div>
+                                            <div class="addresses_title d-flex justify-content-between align-items-center">
+                                                <h3>My Addresses</h3>
+                                                <div>
+                                                    <button class="addresses__addBtn " type="button">Add Address</button>
+                                                    <button class="addresses__backBtn  d-none" type="button">Back</button>
+                                                </div>
+                                            </div>
 
-            <div class="noAddresses__content d-flex justify-content-center align-items-center flex-column">
-                <img src="/assets/No-Address.svg" alt="no addresses">
-                <h5 class="noAddresses__header mt-3">
-                    You have no address yet
-                </h5>
-                <p class="noAddresses__message">
-                    Please add an address for shipping and billing
-                </p>
-            </div>
+                                            <div class="noAddresses__content d-flex justify-content-center align-items-center flex-column">
+                                                <img src="/assets/No-Address.svg" alt="no addresses">
+                                                <h5 class="noAddresses__header mt-3">
+                                                    You have no address yet
+                                                </h5>
+                                                <p class="noAddresses__message">
+                                                    Please add an address for shipping and billing
+                                                </p>
+                                            </div>
 
-            <div class="address__addForm d-none">
-                <div class="AddADDress">
-            <h3 class="AddADDress__title mb-4">Add New Address</h3>
-            <form class="AddADDress__form">
-                <div class="mb-3 col-12">
-                    <input type="text" class="form-control" id="Address-Name" placeholder="Name">
-                </div>
-                
-                <div class="mb-3 col-12">
-                    <input type="text" class="form-control" id="Address-Address" placeholder="Address">
-                </div>
+                                            <div class="address__addForm d-none">
+                                                <div class="AddADDress">
+                                            <h3 class="AddADDress__title mb-4">Add New Address</h3>
+                                            <form class="AddADDress__form">
+                                                <div class="mb-3 col-12">
+                                                    <input type="text" class="form-control" id="Address-Name" placeholder="Name">
+                                                </div>
+                                                
+                                                <div class="mb-3 col-12">
+                                                    <input type="text" class="form-control" id="Address-Address" placeholder="Address">
+                                                </div>
 
-                <div class="mb-3 col-12">
-                    <select class="form-select" id="address-citySelect" aria-label="City Selection">
-                        <option selected>City</option>
-                        <option value="cairo">Cairo</option>
-                        <option value="alexandria">Alexandria</option>
-                        <option value="giza">Giza</option>
-                        <option value="luxor">Luxor</option>
-                        <option value="aswan">Aswan</option>
-                    </select>
-                </div>
-                
-                <div class="mb-3 col-12">
-                    <input type="text" class="form-control" id="Building-number" placeholder="Building number">
-                </div>
-                
-                <div class="row building-details">
-                    <div class="mb-3 px-2 col-6">
-                        <input type="text" class="form-control" id="Department-num" placeholder="Department num">
-                    </div>
-            
-                    <div class="mb-3 px-1 col-6">
-                        <input type="text" class="form-control" id="Floor" placeholder="Floor">
-                    </div>
-                </div>
+                                                <div class="mb-3 col-12">
+                                                    <select class="form-select" id="address-citySelect" aria-label="City Selection">
+                                                        <option selected>City</option>
+                                                        <option value="cairo">Cairo</option>
+                                                        <option value="alexandria">Alexandria</option>
+                                                        <option value="giza">Giza</option>
+                                                        <option value="luxor">Luxor</option>
+                                                        <option value="aswan">Aswan</option>
+                                                    </select>
+                                                </div>
+                                                
+                                                <div class="mb-3 col-12">
+                                                    <input type="text" class="form-control" id="Building-number" placeholder="Building number">
+                                                </div>
+                                                
+                                                <div class="row building-details">
+                                                    <div class="mb-3 px-2 col-6">
+                                                        <input type="text" class="form-control" id="Department-num" placeholder="Department num">
+                                                    </div>
+                                            
+                                                    <div class="mb-3 px-1 col-6">
+                                                        <input type="text" class="form-control" id="Floor" placeholder="Floor">
+                                                    </div>
+                                                </div>
 
-                <div class="address-types">
-                    <label for="address-type" class="address-types__title">Address Type</label>
-                    <div class="address-types__radios">
-                        <div class="radio-button-group">
-                            <input type="radio" id="home" name="address-type" value="home" class="radio-button-input" checked>
-                            <label for="home" class="radio-button">Home</label>
-                        </div>
-                        <div class="radio-button-group">
-                            <input type="radio" id="work" name="address-type" value="work" class="radio-button-input">
-                            <label for="work" class="radio-button">Work</label>
-                        </div>
-                        <div class="radio-button-group">
-                            <input type="radio" id="other" name="address-type" value="other" class="radio-button-input">
-                            <label for="other" class="radio-button">Other</label>
-                        </div>
-                    </div>
-                </div>
-                
-                
-                <div class="ms-5 col-12">
-                    <label class="custom-checkbox" for="Address-Checkbox">
-                        <input type="checkbox" name="AddressCheckbox" id="Address-Checkbox">
-                        <span class="checkmark"></span>
-                        <p>Default Shipping Address</p>
-                    </label>
-                </div>
+                                                <div class="address-types">
+                                                    <label for="address-type" class="address-types__title">Address Type</label>
+                                                    <div class="address-types__radios">
+                                                        <div class="radio-button-group">
+                                                            <input type="radio" id="home" name="address-type" value="home" class="radio-button-input" checked>
+                                                            <label for="home" class="radio-button">Home</label>
+                                                        </div>
+                                                        <div class="radio-button-group">
+                                                            <input type="radio" id="work" name="address-type" value="work" class="radio-button-input">
+                                                            <label for="work" class="radio-button">Work</label>
+                                                        </div>
+                                                        <div class="radio-button-group">
+                                                            <input type="radio" id="other" name="address-type" value="other" class="radio-button-input">
+                                                            <label for="other" class="radio-button">Other</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                                <div class="ms-5 col-12">
+                                                    <label class="custom-checkbox" for="Address-Checkbox">
+                                                        <input type="checkbox" name="AddressCheckbox" id="Address-Checkbox">
+                                                        <span class="checkmark"></span>
+                                                        <p>Default Shipping Address</p>
+                                                    </label>
+                                                </div>
 
 
-                <button type="submit" class="button__primary__medium mt-1 m-auto" id="Add-Address">Save</button>
-            </form>
-        </div>
-            </div>
-        </div>
-         -->
+                                                <button type="submit" class="button__primary__medium mt-1 m-auto" id="Add-Address">Save</button>
+                                            </form>
+                                        </div>
+                                            </div>
+                                        </div>
+                                         -->
                     </div>
                     <div id="Returns" class="d-none">
                         <!-- <div class="Returns">
-            <div class="row Returns__row">
-                <div class="col-6">
+                                            <div class="row Returns__row">
+                                                <div class="col-6">
 
-                    <div class="Returns__card mb-4">
-                        <div class="Returns__card-body d-flex gap-4">
-                            <div class="Returns__card-img">
-                                <img src="/assets/Return-img-card.svg" alt="return-img" class="img-fluid">
-                            </div>
-                            <div class="Returns__card-content d-flex flex-column justify-content-center">
-                                <h3 class="Returns__card-title">Blue Shirt Checked</h3>
-                                <p class="Returns__card-status">Status : Return Requested</p>
-                            </div>
-                            <img src="/assets/Arrow-right.svg" alt="arrow-down" class="Returns__card-arrow" data-component="no-return-details">
-                        </div>
-                    </div>
-
-
-                    <div class="Returns__card mb-4">
-                        <div class="Returns__card-body d-flex gap-4">
-                            <div class="Returns__card-img">
-                                <img src="/assets/Return-img-card.svg" alt="return-img" class="img-fluid">
-                            </div>
-                            <div class="Returns__card-content d-flex flex-column justify-content-center">
-                                <h3 class="Returns__card-title">Blue Shirt Checked</h3>
-                                <p class="Returns__card-status">Status : Return Requested</p>
-                            </div>
-                            <img src="/assets/Arrow-right.svg" alt="arrow-down" class="Returns__card-arrow" data-component="no-return-details">
-                        </div>
-                    </div>
+                                                    <div class="Returns__card mb-4">
+                                                        <div class="Returns__card-body d-flex gap-4">
+                                                            <div class="Returns__card-img">
+                                                                <img src="/assets/Return-img-card.svg" alt="return-img" class="img-fluid">
+                                                            </div>
+                                                            <div class="Returns__card-content d-flex flex-column justify-content-center">
+                                                                <h3 class="Returns__card-title">Blue Shirt Checked</h3>
+                                                                <p class="Returns__card-status">Status : Return Requested</p>
+                                                            </div>
+                                                            <img src="/assets/Arrow-right.svg" alt="arrow-down" class="Returns__card-arrow" data-component="no-return-details">
+                                                        </div>
+                                                    </div>
 
 
-                    <div class="Returns__card mb-4">
-                        <div class="Returns__card-body d-flex gap-4">
-                            <div class="Returns__card-img">
-                                <img src="/assets/Return-img-card.svg" alt="return-img" class="img-fluid">
-                            </div>
-                            <div class="Returns__card-content d-flex flex-column justify-content-center">
-                                <h3 class="Returns__card-title">Blue Shirt Checked</h3>
-                                <p class="Returns__card-status">Status : Return Requested</p>
-                            </div>
-                            <img src="/assets/Arrow-right.svg" alt="arrow-down" class="Returns__card-arrow" data-component="no-return-details">
-                        </div>
-                    </div>
-                </div>
-
-                
-                <div class="col-6">
-                    <div id="no-return-container">
-                        <div class="track-return">
-          <div class="track-return__state">
-            <div class="track-return__timeline">
+                                                    <div class="Returns__card mb-4">
+                                                        <div class="Returns__card-body d-flex gap-4">
+                                                            <div class="Returns__card-img">
+                                                                <img src="/assets/Return-img-card.svg" alt="return-img" class="img-fluid">
+                                                            </div>
+                                                            <div class="Returns__card-content d-flex flex-column justify-content-center">
+                                                                <h3 class="Returns__card-title">Blue Shirt Checked</h3>
+                                                                <p class="Returns__card-status">Status : Return Requested</p>
+                                                            </div>
+                                                            <img src="/assets/Arrow-right.svg" alt="arrow-down" class="Returns__card-arrow" data-component="no-return-details">
+                                                        </div>
+                                                    </div>
 
 
-              <div class="track-return__timeline-step active">
-                <div class="track-return__status-title">
-                  Order Placed
-                  <span>
-                    <img src="/assets/Order-Placed.svg" alt="Order Placed icon" />
-                  </span>
-                </div>
-                <div class="track-return__status-date">Fri, 23 Feb 22, 4:23 PM</div>
-              </div>
+                                                    <div class="Returns__card mb-4">
+                                                        <div class="Returns__card-body d-flex gap-4">
+                                                            <div class="Returns__card-img">
+                                                                <img src="/assets/Return-img-card.svg" alt="return-img" class="img-fluid">
+                                                            </div>
+                                                            <div class="Returns__card-content d-flex flex-column justify-content-center">
+                                                                <h3 class="Returns__card-title">Blue Shirt Checked</h3>
+                                                                <p class="Returns__card-status">Status : Return Requested</p>
+                                                            </div>
+                                                            <img src="/assets/Arrow-right.svg" alt="arrow-down" class="Returns__card-arrow" data-component="no-return-details">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                
+                                                <div class="col-6">
+                                                    <div id="no-return-container">
+                                                        <div class="track-return">
+                                          <div class="track-return__state">
+                                            <div class="track-return__timeline">
 
 
-              <div class="track-return__timeline-step active">
-                <div class="track-return__status-title">
-                  In Progress
-                  <span>
-                    <img src="/assets/routing.svg" alt="In progress icon" />
-                  </span>
-                </div>
-                <div class="track-return__status-date">Sat, 24 Feb 22, 8:23 PM</div>
-              </div>
+                                              <div class="track-return__timeline-step active">
+                                                <div class="track-return__status-title">
+                                                  Order Placed
+                                                  <span>
+                                                    <img src="/assets/Order-Placed.svg" alt="Order Placed icon" />
+                                                  </span>
+                                                </div>
+                                                <div class="track-return__status-date">Fri, 23 Feb 22, 4:23 PM</div>
+                                              </div>
 
 
-              <div class="track-return__timeline-step active">
-                <div class="track-return__status-title">
-                  Shipped
-                  <span>
-                    <img src="/assets/Delivered-car.svg" alt="Shipped icon" />
-                  </span>
-                </div>
-                <div class="track-return__status-date">Expected 25 Feb</div>
-              </div>
+                                              <div class="track-return__timeline-step active">
+                                                <div class="track-return__status-title">
+                                                  In Progress
+                                                  <span>
+                                                    <img src="/assets/routing.svg" alt="In progress icon" />
+                                                  </span>
+                                                </div>
+                                                <div class="track-return__status-date">Sat, 24 Feb 22, 8:23 PM</div>
+                                              </div>
 
 
-              <div class="track-return__timeline-step active mb-0">
-                <div class="track-return__status-title">
-                  Delivered
-                  <span>
-                    <img src="/assets/Delivered.svg" alt="Delivered icon" />
-                  </span>
-                </div>
-                <div class="track-return__status-date">Expected 26-28 Feb</div>
-              </div>
-            </div>
-          </div>
-        </div>
+                                              <div class="track-return__timeline-step active">
+                                                <div class="track-return__status-title">
+                                                  Shipped
+                                                  <span>
+                                                    <img src="/assets/Delivered-car.svg" alt="Shipped icon" />
+                                                  </span>
+                                                </div>
+                                                <div class="track-return__status-date">Expected 25 Feb</div>
+                                              </div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
 
-         -->
+                                              <div class="track-return__timeline-step active mb-0">
+                                                <div class="track-return__status-title">
+                                                  Delivered
+                                                  <span>
+                                                    <img src="/assets/Delivered.svg" alt="Delivered icon" />
+                                                  </span>
+                                                </div>
+                                                <div class="track-return__status-date">Expected 26-28 Feb</div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                         -->
                         <div class="NoReturnDetails d-flex flex-column align-items-center justify-content-center ms-3">
                             <div class="NoReturnDetails__img">
                                 <img src="/assets/no-returns.svg" alt="no return details">
@@ -1497,12 +1479,12 @@
                             </p>
                         </div>
                         <!-- <div class="NoReturns d-flex flex-column justify-content-center align-items-center ">
-            <div class="NoReturns__img">
-                <img src="/assets/no-return-request.svg" alt="no return details">
-            </div>
-            <p class="NoReturns__header mb-1">There are no return requests yet</p>
-            <p class="NoReturns__message">Please submit a return request first, then you can track its status here.</p>
-        </div> -->
+                                            <div class="NoReturns__img">
+                                                <img src="/assets/no-return-request.svg" alt="no return details">
+                                            </div>
+                                            <p class="NoReturns__header mb-1">There are no return requests yet</p>
+                                            <p class="NoReturns__message">Please submit a return request first, then you can track its status here.</p>
+                                        </div> -->
                     </div>
                     <div id="ChangePassword" class="d-none">
                         <div class="ChangePassword">
@@ -1548,100 +1530,10 @@
                 </div>
             </div>
         </div>
-        <footer class="footer">
-            <div class="container">
-                <div class="row mb-2">
-                    <div class="footer__logo d-flex col-12 mb-4 justify-content-md-start justify-content-center col-md-7">
-                        <img src="/assets/Mo'men Logo.svg" alt="logo" />
-                    </div>
-                    <div
-                        class="footer__icon d-flex justify-content-md-end justify-content-center  align-items-center m-md-0 col-12 col-md-5">
-                        <div class="footer__icon__img">
-                            <a href="" class="m-2">
-                                <img src="./assets/facebook-02.svg" alt="" />
-                            </a>
-                        </div>
-                        <div class="footer__icon__img">
-                            <a href="" class="m-2">
-                                <img src="./assets/instagram.svg" alt="" />
-                            </a>
-                        </div>
-                        <div class="footer__icon__img">
-                            <a href="" class="m-2">
-                                <img src="./assets/new-twitter.svg" alt="" />
-                            </a>
-                        </div>
-                        <div class="footer__icon__img">
-                            <a href="" class="m-2">
-                                <img src="./assets/snapchat.svg" alt="" />
-                            </a>
-                        </div>
-                        <div class="footer__icon__img">
-                            <a href="" class="m-2">
-                                <img src="./assets/tiktok.svg" alt="" />
-                            </a>
-                        </div>
-                        <div class="footer__icon__img">
-                            <a href="" class="m-2">
-                                <img src="./assets/whatsapp.svg" alt="" />
-                            </a>
-                        </div>
-                        <div class="footer__icon__img">
-                            <a href="" class="m-2">
-                                <img src="./assets/youtube.svg" alt="" />
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <hr />
-                <div class="container">
-                    <div class="row">
-                        <!-- Quick Links Column -->
-                        <div class="col-6 col-md-3 mb-4">
-                            <h5>Quick Link</h5>
-                            <ul class="footer__list">
-                                <li><a href="#">Home</a></li>
-                                <li><a href="#">Orders</a></li>
-                                <li><a href="#">Returns</a></li>
-                                <li><a href="#">Privacy Policy</a></li>
-                                <li><a href="#">About Mo’men</a></li>
-                            </ul>
-                        </div>
 
-                        <!-- Info Column -->
-                        <div class="col-6 col-md-3 mb-4">
-                            <h5>Info</h5>
-                            <ul class="footer__list">
-                                <li><a href="#">Privacy Policy</a></li>
-                                <li><a href="#">Contact Us</a></li>
-                                <li><a href="#">Terms & Conditions</a></li>
-                            </ul>
-                        </div>
-
-                        <!-- Address Column -->
-                        <div class="col-6 col-md-3">
-                            <div class="footer__list">
-                                <h5>Address</h5>
-                                <p class="mb-5">
-                                    <a href="https://maps.app.goo.gl/VqKj5dgx71an3dN87">Elhelaly street , Faraskûr,
-                                        Egypt</a>
-                                </p>
-                                <h5>Phone Number</h5>
-                                <a href="tel:+201221291710">+20 122 129 1710</a>
-                            </div>
-                        </div>
-                        <div
-                            class="col-6 col-md-3 align-items-center justify-content-center justify-content-md-end d-flex">
-                            <img src="assets/QR.svg" alt="">
-                            <br>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
     </div>
 @endsection
 @section('mainFiles')
-    <script src="{{asset("website/scripts/MyAccount.js")}}"></script>
-    <script src="{{asset("website/scripts/DropImg.js")}}"></script>
+    <script src="{{ asset('website/scripts/MyAccount.js') }}"></script>
+    <script src="{{ asset('website/scripts/DropImg.js') }}"></script>
 @endsection
