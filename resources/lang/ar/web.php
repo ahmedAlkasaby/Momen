@@ -19,4 +19,16 @@ return [
         'upto_20%_save'            => 'وفر ما يصل إلى 20%',
         'buy_now'                  => 'اشترِ الآن',
     ],
+    'whislist'=>'قائمة الرغبات',
+    'category'=>'القسم',
+    'new_products'=>'المنتجات الجديدة',
+    'special_products'=>'المنتجات المميزة',
+    'offer_products'=>'منتجات العروض',
+    'filter_products'=>'منتجات الفلتر',
+    'see_all'=>'مشاهدة الكل',
+    'choose_wear_title' => 'اختر أفضل ملابس للاستخدام اليومي',
+    'everyday_wear' => 'ملابس الاستخدام اليومي',
+    'see_all_categories' => 'عرض جميع الفئات',
+
+
 ];  

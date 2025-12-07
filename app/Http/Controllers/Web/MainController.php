@@ -17,6 +17,7 @@ class MainController extends Controller
     public function __construct()
     {
         $this->setSettingsInView();
+        $this->setUserLang();
         $this->perPage = 10;
     }
 
@@ -25,6 +26,13 @@ class MainController extends Controller
     {
         $this->class = $class;
         View::share('class', $class); 
+    }
+    protected function setUserLang()
+    {
+        $user_language = app()->getLocale();
+        $user_dir = $user_language == 'ar' ? 'rtl' : 'ltr';
+        View::share('user_language', $user_language); 
+        View::share('user_dir', $user_dir);
     }
 
     protected function setSettingsInView()

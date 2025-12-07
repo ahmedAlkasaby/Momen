@@ -18,4 +18,16 @@ return [
         'upto_20%_save'            => 'Up to 20% Save',
         'buy_now'                  => 'Buy Now',
     ],
+    'whislist'=>'Wishlist',
+    'category'=>'Category',
+    'new_products'=>'New Products',
+    'special_products'=>'Special Products',
+    'offer_products'=>'Offer Products',
+    'filter_products'=>'Filter Products',
+    'see_all'=>'See All',
+    'choose_wear_title' => 'Choose the best everyday wear',
+    'everyday_wear' => 'everyday wear',
+    'see_all_categories' => 'See All Categories',
+    'category' => 'Category',
 ];
+

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang={{$user_language}}  dir="{{ $user_dir  }}">
 
 @include('web.layouts.main.head')
 

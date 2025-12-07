@@ -18,7 +18,7 @@ class SettingSeeder extends Seeder
         $generalSettingsData = [
             // الهوية والاتصال
             'site_title'                  => ['Alkasaby',             'text',     'required|string|max:255', 1],
-            'logo'                        => ['website/assets/Momen Logo.svg',    'file',     'nullable|image|mimes:jpeg,png,jpg,svg|max:2048', 2],
+            'logo'                        => ['website/assets/defoultLogo.svg',    'file',     'nullable|image|mimes:jpeg,png,jpg,svg|max:2048', 2],
             'site_email'                  => ['support@myshop.com',   'email',    'required|email|max:255', 3],
             'site_phone'                  => ['01016192604',          'text',     'nullable|string|max:15', 4],
             'site_open'                   => ['yes',                  'boolean',  'required|in:yes,no', 5],

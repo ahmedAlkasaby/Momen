@@ -74,7 +74,7 @@ class ProductSeeder extends Seeder
                 'ar' => fake()->text(),
             ],
             'code' => fake()->unique()->bothify('PROD-####'),
-            'image' => 'products\productDefoult.png',
+            'image' => 'storage/products/productDefoult.png',
             'price' => rand(100, 1000),
 
             'order_limit' => rand(1, 2),

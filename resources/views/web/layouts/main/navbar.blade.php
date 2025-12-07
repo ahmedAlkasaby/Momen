@@ -7,15 +7,15 @@
               </button>
 
               <div class="nav__logo">
-                  <a href="home.html"><img src="{{ asset("website/assets/Mo'men Logo.svg") }}" alt="Logo"
+                  <a href="home.html"><img src="{{ asset($settings['logo']) }}" alt="Logo"
                           height="70" /></a>
               </div>
 
 
 
               <ul class="nav__menu d-flex align-items-center gap-4">
-                  <li class="nav__item"><a href="/home.html"
-                          class="nav__link nav__link--active">{{ __('web.home') }}</a></li>
+                  <li class="nav__item"><a href="{{ route('home') }}"
+                          class="nav__link nav__link--{{ $class == 'home' ? 'active': '' }}">{{ __('web.home') }}</a></li>
                   <li class="nav__item"><a href="/wishlist.html" class="nav__link">{{ __('web.whislist') }}</a></li>
                   <li class="nav__item category-dropdown">
                       <a class="nav__link">{{ __('web.category') }}</a>
