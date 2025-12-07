@@ -17,19 +17,22 @@ class SettingSeeder extends Seeder
         // [ القيمة الافتراضية, نوع الحقل (type), قواعد التحقق (validation_rules), order_id ]
         $generalSettingsData = [
             // الهوية والاتصال
-            'site_title'                  => ['Alkasaby',             'text',     'required|string|max:255', 10],
-            'logo'                        => ['Settings/logo.png',    'file',     'nullable|image|mimes:jpeg,png,jpg,svg|max:2048', 20],
-            'site_email'                  => ['support@myshop.com',   'email',    'required|email|max:255', 30],
-            'site_phone'                  => ['01016192604',          'text',     'nullable|string|max:15', 40],
-            'site_open'                   => ['yes',                  'boolean',  'required|in:yes,no', 50],
+            'site_title'                  => ['Alkasaby',             'text',     'required|string|max:255', 1],
+            'logo'                        => ['website/assets/defoultLogo.svg',    'file',     'nullable|image|mimes:jpeg,png,jpg,svg|max:2048', 2],
+            'site_email'                  => ['support@myshop.com',   'email',    'required|email|max:255', 3],
+            'site_phone'                  => ['01016192604',          'text',     'nullable|string|max:15', 4],
+            'site_open'                   => ['yes',                  'boolean',  'required|in:yes,no', 5],
             
             // إعدادات الأرقام والعمليات
-            'delivery_cost'               => [20,                     'number',   'required|integer|min:0', 60],
-            'min_order_for_shipping_free' => [300,                    'number',   'required|integer|min:0', 70],
-            'min_order'                   => [50,                     'number',   'required|integer|min:0', 80],
-            'max_order'                   => [2000,                   'number',   'required|integer|min:50', 90],
-            'return_period_days'          => [14,                     'number',   'required|integer|min:1', 100],
-            'result'                      => [100,                    'select',   'required|integer|min:0|max:250', 110], // ترك 'result' للأمان
+            'delivery_cost'               => [20,                     'number',   'required|integer|min:0', 6],
+            'min_order_for_shipping_free' => [300,                    'number',   'required|integer|min:0', 7],
+            'min_order'                   => [50,                     'number',   'required|integer|min:0', 8],
+            'max_order'                   => [2000,                   'number',   'required|integer|min:50', 9],
+            'return_period_days'          => [14,                     'number',   'required|integer|min:1', 10],
+            'result'                      => [100,                    'select',   'required|integer|min:0|max:250', 11], 
+            'address'                     => ['123 Main St, City, Country', 'text', 'nullable|string|max:255', 12],
+            'latitude'                    => ['30.0444',              'text',     'nullable|string|max:50', 13],
+            'longitude'                   => ['31.2357',              'text',     'nullable|string|max:50', 14],
         ];
 
         foreach ($generalSettingsData as $key => $data) {

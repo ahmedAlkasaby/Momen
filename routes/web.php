@@ -1,14 +1,20 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\ProductController;
+use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\Auth\AuthController;
 use App\Http\Controllers\Web\Auth\PasswordController;
-use App\Http\Controllers\Web\ProfileController;
-use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('web.layouts.main.main');
-    // auth()->logout();
+
+
+Route::group(['middleware' => ['setUserLang']], function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::resource('products', ProductController::class)->only(['index', 'show']);
+    Route::get('/profile', [ProfileController::class, 'personalInfo'])->name('profile.index');
 });
+
 //auth
 Route::post('/login', 'App\Http\Controllers\Web\Auth\AuthController@login')->name('web.auth.login');
 Route::post('/register', [AuthController::class, 'check_register']);
@@ -19,4 +25,3 @@ Route::post('/forget-password', [PasswordController::class, 'ForgetPassword']);
 Route::post('/confirm-otp', [PasswordController::class, 'confirmOtp']);
 Route::post('/reset-password', [PasswordController::class, 'ResetPassword']);
 //end auth
-Route::get('/profile', [ProfileController::class, 'personalInfo'])->name('profile.index');

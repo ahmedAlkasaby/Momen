@@ -85,7 +85,7 @@ class StoreSeeder extends Seeder
                     'en' => 'Content for Category ' . $i,
                     'ar' => 'وصف للفئة ' . $i,
                 ],
-                'image' => 'categories/categoryDefoult.png',
+                'image' => 'storage/categories/categoryDefoult.png',
                 'active' => true,
                 'order_id' => $i,
                 'parent_id' => null,

@@ -2,42 +2,43 @@
         <div class="container">
             <div class="row mb-2">
                 <div class="footer__logo d-flex col-12 mb-4 justify-content-md-start justify-content-center col-md-7">
-                    <img src="{{ asset("website/assets/Mo'men Logo.svg") }}" alt="logo" />
+                    <img src="{{ asset($settings['logo']) }}" alt="logo" class="my-logo" />
+
                 </div>
                 <div
                     class="footer__icon d-flex justify-content-md-end justify-content-center  align-items-center m-md-0 col-12 col-md-5">
                     <div class="footer__icon__img">
-                        <a href="" class="m-2">
+                        <a href="{{ $settings['facebook'] }}" class="m-2">
                             <img src="{{ asset('website/assets/facebook-02.svg') }}" alt="" />
                         </a>
                     </div>
                     <div class="footer__icon__img">
-                        <a href="" class="m-2">
+                        <a href="{{ $settings['instagram'] }}" class="m-2">
                             <img src="{{ asset('website/assets/instagram.svg') }}" alt="" />
                         </a>
                     </div>
                     <div class="footer__icon__img">
-                        <a href="" class="m-2">
+                        <a href="{{ $settings['twitter'] }}" class="m-2">
                             <img src="{{ asset('website/assets/new-twitter.svg') }}" alt="" />
                         </a>
                     </div>
                     <div class="footer__icon__img">
-                        <a href="" class="m-2">
+                        <a href="{{ $settings['snapchat'] }}" class="m-2">
                             <img src="{{ asset('website/assets/snapchat.svg') }}" alt="" />
                         </a>
                     </div>
                     <div class="footer__icon__img">
-                        <a href="" class="m-2">
+                        <a href="{{ $settings['tiktok'] }}" class="m-2">
                             <img src="{{ asset('website/assets/tiktok.svg') }}" alt="" />
                         </a>
                     </div>
                     <div class="footer__icon__img">
-                        <a href="" class="m-2">
+                        <a href="{{ $settings['whatsapp'] }}" class="m-2">
                             <img src="{{ asset('website/assets/whatsapp.svg') }}" alt="" />
                         </a>
                     </div>
                     <div class="footer__icon__img">
-                        <a href="" class="m-2">
+                        <a href="{{ $settings['youtube'] }}" class="m-2">
                             <img src="{{ asset('website/assets/youtube.svg') }}" alt="" />
                         </a>
                     </div>
@@ -71,13 +72,12 @@
                     <!-- Address Column -->
                     <div class="col-6 col-md-3">
                         <div class="footer__list">
-                            <h5>Address</h5>
+                            <h5>{{ __('web.address') }}</h5>
                             <p class="mb-5">
-                                <a href="https://maps.app.goo.gl/VqKj5dgx71an3dN87">Elhelaly street , Faraskûr,
-                                    Egypt</a>
+                                <a href="https://maps.app.goo.gl/VqKj5dgx71an3dN87">{{ $settings['address'] }}</a>
                             </p>
-                            <h5>Phone Number</h5>
-                            <a href="tel:+201221291710">+20 122 129 1710</a>
+                            <h5>{{ __('web.phone') }}</h5>
+                            <a href="tel:+{{ $settings['site_phone'] }}">{{ $settings['site_phone'] }}</a>
                         </div>
                     </div>
                     <div
