@@ -54,10 +54,13 @@
     </div> --}}
     @include('web.home.includes.landing')
 
-    @include('web.home.includes.categories')
+    {{-- @include('web.home.includes.categories') --}}
     @foreach ($sections as $section)
     @include('web.home.includes.section')
         
     @endforeach
     
+@endsection
+@section('scripts')
+    @include('web.home.includes.product_sizes_colors_script')
 @endsection

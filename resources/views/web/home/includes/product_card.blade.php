@@ -2,14 +2,14 @@
     <div class="product">
         <div class="card product-card">
             <div class="product-card__image m-auto mt-3">
-                <img src="{{ asset($product['image']) }}" alt="Run Tight Trouser" class="product-card__img" />
+                <img src="{{ asset($product->image) }}" alt="Run Tight Trouser" class="product-card__img" />
 
                 <img src={{ asset('website/assets/heart.svg') }} alt="Heart" class="product-card__addToFavIcon"
                     onclick="toggleFav(this)" />
                 <img src={{ asset('website/assets/red-heart.svg') }} alt="Heart"
                     class="product-card__addToFavIconDone" onclick="toggleFav(this)" />
 
-                <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="assets/add.svg" alt="Add to Cart"
+                {{-- <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="assets/add.svg" alt="Add to Cart"
                     class="product-card__addToCartIcon" />
 
                 <div class="product-card__counter">
@@ -18,7 +18,10 @@
                     <span>1</span>
                     <button onclick="updateCount(this, -1)"><img src={{ asset('website/assets/negative.svg') }}
                             alt="Minus"></button>
-                </div>
+                </div> --}}
+                <button class="open-modal-btn" data-product='@json($product->getWebModalData())'>
+                    Select Size & Color
+                </button>
             </div>
 
             <div class="card-body product-card__body">

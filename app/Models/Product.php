@@ -225,9 +225,45 @@ class Product extends MainModel
     }
 
     public static function getProductOfFlags($flag,$perPage=10){
-        return Product::with(['unit','brand'])
+        return Product::with(['unit','brand','children.color','children.size','children.images'])
             ->where($flag, 1)
             ->filter()
             ->paginate($perPage);
     }
+
+public function getWebModalData()
+{
+    return [
+        'id' => $this->id,
+        'name' => $this->nameLang(),
+        'image' => $this->children->first()->images->first()->image ?? asset('placeholder.png'),
+        'price' => $this->children->first()->price,
+        'offer_price' => $this->children->first()->offer_price,
+        'child_id' => $this->children->first()->id,
+
+        'colors' => $this->children
+        ->map(fn($child) => $child->color)
+        ->filter() 
+        ->unique('id') 
+        ->map(fn($c) => [
+            'id' => $c->id,
+            'name' => $c->nameLang(),
+            'code' => $c->code,
+        ])
+        ->values(),
+
+        // Sizes
+        'sizes' => $this->children
+            ->map(fn($child) => $child->size)
+            ->filter()
+            ->unique('id')
+            ->map(fn($s) => [
+                'id' => $s->id,
+                'name' => $s->nameLang(),
+            ])
+            ->values(),
+    ];
+}
+
+
 }

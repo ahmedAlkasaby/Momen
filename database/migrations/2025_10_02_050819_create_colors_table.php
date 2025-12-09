@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('colors', function (Blueprint $table) {
             $table->id();
             $table->text('name');
+            $table->string('code')->nullable();
             $table->integer('order_id')->nullable();
             $table->tinyInteger('active')->default(1);
             $table->softDeletes();
