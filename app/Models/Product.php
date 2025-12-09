@@ -224,46 +224,57 @@ class Product extends MainModel
         }
     }
 
-    public static function getProductOfFlags($flag,$perPage=10){
-        return Product::with(['unit','brand','children.color','children.size','children.images'])
+    public static function getProductOfFlags($flag, $perPage = 10)
+    {
+        return Product::with(['unit', 'brand', 'children.color', 'children.size', 'children.images'])
             ->where($flag, 1)
             ->filter()
             ->paginate($perPage);
     }
 
-public function getWebModalData()
-{
-    return [
-        'id' => $this->id,
-        'name' => $this->nameLang(),
-        'image' => $this->children->first()->images->first()->image ?? asset('placeholder.png'),
-        'price' => $this->children->first()->price,
-        'offer_price' => $this->children->first()->offer_price,
-        'child_id' => $this->children->first()->id,
-
-        'colors' => $this->children
-        ->map(fn($child) => $child->color)
-        ->filter() 
-        ->unique('id') 
-        ->map(fn($c) => [
-            'id' => $c->id,
-            'name' => $c->nameLang(),
-            'code' => $c->code,
-        ])
-        ->values(),
-
-        // Sizes
-        'sizes' => $this->children
-            ->map(fn($child) => $child->size)
-            ->filter()
-            ->unique('id')
-            ->map(fn($s) => [
-                'id' => $s->id,
-                'name' => $s->nameLang(),
+    public function getWebModalData()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->nameLang(),
+            'image' => $this->children->first()->images->first()->image ?? asset('placeholder.png'),
+            'price' => $this->children->first()->price,
+            'offer_price' => $this->children->first()->offer_price,
+            'children' => $this->children->map(fn($child) => [
+                'id' => $child->id,
+                'name' => $child->nameLang(),
+                'price' => $child->price,
+                'offer_price' => $child->offer_price,
+                'color_id' => $child->color_id,
+                'size_id' => $child->size_id,
+                'order_limit' => $child->order_limit,
+                'max_order' => $child->max_order,
+                'is_offer' => $child->is_offer,
+                'images' => $child->images->map(fn($img) => asset($img->image)),
             ])
-            ->values(),
-    ];
-}
+                ->values(),
 
+            'colors' => $this->children
+                ->map(fn($child) => $child->color)
+                ->filter()
+                ->unique('id')
+                ->map(fn($c) => [
+                    'id' => $c->id,
+                    'name' => $c->nameLang(),
+                    'code' => $c->code,
+                ])
+                ->values(),
 
+            // Sizes
+            'sizes' => $this->children
+                ->map(fn($child) => $child->size)
+                ->filter()
+                ->unique('id')
+                ->map(fn($s) => [
+                    'id' => $s->id,
+                    'name' => $s->nameLang(),
+                ])
+                ->values(),
+        ];
+    }
 }

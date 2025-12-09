@@ -1,6 +1,6 @@
 @extends('web.layouts.app')
 @section('title')
-    Home
+    {{__('web.home')}}
 @endsection
 
 @section('content')
@@ -54,7 +54,7 @@
     </div> --}}
     @include('web.home.includes.landing')
 
-    {{-- @include('web.home.includes.categories') --}}
+    @include('web.home.includes.categories')
     @foreach ($sections as $section)
     @include('web.home.includes.section')
         
