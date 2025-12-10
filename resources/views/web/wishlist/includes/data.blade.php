@@ -1,6 +1,7 @@
 <tr>
     <td class="text-center">
-        <img src="assets/Cards.svg" alt="card" class="img-fluid img__box" style="max-width: 80px;">
+        <img src="{{ asset($favorite->product->image) }}" alt="card" class="img-fluid img__box"
+            style="max-width: 80px;">
     </td>
 
     <td>
