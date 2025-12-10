@@ -3,13 +3,15 @@
 
 @include('web.layouts.main.head')
 
-<body>
+<body style="min-height:100vh; display:flex; flex-direction:column;">
+
     @include('web.layouts.main.navbar')
 
-    @yield('content')
+    <main style="flex:1;">
+        @yield('content')
+    </main>
 
     @include('web.layouts.main.footer')
-
 
     @include('web.layouts.main.scripts')
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web\Auth;
 
+use mail;
 use App\Models\User;
 use Ichtrojan\Otp\Otp;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Web\LoginRequest;
 use App\Http\Requests\Web\SignupRequest;
+use App\Notifications\SendOtpMail;
 use Illuminate\Support\Facades\Validator;
 use App\Notifications\SendOtpNotification;
 use Illuminate\Support\Facades\Notification;
@@ -30,7 +32,7 @@ class AuthController extends Controller
             ]
         ]);
         Notification::route('mail', $request->email)
-            ->notify((new SendOtpNotification($otp->token))->delay(now()->addMinutes(1)));
+            ->notify((new SendOtpMail($otp->token))->delay(now()->addMinutes(1)));
 
         return response()->json([
             'status' => 200,
@@ -109,7 +111,7 @@ class AuthController extends Controller
 
         $otp = (new Otp())->generate($data['email'], 'numeric', 4, 10);
         Notification::route('mail', $data['email'])
-            ->notify((new SendOtpNotification($otp->token))->delay(now()->addMinutes(1)));
+            ->notify((new SendOtpMail($otp->token))->delay(now()->addMinutes(1)));
 
         return response()->json(['status' => 200, 'message' => 'OTP resent successfully']);
     }

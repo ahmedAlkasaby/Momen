@@ -16,4 +16,5 @@
     <script src="{{ asset('website/scripts/login.js') }}"></script>
     <script src="{{ asset('website/scripts/forget-password.js') }}"></script>
 @endif
+<script src="{{ asset('website/scripts/toggle-wishlist.js') }}"></script>
 @yield('mainFiles')

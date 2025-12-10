@@ -10,7 +10,7 @@
                                 <!-- #card -->
                                 <div class="col-12 row">
                                     <div class="col-md-4 col-12">
-                                        <img src="assets/modal_img.svg" alt="Run Tight Trouser"
+                                        <img src="{{asset("website/assets/modal_img.svg")}}" alt="Run Tight Trouser"
                                             class="product-card__img ">
                                     </div>
                                     <div class="col-md-8 col-12">

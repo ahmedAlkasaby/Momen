@@ -6,13 +6,14 @@ use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\ProfileController;
 use App\Http\Controllers\Web\Auth\AuthController;
 use App\Http\Controllers\Web\Auth\PasswordController;
-
-
+use App\Http\Controllers\Web\WishListController;
 
 Route::group(['middleware' => ['setUserLang']], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::resource('products', ProductController::class)->only(['index', 'show']);
     Route::get('/profile', [ProfileController::class, 'personalInfo'])->name('profile.index');
+    Route::get('favorites', [WishListController::class,'index'])->name('wishlist.index');
+    Route::post('favorites',[WishListController::class,'toggle'])->name('wishlist.toggle');
 });
 
 //auth

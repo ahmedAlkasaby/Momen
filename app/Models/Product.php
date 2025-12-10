@@ -214,6 +214,16 @@ class Product extends MainModel
         return 0;
     }
 
+    public function isFav()
+    {
+        $userId = Auth::id();
+        if (!$userId) return false;
+
+        $fav = $this->favorites()->where('user_id', $userId)->first();
+
+        return $fav && $fav->favorite === 'yes';
+    }
+
 
 
     public function deleteChildrenOldWhenNotSendInUpdate()
@@ -224,8 +234,9 @@ class Product extends MainModel
         }
     }
 
-    public static function getProductOfFlags($flag,$perPage=10){
-        return Product::with(['unit','brand'])
+    public static function getProductOfFlags($flag, $perPage = 10)
+    {
+        return Product::with(['unit', 'brand'])
             ->where($flag, 1)
             ->filter()
             ->paginate($perPage);
