@@ -1,6 +1,6 @@
 @extends('web.layouts.app')
 @section('title')
-    Home
+    {{__('web.home')}}
 @endsection
 
 @section('content')
@@ -60,4 +60,7 @@
         
     @endforeach
     
+@endsection
+@section('scripts')
+    @include('web.home.includes.product_sizes_colors_script')
 @endsection

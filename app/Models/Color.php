@@ -7,6 +7,7 @@ class Color extends MainModel
 {
     protected $fillable = [
         'name',
+        'code',
         'active',
         'order_id'
     ];
