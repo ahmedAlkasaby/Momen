@@ -2,16 +2,19 @@
     <div class="product">
         <div class="card product-card">
             <div class="product-card__image m-auto mt-3">
-                <img src="{{ asset($product->image) }}" alt="Run Tight Trouser" class="product-card__img" />
+                <img src="{{ asset($product['image']) }}" alt="Run Tight Trouser" class="product-card__img" />
+                <img src="{{ $product->isFav() ? asset('website/assets/red-heart.svg') : asset('website/assets/heart.svg') }}"
+                    class="product-card__addToFavIcon" data-id="{{ $product->id }}"
+                    data-url="{{ route('wishlist.toggle') }}" data-heart="{{ asset('website/assets/heart.svg') }}"
+                    data-red-heart="{{ asset('website/assets/red-heart.svg') }}" />
 
-                <img src={{ asset('website/assets/heart.svg') }} alt="Heart" class="product-card__addToFavIcon"
-                    onclick="toggleFav(this)" />
-                <img src={{ asset('website/assets/red-heart.svg') }} alt="Heart"
-                    class="product-card__addToFavIconDone" onclick="toggleFav(this)" />
 
-                {{-- <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="assets/add.svg" alt="Add to Cart"
+
+                <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="assets/add.svg" alt="Add to Cart"
                     class="product-card__addToCartIcon" />
 
+                <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="{{ asset('website/assets/add.svg') }}"
+                    alt="Add to Cart" class="product-card__addToCartIcon" />
                 <div class="product-card__counter">
                     <button onclick="updateCount(this, 1)"><img src={{ asset('website/assets/add-count.svg') }}
                             alt="Add"></button>

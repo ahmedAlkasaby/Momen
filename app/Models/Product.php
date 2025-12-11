@@ -214,6 +214,16 @@ class Product extends MainModel
         return 0;
     }
 
+    public function isFav()
+    {
+        $userId = Auth::id();
+        if (!$userId) return false;
+
+        $fav = $this->favorites()->where('user_id', $userId)->first();
+
+        return $fav && $fav->favorite === 'yes';
+    }
+
 
 
     public function deleteChildrenOldWhenNotSendInUpdate()

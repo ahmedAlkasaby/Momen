@@ -16,7 +16,7 @@
               <ul class="nav__menu d-flex align-items-center gap-4">
                   <li class="nav__item"><a href="{{ route('home') }}"
                           class="nav__link nav__link--{{ $class == 'home' ? 'active': '' }}">{{ __('web.home') }}</a></li>
-                  <li class="nav__item"><a href="/wishlist.html" class="nav__link">{{ __('web.whislist') }}</a></li>
+                  <li class="nav__item"><a href="{{ route('wishlist.index') }}" class="nav__link">{{ __('web.whislist') }}</a></li>
                   <li class="nav__item category-dropdown">
                       <a class="nav__link">{{ __('web.category') }}</a>
                       <img src="{{ asset('website/assets/category-arrow.svg') }}" class="category-arrow ms-2">
