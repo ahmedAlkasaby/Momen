@@ -6,34 +6,39 @@ use mail;
 use App\Models\User;
 use Ichtrojan\Otp\Otp;
 use Illuminate\Http\Request;
+use App\Enums\TypeUserCodeEnum;
+use App\Services\UserCodeService;
+use App\Notifications\SendOtpMail;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\Web\LoginRequest;
 use App\Http\Requests\Web\SignupRequest;
-use App\Notifications\SendOtpMail;
 use Illuminate\Support\Facades\Validator;
 use App\Notifications\SendOtpNotification;
 use Illuminate\Support\Facades\Notification;
 
 class AuthController extends Controller
 {
+    private $userCodeService;
+    public function __construct(UserCodeService $userCodeService)
+    {
+        $this->userCodeService = $userCodeService;
+    }
     public function check_register(SignupRequest $request)
     {
-        $otp = (new Otp())->generate($request->email, 'numeric', 4, 10);
-        Log::info('OTP:', ['otp' => $otp, 'email' => $request->email]);
+        $otp = $this->userCodeService->generate($request->email, TypeUserCodeEnum::VerfiyEmail, 4, 10);
+        Notification::route('mail', $request->email)
+            ->notify((new SendOtpMail($otp))->delay(now()->addMinutes(1)));
         session([
             'signup_data' => [
                 'name_first' => $request->name_first,
                 'name_last' => $request->name_last,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'password' => Hash::make($request->password),
+                'password' => $request->password,
             ]
         ]);
-        Notification::route('mail', $request->email)
-            ->notify((new SendOtpMail($otp->token))->delay(now()->addMinutes(1)));
-
         return response()->json([
             'status' => 200,
             'message' => 'OTP sent successfully'
@@ -52,6 +57,7 @@ class AuthController extends Controller
                 'status' => 400
             ], 400);
         }
+
         $data = session('signup_data');
         if (!$data) {
             return response()->json([
@@ -59,8 +65,9 @@ class AuthController extends Controller
                 'status' => 400
             ], 400);
         }
-        $email = session('signup_data')['email'];
-        $otp = (new Otp())->validate($email, $request->code);
+
+        $email = $data['email'];
+        $otp = $this->userCodeService->validate($email, $request->code);
         Log::info('OTP:', [$otp->message]);
 
         if (!$otp->status) {
@@ -69,22 +76,24 @@ class AuthController extends Controller
                 'status' => 400
             ], 400);
         }
-        $data['email_verified_at'] = now();
+
         $user = User::create($data);
+
         auth()->login($user);
-        Log::info('OTP Email:', [$email]);
-        Log::info('OTP Code:', [$request->code]);
         session()->forget('signup_data');
+
         return response()->json([
             'status' => 200,
             'message' => 'User registered successfully',
             'redirect_url' => url('/')
         ]);
     }
+
     public function login(LoginRequest $request)
     {
         $user = User::where('email', $request->email)->first();
-
+        Log::info('User:', [$user]);
+        Log::info('password:', [$request->password]);
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'error' => __('auth.invalid_credentials'),
@@ -118,6 +127,6 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
-        return redirect()->route('web.home.index');
+        return redirect()->route('home');
     }
 }

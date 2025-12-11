@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 
 class RestPasswordController extends MainController
 {
+    protected $userCodeService;
     public function __construct(UserCodeService $userCodeService)
     {
         $this->userCodeService = $userCodeService;

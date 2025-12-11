@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ForgetPasswordController extends MainController
 {
+    protected $userCodeService;
     public function __construct(UserCodeService $userCodeService)
     {
         $this->userCodeService = $userCodeService;

@@ -14,13 +14,14 @@ Route::group(['middleware' => ['setUserLang']], function () {
     Route::get('/profile', [ProfileController::class, 'personalInfo'])->name('profile.index');
     Route::get('favorites', [WishListController::class,'index'])->name('wishlist.index');
     Route::post('favorites',[WishListController::class,'toggle'])->name('wishlist.toggle');
+    
 });
 
 //auth
 Route::post('/login', 'App\Http\Controllers\Web\Auth\AuthController@login')->name('web.auth.login');
 Route::post('/register', [AuthController::class, 'check_register']);
 Route::post('/register/verify', [AuthController::class, 'register']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('web.auth.logout');
+Route::get('/logout', [AuthController::class, 'logout'])->name('web.auth.logout');
 Route::post('/resend-otp', [AuthController::class, 'resendOtp']);
 Route::post('/forget-password', [PasswordController::class, 'ForgetPassword']);
 Route::post('/confirm-otp', [PasswordController::class, 'confirmOtp']);
