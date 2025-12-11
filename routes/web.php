@@ -12,6 +12,9 @@ Route::group(['middleware' => ['setUserLang']], function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::resource('products', ProductController::class)->only(['index', 'show']);
     Route::get('/profile', [ProfileController::class, 'personalInfo'])->name('profile.index');
+    Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/security', [ProfileController::class, 'security'])->name('profile.security');
+    Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
     Route::get('favorites', [WishListController::class,'index'])->name('wishlist.index');
     Route::post('favorites',[WishListController::class,'toggle'])->name('wishlist.toggle');
     

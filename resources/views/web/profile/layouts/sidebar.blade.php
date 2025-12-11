@@ -4,19 +4,19 @@
                             <a href="{{ route('profile.index') }}" class="active">Personal Information</a>
                         </li>
                         <li class="MyAcountList__item">
-                            <a href="#">My Orders</a>
+                            <a href="">My Orders</a>
                         </li>
                         <li class="MyAcountList__item">
-                            <a href="#">Addresses</a>
+                            <a href="">Addresses</a>
                         </li>
                         <li class="MyAcountList__item">
-                            <a href="#">Returns</a>
+                            <a href="">Returns</a>
                         </li>
                         <li class="MyAcountList__item">
-                            <a href="#">Change Password</a>
+                            <a href="{{ route('profile.security') }}">Change Password</a>
                         </li>
                         <li class="MyAcountList__item">
-                            <a href="/" class="logout-link">Log Out</a>
+                            <a href="{{ route('web.auth.logout') }}" class="logout-link">Log Out</a>
                         </li>
 
                     </ul>
