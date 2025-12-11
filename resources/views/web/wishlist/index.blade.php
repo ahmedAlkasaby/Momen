@@ -22,5 +22,5 @@
     </div>
 @endsection
 @section('mainFiles')
-    <script src="{{ asset('website/scripts/remove-from-favorite.js') }}"></script>
+    @include('web.layouts.auth.scripts.remove-from-favorite')
 @endsection

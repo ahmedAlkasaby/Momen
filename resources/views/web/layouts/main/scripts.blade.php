@@ -11,10 +11,9 @@
 <script src="{{ asset('website/scripts/checkbox_once.js') }}"></script>
 <script src="{{ asset('website/scripts/test_slider.js') }}"></script>
 @if (!auth()->check())
-    <script src="{{ asset('website/scripts/signup.js') }}"></script>
-    <script src="{{ asset('website/scripts/confirm-signup-otp.js') }}"></script>
-    <script src="{{ asset('website/scripts/login.js') }}"></script>
-    <script src="{{ asset('website/scripts/forget-password.js') }}"></script>
+    @include('web.layouts.auth.scripts.forget-password')
+    @include('web.layouts.auth.scripts.login')
+    @include('web.layouts.auth.scripts.signup')
 @endif
-<script src="{{ asset('website/scripts/toggle-wishlist.js') }}"></script>
+@include('web.layouts.auth.scripts.toggle-wishlist')
 @yield('mainFiles')
