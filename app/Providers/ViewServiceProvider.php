@@ -24,6 +24,17 @@ class ViewServiceProvider extends ServiceProvider
             $categories = Category::activeParents()->with('activeChildren')->get();
             $view->with('categories', $categories);
         });
+
+        view()->composer('web.layouts.cart_count_navbar', function ($view) {
+
+        $cart_count = 0;
+        
+        if (auth()->check()) {
+            $cart_count = auth()->user()->cart?->cartItems()->count() ?? 0;
+        }
+
+        $view->with('cart_count', $cart_count);
+       });
        
     }
 }

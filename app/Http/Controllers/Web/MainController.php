@@ -41,5 +41,6 @@ class MainController extends Controller
 
         View::share('settings', $settings);
     }
+   
 
 }
