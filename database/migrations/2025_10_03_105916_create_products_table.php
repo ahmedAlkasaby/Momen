@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('image');
             $table->string('video')->nullable();
             $table->string('background')->nullable();
-            $table->string('color')->nullable();
 
             // offer
             $table->string('offer_type')->nullable();

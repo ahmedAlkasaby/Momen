@@ -50,8 +50,8 @@ class ProductSeeder extends Seeder
                     $clidermProduct = Product::create(array_merge($dataProductParent, $childData));
                     $images = [
                         'storage/products/productDefoult.png',
-                        'storage/products/productDefoult.png',
-                        'storage/products/productDefoult.png',
+                        'storage/products/sneakers.svg',
+                        'storage/products/slider.svg',
                     ];
                     foreach ($images as $image) {
                         $clidermProduct->images()->create(['image' => $image]);

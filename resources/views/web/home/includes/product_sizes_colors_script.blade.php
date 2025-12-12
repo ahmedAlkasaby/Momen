@@ -118,10 +118,12 @@
         if (child) {
             window.selectedChild = child;
 
-            // CHANGE IMAGE
-            if (child.images.length > 0) {
-                $('#modal-product-image').attr('src', child.images[0]);
+            window.currentImages = child.images; // كل صور الـ child
+            window.currentImageIndex = 0;
+            if (window.currentImages.length > 0) {
+                $('#modal-product-image').attr('src', window.currentImages[0]);
             }
+
 
             // CHANGE PRICE
             $('#modal-product-price').text(child.price + " EGP");
@@ -134,6 +136,33 @@
             }
         }
     });
+    $(document).on('click', '#img-next', function() {
+        if (!window.currentImages || window.currentImages.length === 0) return;
+
+        window.currentImageIndex++;
+
+        if (window.currentImageIndex >= window.currentImages.length) {
+            window.currentImageIndex = 0; // نرجع لأول صورة
+        }
+
+        $('#modal-product-image')
+            .attr('src', window.currentImages[window.currentImageIndex]);
+    });
+
+    $(document).on('click', '#img-prev', function() {
+        if (!window.currentImages || window.currentImages.length === 0) return;
+
+        window.currentImageIndex--;
+
+        if (window.currentImageIndex < 0) {
+            window.currentImageIndex = window.currentImages.length - 1; // آخر صورة
+        }
+
+        $('#modal-product-image')
+            .attr('src', window.currentImages[window.currentImageIndex]);
+    });
+
+
 
 
     // ====================================================

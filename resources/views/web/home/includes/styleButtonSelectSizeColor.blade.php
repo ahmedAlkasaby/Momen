@@ -75,4 +75,40 @@
     border-color: #000;
 }
 
+.modal-image-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.img-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 32px;
+    font-weight: bold;
+    background: rgba(0,0,0,0.45);
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    line-height: 32px;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    transition: .2s;
+}
+
+.img-arrow:hover {
+    background: rgba(0,0,0,0.7);
+}
+
+.img-prev {
+    left: 5px;
+}
+
+.img-next {
+    right: 5px;
+}
+
+
 </style>

@@ -1,5 +1,5 @@
-<div class="modal fade py-0" id="sizemodal" data-bs-backdrop="static" data-bs-keyboard="false"
-    tabindex="-1" aria-hidden="true">
+<div class="modal fade py-0" id="sizemodal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-hidden="true">
 
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content modal__card">
@@ -10,14 +10,25 @@
 
             <div class="modal-body">
 
-                <!-- #product card preview -->
                 <div class="col-12 row">
+
+                    <!-- الصورة + السلايدر -->
                     <div class="col-md-4 col-12">
-                        <img id="modal-product-image"
-                             src="{{ asset('placeholder.png') }}"
-                             class="product-card__img">
+                        <div class="modal-image-wrapper position-relative">
+
+                            <img id="modal-product-image" src="{{ asset('placeholder.png') }}"
+                                class="product-card__img">
+
+                            <!-- زر السهم يمين -->
+                            <div id="img-next" class="img-arrow img-next">›</div>
+
+                            <!-- زر السهم شمال -->
+                            <div id="img-prev" class="img-arrow img-prev">‹</div>
+
+                        </div>
                     </div>
 
+                    <!-- البيانات -->
                     <div class="col-md-8 col-12">
                         <h6 class="mt-3" id="modal-product-name"></h6>
 
@@ -27,7 +38,10 @@
                             <span></span> EGP
                         </p>
                     </div>
+
                 </div>
+
+
 
                 <hr class="mt-4">
 
@@ -36,8 +50,7 @@
                     <h5>{{ __('web.colors') }}</h5>
                 </div>
 
-                <div id="modal-color-box"
-                     class="row row-cols-4 row-cols-md-6 ps-2 g-2 color-options">
+                <div id="modal-color-box" class="row row-cols-4 row-cols-md-6 ps-2 g-2 color-options">
                     <!-- colors injected by JS -->
                 </div>
 
@@ -48,19 +61,16 @@
                     <h5>{{ __('web.sizes') }}</h5>
                 </div>
 
-                <div id="modal-size-box"
-                     class="size-group__options ps-3">
+                <div id="modal-size-box" class="size-group__options ps-3">
                     <!-- sizes injected by JS -->
                 </div>
 
             </div>
 
             <div class="modal-footer">
-                <button id="modal-add-to-cart"
-                        type="button"
-                        class="button__primary__large d-none d-md-block m-auto">
-                    {{ __('web.add_to_cart') }}               
-                 </button>
+                <button id="modal-add-to-cart" type="button" class="button__primary__large d-none d-md-block m-auto">
+                    {{ __('web.add_to_cart') }}
+                </button>
 
             </div>
 
