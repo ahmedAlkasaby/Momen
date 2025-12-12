@@ -21,9 +21,9 @@
                     <span>1</span>
                     <button onclick="updateCount(this, -1)"><img src={{ asset('website/assets/negative.svg') }}
                             alt="Minus"></button>
-                </div> --}}
+                </div> 
                 <button class="open-modal-btn" data-product='@json($product->getWebModalData())'>
-                    Select Size & Color
+                    {{ __('web.select_size_color') }}
                 </button>
             </div>
 
@@ -34,13 +34,13 @@
 
                     {{-- <p class="product-card__offer"><span>560</span> EGP</p> --}}
                 </div>
-                <div class="d-flex justify-content-between">
+                {{-- <div class="d-flex justify-content-between">
                     <p class="product-card__category">Men/ T-Shirt</p>
                     <div class="product-card__rate">
                         <img class="product-card__rateImg" src={{ asset('website/assets/star.svg') }} alt="starIcon" />
                         <span class="product-card__rateNo">(4.2)</span>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
 
