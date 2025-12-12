@@ -33,7 +33,7 @@
 
                 <!-- #colors -->
                 <div class="col-12 ps-1 row">
-                    <h5>{{ __('web.color') }}</h5>
+                    <h5>{{ __('web.colors') }}</h5>
                 </div>
 
                 <div id="modal-color-box"
@@ -45,7 +45,7 @@
 
                 <!-- #sizes -->
                 <div class="col-12 mb-3 ps-1 row">
-                    <h5>{{ __('web.size') }}</h5>
+                    <h5>{{ __('web.sizes') }}</h5>
                 </div>
 
                 <div id="modal-size-box"
@@ -59,14 +59,9 @@
                 <button id="modal-add-to-cart"
                         type="button"
                         class="button__primary__large d-none d-md-block m-auto">
-                    Add To Cart
-                </button>
+                    {{ __('web.add_to_cart') }}               
+                 </button>
 
-                <button id="modal-add-to-cart"
-                        type="button"
-                        class="button__primary__medium d-block d-md-none m-auto">
-                        {{ __('web.add_to_cart') }}
-                </button>
             </div>
 
         </div>

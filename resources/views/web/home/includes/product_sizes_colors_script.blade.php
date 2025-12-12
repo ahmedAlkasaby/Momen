@@ -75,6 +75,8 @@
     });
 
 
+
+
     $(document).on('change', '.size-radio', function() {
 
         let sizeId = $(this).val();
@@ -90,8 +92,23 @@
         if (child) {
             console.log("Selected child:", child);
             window.selectedChild = child;
+
+         
+            if (child.images && child.images.length > 0) {
+                $('#modal-product-image').attr('src', child.images[0]);
+            }
+
+            $('#modal-product-price').text(child.price + " EGP");
+
+            if (child.offer_price && child.offer_price > 0) {
+                $('#modal-product-offer').removeClass('d-none');
+                $('#modal-product-offer span').text(child.offer_price);
+            } else {
+                $('#modal-product-offer').addClass('d-none');
+            }
         }
     });
+
 
     $(document).on('click', '#modal-add-to-cart', function() {
 
