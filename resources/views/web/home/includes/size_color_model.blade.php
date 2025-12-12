@@ -65,7 +65,7 @@
                 <button id="modal-add-to-cart"
                         type="button"
                         class="button__primary__medium d-block d-md-none m-auto">
-                    Add To Cart
+                        {{ __('web.add_to_cart') }}
                 </button>
             </div>
 

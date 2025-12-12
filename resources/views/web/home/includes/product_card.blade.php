@@ -9,22 +9,19 @@
                     data-red-heart="{{ asset('website/assets/red-heart.svg') }}" />
 
 
-
-                <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="assets/add.svg" alt="Add to Cart"
-                    class="product-card__addToCartIcon" />
-
-                <img data-bs-toggle="modal" data-bs-target="#sizemodal" src="{{ asset('website/assets/add.svg') }}"
-                    alt="Add to Cart" class="product-card__addToCartIcon" />
+                
                 <div class="product-card__counter">
                     <button onclick="updateCount(this, 1)"><img src={{ asset('website/assets/add-count.svg') }}
                             alt="Add"></button>
                     <span>1</span>
                     <button onclick="updateCount(this, -1)"><img src={{ asset('website/assets/negative.svg') }}
                             alt="Minus"></button>
-                </div> 
-                <button class="open-modal-btn" data-product='@json($product->getWebModalData())'>
+                </div>
+                <button class="open-modal-btn select-size-btn" data-product='@json($product->getWebModalData())'>
+                    <img src="{{ asset('website/assets/add.svg') }}" class="me-1" style="width:13px;">
                     {{ __('web.select_size_color') }}
                 </button>
+
             </div>
 
             <div class="card-body product-card__body">

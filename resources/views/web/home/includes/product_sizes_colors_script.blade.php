@@ -1,3 +1,6 @@
+>
+
+
 <script>
     // فتح المودال
     $(document).on('click', '.open-modal-btn', function() {
@@ -48,7 +51,7 @@
     };
 
 
-    
+
     $(document).on('change', '.color-radio', function() {
 
         let colorId = $(this).val();
@@ -71,7 +74,7 @@
 
     });
 
-   
+
     $(document).on('change', '.size-radio', function() {
 
         let sizeId = $(this).val();
@@ -90,4 +93,71 @@
         }
     });
 
+    $(document).on('click', '#modal-add-to-cart', function() {
+
+        if (!window.selectedChild) {
+            showToast("{{ __('web.select_size_color_first') }}", 'error');
+            return;
+        }
+
+        $.ajax({
+            url: "{{ route('carts.store') }}",
+            method: "POST",
+            data: {
+                product_id: window.selectedChild.id,
+                amount: 1,
+                _token: "{{ csrf_token() }}"
+            },
+            success: function(res) {
+                console.log(res);
+
+                // السطر المهم هنا
+                if (res.success === true) {
+                    showToast(res.message, 'success');
+                    $('#sizemodal').modal('hide');
+                } else {
+                    showToast(res.message, 'error');
+                }
+            },
+            error: function(xhr) {
+                console.log(xhr.responseText);
+
+                // هنا لو فشل الفاليديشن هنبعت الرسالة الصح
+                let msg = xhr.responseJSON?.message ?? "{{ __('web.error_occurred') }}";
+                showToast(msg, 'error');
+            }
+        });
+    });
+</script>
+
+
+
+<div id="toast"
+    style="
+    position: fixed; 
+    bottom: 20px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    background: #222; 
+    color: #fff; 
+    padding: 12px 20px; 
+    border-radius: 6px; 
+    display: none;
+    z-index: 9999;">
+</div>
+
+<script>
+    function showToast(msg, type = 'success') {
+        let t = $('#toast');
+        t.text(msg);
+
+        if (type === 'error') {
+            t.css('background', '#c0392b');
+        } else {
+            t.css('background', '#27ae60');
+        }
+
+        t.fadeIn(300);
+        setTimeout(() => t.fadeOut(300), 2500);
+    }
 </script>

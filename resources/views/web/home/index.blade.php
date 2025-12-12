@@ -2,6 +2,9 @@
 @section('title')
     {{__('web.home')}}
 @endsection
+@section('styles')
+@include('web.home.includes.styleButtonSelectSizeColor')
+@endsection
 
 @section('content')
     {{-- <div id="searchOverlay" class="search__overlay">
@@ -54,7 +57,7 @@
     </div> --}}
     @include('web.home.includes.landing')
 
-    @include('web.home.includes.categories')
+    {{-- @include('web.home.includes.categories') --}}
     @foreach ($sections as $section)
     @include('web.home.includes.section')
         
