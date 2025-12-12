@@ -1,17 +1,18 @@
->
-
-
 <script>
     // فتح المودال
     $(document).on('click', '.open-modal-btn', function() {
 
         let product = $(this).data('product');
-        window.currentProduct = product; // نخزن المنتج لاستخدامه لاحقاً
+        window.currentProduct = product;
+        window.selectedChild = null;
         openProductModal(product);
     });
 
     window.openProductModal = function(product) {
 
+        // ===============================
+        //   UPDATE MAIN PRODUCT DATA
+        // ===============================
         $('#modal-product-image').attr('src', product.image);
         $('#modal-product-name').text(product.name);
         $('#modal-product-price').text(product.price + " EGP");
@@ -23,6 +24,9 @@
             $('#modal-product-offer').addClass('d-none');
         }
 
+        // ===============================
+        //   BUILD COLORS
+        // ===============================
         let colorBox = $('#modal-color-box').html('');
         product.colors.forEach(c => {
             colorBox.append(`
@@ -30,14 +34,16 @@
                     <input type="radio" name="color" class="color-radio"
                            id="color-${c.id}" value="${c.id}">
                     <label for="color-${c.id}">
-                        <span class="color-circle"
-                              style="background:${c.code}; border:1px solid #ccc"></span>
+                        <span class="color-circle" style="background:${c.code};"></span>
                         <span class="color-name">${c.name}</span>
                     </label>
                 </div>
             `);
         });
 
+        // ===============================
+        //   BUILD SIZES
+        // ===============================
         let sizeBox = $('#modal-size-box').html('');
         product.sizes.forEach(s => {
             sizeBox.append(`
@@ -47,11 +53,23 @@
             `);
         });
 
+        // ===============================
+        //    AUTO SELECT FIRST COLOR
+        // ===============================
+        setTimeout(() => {
+            let firstColor = $('.color-radio').first();
+            if (firstColor.length) {
+                firstColor.prop('checked', true).trigger('change');
+            }
+        }, 50);
+
         $('#sizemodal').modal('show');
     };
 
 
-
+    // ====================================================
+    //   ON COLOR CHANGE → FILTER SIZES + AUTO SELECT SIZE
+    // ====================================================
     $(document).on('change', '.color-radio', function() {
 
         let colorId = $(this).val();
@@ -72,11 +90,19 @@
             }
         });
 
+        // AUTO SELECT FIRST AVAILABLE SIZE
+        setTimeout(() => {
+            let firstVisible = $('.size-radio:visible').first();
+            if (firstVisible.length) {
+                firstVisible.prop('checked', true).trigger('change');
+            }
+        }, 50);
     });
 
 
-
-
+    // ====================================================
+    //   ON SIZE CHANGE → UPDATE CHILD DATA (image/price)
+    // ====================================================
     $(document).on('change', '.size-radio', function() {
 
         let sizeId = $(this).val();
@@ -90,14 +116,14 @@
         );
 
         if (child) {
-            console.log("Selected child:", child);
             window.selectedChild = child;
 
-         
-            if (child.images && child.images.length > 0) {
+            // CHANGE IMAGE
+            if (child.images.length > 0) {
                 $('#modal-product-image').attr('src', child.images[0]);
             }
 
+            // CHANGE PRICE
             $('#modal-product-price').text(child.price + " EGP");
 
             if (child.offer_price && child.offer_price > 0) {
@@ -110,6 +136,9 @@
     });
 
 
+    // ====================================================
+    //   ADD TO CART
+    // ====================================================
     $(document).on('click', '#modal-add-to-cart', function() {
 
         if (!window.selectedChild) {
@@ -126,10 +155,7 @@
                 _token: "{{ csrf_token() }}"
             },
             success: function(res) {
-                console.log("AJAX success:");
-                console.log(res);
 
-                // السطر المهم هنا
                 if (res.success === true) {
                     showToast(res.message, 'success');
                     $('#sizemodal').modal('hide');
@@ -138,18 +164,13 @@
                 }
             },
             error: function(xhr) {
-                console.log("AJAX error:");
-                console.log(xhr.responseText);
 
-                // هنا لو فشل الفاليديشن هنبعت الرسالة الصح
                 let msg = xhr.responseJSON?.message ?? "{{ __('web.error_occurred') }}";
                 showToast(msg, 'error');
             }
         });
     });
 </script>
-
-
 
 <div id="toast"
     style="
