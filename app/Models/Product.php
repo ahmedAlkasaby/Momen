@@ -287,4 +287,12 @@ class Product extends MainModel
                 ->values(),
         ];
     }
+
+    public function hasOfferPrice()
+    {
+        if ( $this->offer_price != null && $this->offer_price > $this->price ) {
+            return true;
+        }
+        return false;
+    }
 }

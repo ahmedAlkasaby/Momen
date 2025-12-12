@@ -109,6 +109,7 @@
                 _token: "{{ csrf_token() }}"
             },
             success: function(res) {
+                console.log("AJAX success:");
                 console.log(res);
 
                 // السطر المهم هنا
@@ -120,6 +121,7 @@
                 }
             },
             error: function(xhr) {
+                console.log("AJAX error:");
                 console.log(xhr.responseText);
 
                 // هنا لو فشل الفاليديشن هنبعت الرسالة الصح

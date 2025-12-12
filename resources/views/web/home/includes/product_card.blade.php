@@ -2,7 +2,7 @@
     <div class="product">
         <div class="card product-card">
             <div class="product-card__image m-auto mt-3">
-                <img src="{{ asset($product['image']) }}" alt="Run Tight Trouser" class="product-card__img" />
+                <img src="{{ asset($product->image) }}" alt="Run Tight Trouser" class="product-card__img" />
                 <img src="{{ $product->isFav() ? asset('website/assets/red-heart.svg') : asset('website/assets/heart.svg') }}"
                     class="product-card__addToFavIcon" data-id="{{ $product->id }}"
                     data-url="{{ route('wishlist.toggle') }}" data-heart="{{ asset('website/assets/heart.svg') }}"
@@ -28,16 +28,27 @@
                 <h5 class="product-card__name">{{ $product->nameLang() }}</h5>
                 <div class="product-card__priceOffer d-flex justify-content-between">
                     <p class="product-card__price">{{ $product->price }} EGP</p>
+                 
+                    @if ($product->hasOfferPrice())
+                    <p class="product-card__offer"><span>{{ $product->offer_price }}</span> EGP</p>
 
-                    {{-- <p class="product-card__offer"><span>560</span> EGP</p> --}}
+                    @endif
+
+                   
                 </div>
-                {{-- <div class="d-flex justify-content-between">
-                    <p class="product-card__category">Men/ T-Shirt</p>
+                
+                <div class="d-flex justify-content-between">
+                    @if ($product->unit_id)
+                    <p class="product-card__category">{{ $product->unit->nameLang() }}</p>
+                    @endif
+                    @if ($product->rate > 0)
+                        
                     <div class="product-card__rate">
                         <img class="product-card__rateImg" src={{ asset('website/assets/star.svg') }} alt="starIcon" />
-                        <span class="product-card__rateNo">(4.2)</span>
+                        <span class="product-card__rateNo">({{ $product->rate }})</span>
                     </div>
-                </div> --}}
+                    @endif
+                </div>
             </div>
         </div>
 
